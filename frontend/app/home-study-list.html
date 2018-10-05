@@ -1,0 +1,15 @@
+<kin-study-menu studies="$ctrl.studies" archived="false">
+</kin-study-menu>
+
+<div ng-if="$ctrl.someArchived">
+  <hr />
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" ng-model="$ctrl.showArchived"> Show archived studies
+    </label>
+  </div>
+
+  <kin-study-menu ng-if="$ctrl.showArchived" studies="$ctrl.studies" archived="true">
+  </kin-study-menu>
+</div>

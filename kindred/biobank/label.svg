@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   id="svg4170"
+   viewBox="0 0 152.3622 54.92126"
+   height="15.5mm"
+   width="43mm">
+  <defs
+     id="defs4172">
+    <filter
+       id="filter6184"
+       style="color-interpolation-filters:sRGB;">
+      <feFlood
+         id="feFlood6186"
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity="0.247059" />
+      <feComposite
+         id="feComposite6188"
+         result="composite1"
+         operator="in"
+         in2="SourceGraphic"
+         in="flood" />
+      <feGaussianBlur
+         id="feGaussianBlur6190"
+         result="blur"
+         stdDeviation="0.2"
+         in="composite1" />
+      <feOffset
+         id="feOffset6192"
+         result="offset"
+         dy="0.5"
+         dx="0.5" />
+      <feComposite
+         id="feComposite6194"
+         result="composite2"
+         operator="over"
+         in2="offset"
+         in="SourceGraphic" />
+    </filter>
+    <filter
+       id="filter6196"
+       style="color-interpolation-filters:sRGB;">
+      <feFlood
+         id="feFlood6198"
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity="0.247059" />
+      <feComposite
+         id="feComposite6200"
+         result="composite1"
+         operator="in"
+         in2="SourceGraphic"
+         in="flood" />
+      <feGaussianBlur
+         id="feGaussianBlur6202"
+         result="blur"
+         stdDeviation="0.2"
+         in="composite1" />
+      <feOffset
+         id="feOffset6204"
+         result="offset"
+         dy="0.5"
+         dx="0.5" />
+      <feComposite
+         id="feComposite6206"
+         result="composite2"
+         operator="over"
+         in2="offset"
+         in="SourceGraphic" />
+    </filter>
+    <filter
+       height="1.0204514"
+       y="-0.01022572"
+       width="1.011112"
+       x="-0.0055560138"
+       id="filter6247"
+       style="color-interpolation-filters:sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur6249"
+         stdDeviation="0.18867297" />
+    </filter>
+  </defs>
+  <metadata
+     id="metadata4175">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+
+  <g
+     transform="translate(0,-997.44094)"
+     id="stickers">
+    <rect
+       ry="1.7716535"
+       y="1000.9865"
+       x="10.625"
+       height="44.281979"
+       width="81.5"
+       id="sticker1"
+       style="fill:#fdfdfd;fill-opacity:1;stroke:#7f7f7f;stroke-width:0.70866144;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter6247)" />
+    <circle
+       r="21.28125"
+       cy="1022.2677"
+       cx="124.03125"
+       id="sticker2"
+       style="fill:#fdfdfd;fill-opacity:1;stroke:#7f7f7f;stroke-width:0.70866142;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter6184)" />
+  </g>
+
+  <g
+     transform="translate(0,-997.44094)"
+     id="contents">
+    <rect
+       y="1008.7283"
+       x="17.716536"
+       height="28.346457"
+       width="28.346457"
+       id="rect4735"
+       style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.70866144;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+
+    <path id="qr-path" transform="translate(17.716536,1008.7283) scale(13.5289908409,13.5289908409)"
+     d=""
+     style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+
+    <text
+       id="sample_id"
+       y="1014.4015"
+       x="48.785988"
+       style="font-style:normal;font-weight:normal;font-size:8.125px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve">B-0000000</text>
+    <text
+       id="patient_id"
+       y="1024.454"
+       x="48.734913"
+       style="font-style:normal;font-weight:normal;font-size:8.125px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve">P-000000</text>
+    <text
+       id="patient_abbrev"
+       y="1036.4749"
+       x="48.292969"
+       style="font-style:normal;font-weight:normal;font-size:11px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve">AAA</text>
+    <use
+        x="0"
+        y="0"
+        xlink:href="#patient_abbrev"
+        id="use4772"
+        transform="translate(65,-20)"
+        width="100%"
+        height="100%" />
+    <use
+        x="0"
+        y="0"
+        xlink:href="#sample_id"
+        id="use5467"
+        transform="translate(54,10)"
+        width="100%"
+        height="100%" />
+    <use
+        x="0"
+        y="0"
+        xlink:href="#patient_id"
+        id="use5469"
+        transform="translate(57,8)"
+        width="100%"
+        height="100%" />
+  </g>
+</svg>

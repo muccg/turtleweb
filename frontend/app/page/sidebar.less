@@ -1,0 +1,119 @@
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+/*
+.sidebar {
+  display: none;
+}
+*/
+
+.sidebar, .sidebar2 {
+  background-color: @navbar-default-bg;
+  border-top: 1px solid @navbar-default-border;
+}
+
+.sidebar {
+  margin-top: 1.5em;
+}
+
+@media (min-width: @screen-sm-min) {
+  .sidebar, .sidebar2 {
+    position: fixed;
+    top: @navbar-height + 1px;
+    bottom: 0;
+    z-index: 1000;
+    display: block;
+    padding: 0px 10px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: @navbar-default-bg;
+    border-top: none;
+    border-right: 1px solid @navbar-default-border;
+    margin-top: 0px;
+  }
+  .sidebar {
+    left: 0;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  @media (min-width: @screen-sm-min) {
+    margin-right: -21px; /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
+  }
+
+  > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+    white-space: nowrap;
+
+    /* hide link text on sm only */
+    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+      > span {
+        display: none;
+      }
+    }
+  }
+
+  > .active {
+    & > a,
+    & > a:hover,
+    & > a:focus {
+      color: #fff;
+      background-color: #428bca;
+    }
+  }
+
+  > li > .nav {
+    background-color: #eee;
+    padding-left: 2em;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 0.5em;
+  }
+
+  > li.nav-study {
+    &.nav-study-first {
+      margin-top: 1em;
+    }
+    &.active > a {
+      color: @link-color;
+      background-color: @navbar-default-link-active-bg;
+    }
+  }
+
+  // hide studies on small
+  @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    > li.nav-study {
+      display: none;
+    }
+  }
+}
+
+
+
+// .sidebar > .sidebar-version {
+//   display: none;
+// }
+
+.sidebar > .sidebar-version {
+  color: lighten(@navbar-default-color, 15%);
+
+  @media (min-width: @screen-sm-min) {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    text-align: right;
+    padding: 0 @grid-gutter-width/2 0.2em 0;
+    z-index: -1;
+
+    > small {
+      position: absolute;
+      left: 0px;
+      opacity: 0.8;
+    }
+  }
+}

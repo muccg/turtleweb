@@ -1,0 +1,175 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs title="Users">
+  <kin-breadcrumb hide="!vm.currentUser.perms.userEdit"
+                  link="['/App/Admin']"
+                  title="Admin">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.currentUser.perms.userEdit"
+                  link="['/App/Admin/User/List']"
+                  title="Users">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id === vm.currentUser.id"
+                  title="{{ vm.item.email }} — {{ vm.item | personFullName }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id === vm.currentUser.id"
+                  title="Edit">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id !== vm.currentUser.id"
+                  title="Edit Profile">
+  </kin-breadcrumb>
+</kin-breadcrumbs>
+
+<form class="form-horizontal" role="form" name="editForm"
+      novalidate autocomplete="off">
+  <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+  <input class="login-fake" type="text" name="fakeusernameremembered"/>
+  <input class="login-fake" type="password" name="fakepasswordremembered"/>
+
+  <div class="row">
+    <div class="col-sm-10">
+        <div class="form-group">
+          <label class="col-sm-2 control-label required" for="email">
+            E-mail address
+          </label>
+          <div class="col-sm-10">
+            <input type="email" name="email" class="form-control"
+                   ng-model="vm.item.email"
+                   kin-unique="vm.item" kin-unique-field="email"
+                   ng-model-options="{ debounce: 250 }"
+                   placeholder="E-mail" required id="email">
+            <p ng-show="editForm.email.$error && editForm.email.$dirty" class="help-block">
+              <span ng-show="editForm.$pending.email">
+                Checking email address...
+              </span>
+              <span ng-show="editForm.email.$error.unique">
+                That e-mail address is already in use.
+              </span>
+              <span ng-show="editForm.email.$error.required">
+                E-mail address is required.</span>
+              <span ng-show="editForm.email.$error.email">
+                This is not a valid email.
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="first_name" class="col-sm-2 control-label">
+            First name
+          </label>
+          <div class="col-sm-10">
+            <input ng-model="vm.item.first_name" type="text" class="form-control"
+                   id="first_name" name="first_name" placeholder="First name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="last_name" class="col-sm-2 control-label">
+            Last name
+          </label>
+          <div class="col-sm-10">
+            <input ng-model="vm.item.last_name" type="text" class="form-control"
+                   id="last_name" name="last_name" placeholder="Last name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password" class="col-sm-2 control-label">
+            Password
+          </label>
+          <div class="col-sm-10">
+            <input ng-model="vm.item.password" type="password" class="form-control"
+                   id="password" name="password" autocomplete="off"
+                   placeholder="Enter password to change"
+                   kin-validate-strength="ui.passStrength">
+            <p ng-show="editForm.password.$error && editForm.password.$dirty" class="help-block">
+              <span ng-show="editForm.password.$error.weak">
+                That password is too weak. It will require at least 8
+                characters, including a lowercase letter, an uppercase
+                letter, and a digit or character.
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="form-group" ng-if="editForm.password.$viewValue">
+          <label for="password2" class="col-sm-2 control-label required">
+            Confirm password
+          </label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control"
+                   id="password2" name="password2" placeholder="Confirm password"
+                   ng-model="passwordConfirm"
+                   kin-confirm-password="editForm.password.$viewValue"
+                   ng-required="!!vm.item.password">
+            <p ng-show="editForm.password2.$error && editForm.password2.$dirty" class="help-block">
+              <span ng-show="editForm.password2.$error.matches">
+                The two passwords don't match.
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="form-group" ng-if="vm.currentUser.perms.userEdit || vm.currentUser.id === vm.item.id">
+          <label for="phone" class="col-sm-2 control-label"
+                 ng-class="{ required: vm.item.is_active && !vm.item.tokenless_login_allowed }">
+            Mobile phone
+          </label>
+          <div class="col-sm-10">
+            <input type="text" id="phone" class="form-control"
+                   ng-model="vm.item.mobile_phone_number">
+          </div>
+        </div>
+        <div class="form-group" ng-if="vm.currentUser.perms.userEdit">
+          <div class="col-sm-10 col-sm-offset-2">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="vm.item.tokenless_login_allowed">
+                Allow login without token
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="role" class="col-sm-2 control-label"
+                 ng-class="{ required: vm.item.is_active }">
+            System role
+          </label>
+          <div class="col-sm-10">
+            <select ng-if="vm.currentUser.perms.userEdit"
+                    id="role" class="form-control"
+                    ng-required="vm.item.is_active"
+                    ng-model="vm.item.level"
+                    ng-disabled="vm.item.level < vm.currentUser.level || vm.currentUser.id === vm.item.id"
+                    ng-options="l.level as l.name disable when (l.level < vm.currentUser.level && l.level != vm.item.level) for l in vm.levelOptions">
+            </select>
+            <p ng-if="!vm.currentUser.perms.userEdit"
+               class="form-control-static">
+              {{ vm.item|userLevel }}
+            </p>
+          </div>
+        </div>
+        <div class="form-group" ng-if="vm.currentUser.perms.userEdit && vm.item.id && vm.currentUser.id !== vm.item.id">
+          <label class="col-sm-2 control-label">Is active</label>
+          <div class="col-sm-10">
+            <kin-yes-no-button ng-model="vm.item.is_active">
+            </kin-yes-no-button>
+          </div>
+        </div>
+
+    </div>
+    <ul class="col-sm-2 kin-view-actions">
+      <li>
+        <button type="submit" id="save-btn" class="btn btn-success"
+                ng-click="vm.confirmSave()" ng-disabled="editForm.$pristine || editForm.$invalid">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </li>
+      <li>
+        <kin-versions-dropdown item="vm.item">
+        </kin-versions-dropdown>
+      </li>
+      <li>
+        <a ng-link="vm.currentUser.perms.userEdit ? ['Detail', {id:vm.item.id}] : ['/App']" class="btn btn-large btn-default">
+          Cancel
+        </a>
+      </li>
+    </ul>
+  </div>
+</form>
+</div>

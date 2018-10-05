@@ -1,0 +1,390 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs item="vm.item" $router="$router">
+  <kin-breadcrumb link="['_', 'Person']" title="Patients">
+  </kin-breadcrumb>
+  <kin-breadcrumb title="{{ vm.item | patientId }} {{ vm.item | personFullName }}">
+  </kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div>
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            Patient Identification
+          </h4>
+        </div>
+
+        <div class="panel-body">
+          <form class="form-horizontal">
+          <div class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                 <label class="col-xs-6 control-label">
+                  Patient ID:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static kin-record-id">{{ vm.item|patientId }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                 <label class="col-xs-6 control-label">
+                  Consent Status:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static">
+                    <a ng-link="['Consent']">
+                      <kin-ddl-lookup uri="vm.studyMember.consents[0].status">
+                      </kin-ddl-lookup>
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  Surname:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static">{{ vm.item.last_name }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  First name:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static">{{ vm.item.first_name }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  Middle name:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static">{{ vm.item.second_name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  Alias:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static">{{ vm.item | personAlias }}</p>
+                </div>
+             </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  Title:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static">{{ vm.item | personTitle }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  Sex:
+                </label>
+                <div class="col-xs-6">
+                  <p class="form-control-static">{{ vm.item|personSex }}</p>
+                </div>
+             </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label" title="Date of Birth">
+                  DOB:
+                </label>
+                <div class="col-xs-6">
+                  <p ng-if="vm.item.dob" class="form-control-static"
+                     title="{{ !vm.item.dob_checked ? 'Uncertain that this is correct' : '' }}">
+                    {{ vm.item.dob | apiDateShow }}
+                    <i ng-if="!vm.item.dob_checked"
+                       class="glyphicon glyphicon-question-sign"></i>
+                  </p>
+                  <p ng-if="!vm.item.dob" class="form-control-static">
+                    <span ng-if="vm.item.dob_checked">Not entered</span>
+                    <span ng-if="!vm.item.dob_checked">Unknown</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label" title="Date of Death">
+                  DOD:
+                </label>
+                <div class="col-xs-6">
+                  <p ng-if="vm.item.deceased" class="form-control-static">
+                    <span ng-if="vm.item.dod"
+                     title="{{ !vm.item.dod_checked ? 'Uncertain that this is correct' : '' }}">
+                      {{ vm.item.dod | apiDateShow }}
+                      <i ng-if="!vm.item.dod_checked"
+                         class="glyphicon glyphicon-question-sign"></i>
+                    </span>
+                    <span ng-if="!vm.item.dod">
+                      <span ng-if="vm.item.dod_checked">Not entered</span>
+                      <span ng-if="!vm.item.dod_checked">Unknown</span>
+                    </span>
+                  </p>
+                  <p ng-if="!vm.item.deceased" class="form-control-static">
+                    N/A
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label" title="Date of Birth">
+                  Age:
+                </label>
+                <div class="col-xs-6">
+                  <p ng-if="vm.item.dob" class="form-control-static">
+                    {{ vm.item | personAge }}
+                  </p>
+                  <p ng-if="!vm.item.dob" class="form-control-static">
+                    <span ng-if="vm.item.dob_checked">Not entered</span>
+                    <span ng-if="!vm.item.dob_checked">Unknown</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="vm.item.deceased">
+            <div class="col-sm-6 col-md-6">
+              <div class="form-group">
+                <label class="col-xs-4 control-label">
+                  Cause of death:
+                </label>
+                <div class="col-xs-8">
+                  <p class="form-control-static">
+                    {{ vm.item.cause_of_death|showTextField }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  Current Address:
+                </label>
+                <div class="col-xs-6">
+                  <div ng-if="vm.addresses[0] && vm.addresses[0].contact" class="form-control-static">
+                    <div>{{vm.addresses[0].contact.address_line1}}</div>
+                    <div>{{vm.addresses[0].contact.address_line2}}</div>
+                    <div>{{vm.addresses[0].contact.address_line3}}</div>
+                    <div>{{vm.addresses[0].contact.address_line4}}</div>
+                    <div ng-if="vm.addresses[0].contact.suburb">{{vm.addresses[0].contact.suburb.name}}, {{vm.addresses[0].contact.suburb.state.abbrev}}, {{vm.addresses[0].contact.suburb.postcode}}</div>
+                    <div ng-if="false">{{vm.addresses[0].contact.suburb.state.country}}</div>
+                    <div ng-if="vm.addresses[0].contact.suburb">Australia</div>
+                  </div>
+                  <p ng-if="vm.addresses && (!vm.addresses[0] || !vm.addresses[0].contact)" class="form-control-static">
+                    Not entered
+                  </p>
+                  <p ng-if="!vm.addresses" class="form-control-static">
+                    <i>Loading...</i>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  Studies:
+                </label>
+                <div class="col-xs-6">
+                  <ul class="form-control-static list-unstyled">
+                    <li ng-repeat="s in vm.patientStudies">
+                      <a ng-link="['..', '..', '..', 'Studies', { study: s.slug }, 'Person', 'Detail', { id: vm.item.id }]"
+                         title="{{ s.desc }}">
+                        {{ s.name }}
+                      </a>
+                    </li>
+                    <li ng-if="vm.studyMember.length === 0">—</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="col-xs-6 control-label">
+                  {{ vm.currentStudy.name }} Case:
+                </label>
+                <div class="col-xs-6">
+                  <ul class="form-control-static list-unstyled">
+                    <li ng-repeat="c in vm.patientHasCase">
+                      {{ c.case.name }}
+                    </li>
+                    <li ng-if="vm.patientHasCase.length === 0">—</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="col-sm-2 col-xs-6 control-label">
+                  Comment:
+                </label>
+                <div class="col-sm-10 col-xs-6">
+                  <p class="form-control-static" ng-bind-html="vm.item.comment|makeParagraphs"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          </form>
+
+        </div>
+      </div>
+
+        <div class="panel panel-default" ng-class="{ 'panel-loading': !vm.events }">
+          <div class="panel-heading">
+            <h4 class="panel-title">Events</h4>
+          </div>
+          <div class="panel-body" ng-if="vm.events && vm.events.length === 0">
+            <p ng-show="false" ng-if="vm.events && vm.events.length === 0">No events.</p>
+            <p ng-if="!vm.events">Loading...</p>
+          </div>
+
+          <kin-display-events-table
+             ng-if="vm.events && vm.events.length"
+             ng-model="vm.events"
+             patient="vm.item"
+             patient-has-cases="vm.patientHasCase">
+          </kin-display-events-table>
+
+          <div class="panel-body">
+            <p class="pull-right">
+              <kin-add-event-button patient="vm.item" study="vm.currentStudy"
+                                    ng-if="user.perms.patientEdit">
+              </kin-add-event-button>
+            </p>
+
+            <p>Events are a set of data values describing something
+            that happened to the patient.</p>
+
+            <div class="checkbox" ng-if="vm.currentStudy">
+              <label>
+                <input type="checkbox" ng-model="vm.limitEventsStudy">
+                Only show events and samples for {{ vm.currentStudy.name }} study.
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default" ng-class="{ 'panel-loading': !vm.events }">
+          <div class="panel-heading">
+            <h4 class="panel-title">Bio Specimens</h4>
+          </div>
+
+          <kin-patient-samples-table
+             patient="vm.item" events="vm.events"
+             study="vm.currentStudy" limit-study="vm.limitEventsStudy">
+          </kin-patient-samples-table>
+        </div>
+
+        <div class="panel panel-default" ng-class="{ 'panel-loading': vm.filesLoading }">
+          <div class="panel-heading">
+            <h4 class="panel-title">Files</h4>
+          </div>
+
+          <kin-files-table item="vm.item" is-loading="vm.filesLoading">
+          </kin-files-table>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">Links to Other Databases</h4>
+          </div>
+
+          <div class="panel-body">
+            <div class="row">
+              <label class="col-sm-2 control-label">Cancer Registry Number</label>
+              <div class="col-sm-10">{{ vm.item.data.wa_crn }}</div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label">UMRN</label>
+              <div class="col-sm-10">{{ vm.item.data.umrn }}</div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label">ARK PID</label>
+              <div class="col-sm-10">{{ vm.item.data.wartn_subject_id }}</div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label">Cameron's Database ID</label>
+              <div class="col-sm-10">{{ vm.item.data.cameron_db_id }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">Other</h4>
+          </div>
+
+          <div class="panel-body">
+            <kin-custom-data-fields
+               ng-model="vm.item.data"
+               resource="person"
+               study="vm.currentStudy"
+               dont-show="['wa_crn', 'umrn', 'wartn_subject_id', 'cameron_db_id']">
+            </kin-custom-data-fields>
+          </div>
+        </div>
+    </div>
+
+    <ul class="col-sm-2 kin-view-actions">
+      <li>
+        <a ng-link="['Edit', { id: vm.item.id }]" class="btn btn-success"
+           ng-if="$root.user.perms.patientEdit">
+          <i class="glyphicon glyphicon-pencil"></i> Edit record
+        </a>
+      </li>
+
+      <li>
+        <kin-add-event-button patient="vm.item" study="vm.currentStudy"
+                              ng-if="$root.user.perms.patientEdit">
+        </kin-add-event-button>
+      </li>
+
+      <li>
+        <kin-attach-button item="vm.item" ng-if="$root.user.perms.patientEdit">
+        </kin-attach-button>
+      </li>
+
+      <li ng-if="$root.user.perms.patientEdit">
+        <a ng-link="['..', '..', 'StudyGroup', 'List']" ng-click="vm.addToStudyGroup()" class="btn btn-default" >
+          <i class="glyphicon glyphicon-plus"></i>
+          Add to Study Group
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<ng-outlet><ng-outlet>
+</div>

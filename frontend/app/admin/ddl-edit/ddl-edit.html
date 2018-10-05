@@ -1,0 +1,55 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th ng-if="schema.fields.desc">Desc</th>
+      <th>Default</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody ng-if="vm.items" ui-sortable="sortableOptions" ng-model="vm.items">
+    <tr ng-repeat="item in vm.items">
+      <td class="dragHandle">
+        <span ng-style="{ 'margin-left': angular.isDefined(item.depth) ? item.depth + 'em' : null }">
+          <i class="glyphicon glyphicon-menu-hamburger"></i>
+        </span>
+      </td>
+      <td>
+        <kin-edit-label ng-model="item.name" item="item" unique-field="name">
+        </kin-edit-label>
+      </td>
+      <td ng-if="schema.fields.desc">{{ item.desc }}</td>
+      <td class="invisibutton">
+        <span ng-if="item.default" class="label label-primary">Default</span>
+        <button type="button" class="btn btn-default btn-xs"
+                ng-click="toggleDefault(item)">
+          {{ item.default ? "&times;" : "Set Default" }}
+        </button>
+      </td>
+      <td ng-if="false" class="invisibutton">
+        <button type="button" class="btn btn-danger btn-xs"
+                ng-click="vm.deleteItem(item)">Delete</button>
+      </td>
+      <td>
+        <button type="button" class="close" aria-label="Delete"
+                ng-click="vm.deleteItem(item)"><span aria-hidden="true">&times;</span></button>
+      </td>
+    </tr>
+  </tbody>
+  <tbody ng-if="!vm.items" class="loading">
+    <tr><td colspan="{{ schema.fields.desc ? 5 : 4 }}">Loading...</td></tr>
+  </tbody>
+  <tfoot ng-hide="vm.hasPlaceholder()">
+    <tr>
+      <td></td>
+      <td colspan="{{ schema.fields.desc ? 4 : 3 }}">
+        <button type="button" class="btn btn-default btn-sm"
+                ng-click="vm.addItem()">
+          <i class="glyphicon glyphicon-plus"></i>
+          Add Item
+        </button>
+      </td>
+    </tr>
+  </tfoot>
+</table>

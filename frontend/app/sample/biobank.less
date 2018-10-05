@@ -1,0 +1,182 @@
+
+div.container-grid {
+    position: relative; /* fixme maybe not */
+    width: 100%;
+    padding-bottom: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    > .container-grid-inside {
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+
+        > .container-grid-row {
+            // Round the first and last items
+            &:first-child {
+                .border-top-radius(@list-group-border-radius);
+            }
+            &:last-child {
+                margin-bottom: 0;
+                .border-bottom-radius(@list-group-border-radius);
+            }
+
+            box-sizing: border-box;
+            position: relative;
+            display: block;
+            width: 100%;
+            background-color: @list-group-bg;
+            border: 1px solid @list-group-border;
+            margin-bottom: -1px;
+
+            > .container-grid-cell {
+                color: @list-group-link-color;
+                display: inline-block;
+                position: relative;
+                height: 100%;
+                border-right: 1px solid #ddd;
+                text-align: center;
+                line-height: 100%;
+                vertical-align: middle;
+                font-size: 200%;
+
+                &:last-child {
+                    border-right-width: 0px;
+                }
+
+                &.full, &.picked {
+                    background-image: url('../img/solid-circle.svg');
+                    background-size: 75%;
+                    background-repeat: no-repeat;
+                    background-position: 50%;
+                }
+
+                // background svg seems to be easier to position than
+                // dot glyph
+                > .cell-dot {
+                    visibility: hidden;
+                    margin: 0;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    margin-right: -50%;
+                    transform: translate(-50%, -50%);
+                }
+
+                > .pick-num {
+                  top: 0px;
+                  height: 100%;
+                  width: 100%;
+                  left: 0px;
+                  font-weight: bold;
+                  & > svg {
+                    opacity: 0.9;
+                    vertical-align: middle;
+                    width: 80%;
+                    height: 80%;
+                  }
+                }
+
+                // Hover state
+                &:hover {
+                    text-decoration: none;
+                    color: @list-group-link-hover-color;
+                    background-color: @list-group-hover-bg;
+                }
+
+                &.link:hover {
+                    color: @link-color;
+                }
+
+                > .cell-coord {
+                    position: absolute;
+                    font-size: 50%;
+                    line-height: 100%;
+                    color: #000;
+
+                    &.cell-coord-x {
+                        // bust out into the row above, so not obscured by samples
+                        top: -1.2em;
+                        right: 0.5em;
+                    }
+
+                    &.cell-coord-y {
+                        // bust out into the column left
+                        left: -1.2em;
+                        bottom: 0.5em;
+                    }
+                }
+            }
+
+        }
+
+        .container-grid-row.sel .container-grid-cell,
+        .container-grid-cell.sel {
+            background-color: lighten(@state-success-bg, 7%);
+        }
+
+        .container-grid-cell.sel.selected {
+            .text-success;
+            .bg-success;
+        }
+    }
+}
+   
+div.container-grid.highlight {
+    .container-grid-row.highlight .container-grid-cell,
+    .container-grid-cell.highlight {
+        background-color: @list-group-hover-bg;
+    }
+
+    .container-grid-row.highlight .container-grid-cell.highlight {
+        opacity: 1.0;
+    }
+
+    a.container-grid-cell {
+        opacity: 0.4;
+    }
+
+    a.container-grid-cell.picked {
+      opacity: 1.0;
+    }
+}
+
+.kin-sample-label {
+}
+
+.list-group.kin-sample-location {
+    .kin-sample-class {
+        .small;
+        .text-muted;
+        margin-right: 1.5em;
+    }
+    .kin-sample-container {
+    }
+}
+
+.dropdown-menu.label-print {
+
+  .labels {
+    max-height: 30em;
+    overflow-y: scroll;
+    border-top: 1px solid @dropdown-divider-bg;
+    border-bottom: 1px solid @dropdown-divider-bg;
+    margin: 4px 4px 4px 0px;
+  }
+}
+
+kin-sample-location-form-groups {
+  .form-group > .kin-container-coord {
+    text-align: right;
+    margin-bottom: 0px;
+    padding-top: 0px;
+
+    & > label.control-label {
+      padding-top: 4px;
+      margin-bottom: 7px;
+    }
+  }
+
+  .active-pick {
+    font-weight: bold;
+  }
+}

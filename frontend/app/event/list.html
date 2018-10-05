@@ -1,0 +1,107 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb title="Events"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <!-- fixme: make something like kin-query-box for events -->
+      <form class="form-horizontal" role="form" novalidate autocomplete="off"
+            name="queryForm" ng-submit="vm.submit()">
+        <div class="form-group query-form">
+          <div class="col-xs-12">
+            <label class="sr-only" for="searchQuery">Search terms</label>
+
+            <kin-query class="kin-query" ng-model="vm.search.expr" resource="vm.search.what">
+              <div class="input-group">
+                <input type="text" id="searchQuery"
+                       class="form-control input-lg"
+                       placeholder="Event query"
+                       spellcheck="false"
+                       ng-model="kinQuery.text"
+                       kin-query-input
+                       kin-query-auto-complete="vm.ac"
+                       kin-autofocus
+                       ng-readonly="vm.show_options">
+                <span class="input-group-btn" uib-dropdown>
+                  <button type="submit" ng-disabled="queryForm.$invalid" class="btn btn-lg btn-primary">
+                    <span class="hidden-xs hidden-sm">Search</span>
+                    <span class="visible-xs visible-sm"><i class="glyphicon glyphicon-search"></i></span>
+                  </button>
+
+                  <button type="button" class="btn btn-lg btn-default" uib-dropdown-toggle>
+                    <span class="hidden-xs hidden-sm">Save <span class="caret"></span></span>
+                    <span class="visible-xs visible-sm"><i class="glyphicon glyphicon-save"></i></span>
+                  </button>
+                  <ul uib-dropdown-menu class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a href ng-click="vm.savedSearch.create(vm.search)">Create saved search</a></li>
+                    <li ng-if="vm.search.saved"><a href ng-click="vm.savedSearch.update(vm.search)">Update <em>{{ vm.search.saved.name }}</em></a></li>
+                    <li><a target="_blank" ng-if="vm.search.getCsvLink()"
+                           ng-href="{{ vm.search.getCsvLink() }}">Download CSV</a></li>
+                  </ul>
+                  <button ng-disabled="vm.search.is_blank()" ng-click="vm.search.clearAndRefresh()"
+                          class="btn btn-lg btn-cancel hidden-xs hidden-sm">Clear</button>
+                </span>
+              </div>
+
+              <kin-query-auto-complete-menu pos="vm.ac.pos" info="vm.ac">
+              </kin-query-auto-complete-menu>
+
+            </kin-query>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <kin-grid on-select="vm.rowSelect(item)">
+        <kin-grid-search search="vm.search">
+        </kin-grid-search>
+
+        <kin-grid-col
+           heading="Event ID" sort-dir="1"
+           show="true" export="true"
+           field="ident">
+        </kin-grid-col>
+        <kin-grid-col
+           heading="Patient"
+           show="true" export="true"
+           expr="item.person|patientIdFullName"
+           field="person.pid_full_name"
+           cell-sref="['..', '..', 'Person', 'Detail', {id: item.person.id}]">
+        </kin-grid-col>
+        <kin-grid-col
+           heading="Study"
+           show="false" export="false"
+           expr="item.study|studyLookup"
+           field="study">
+        </kin-grid-col>
+        <kin-grid-col
+           heading="Type"
+           show="true" export="true"
+           expr="item.type.name"
+           field="type">
+        </kin-grid-col>
+        <kin-grid-col
+           heading="Event Date"
+           show="true" export="true"
+           expr="item.date|apiDateShow"
+           field="date">
+        </kin-grid-col>
+        <kin-grid-col
+           heading="Event Time"
+           show="false" export="false"
+           expr="item.date|apiTimeShow"
+           field="date"
+           sort-field="date">
+        </kin-grid-col>
+
+        <kin-grid-data-cols data="item.data" schema="event">
+        </kin-grid-data-cols>
+
+        <kin-grid-event-cols data="item.data" study="vm.currentStudy">
+        </kin-grid-event-cols>
+      </kin-grid>
+    </div>
+  </div>

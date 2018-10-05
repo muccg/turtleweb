@@ -1,0 +1,42 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb title="Admin"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-sm-1 sidebar2"
+       ng-show="vm.kinSession.user.perms.djangoAdmin || vm.kinSession.user.perms.fieldEdit || vm.kinSession.user.perms.userEdit">
+    <ul class="nav nav-sidebar">
+      <li ng-class="vm.u.activeClass('ddl/list')" ng-show="vm.kinSession.user.perms.fieldEdit">
+        <a ng-link="['Ddl', 'List']">Drop-down Lists</a>
+      </li>
+      <li ng-class="vm.u.activeClass('eventtype/edit')" ng-show="vm.kinSession.user.perms.fieldEdit">
+        <a ng-link="['Ddl', 'Edit', { endpoint: 'eventtype' }]">Event Types</a>
+      </li>
+      <li ng-class="vm.u.activeClass('study/edit')" ng-show="vm.kinSession.user.perms.fieldEdit">
+        <a ng-link="['Ddl', 'Edit', { endpoint: 'study' }]">Studies</a>
+      </li>
+      <li ng-class="vm.u.activeClass()" ng-show="vm.kinSession.user.perms.fieldEdit">
+        <a ng-link="['Ddl', 'Edit', {endpoint: 'patientcase'}]">Patient Cases</a>
+      </li>
+      <li ng-class="vm.u.activeClass()" ng-show="vm.kinSession.user.perms.fieldEdit">
+        <a ng-link="['Ddl', 'Edit', {endpoint: 'containerclass'}]">Container Classes</a>
+      </li>
+      <li ng-class="vm.u.activeClass()" ng-show="vm.kinSession.user.perms.fieldEdit">
+        <a ng-link="['Ddl', 'Edit', {endpoint: 'container'}]">Containers</a>
+      </li>
+      <li ng-class="vm.u.activeClass()" ng-show="vm.kinSession.user.perms.fieldEdit"
+          ng-repeat="custom in vm.kinCustomDataSchema.models">
+        <a ng-link="['Schema', 'Edit', {resource: custom.resource}]">{{ custom.resource|titleCase }} Fields</a>
+      </li>
+      <li ng-class="vm.u.activeClass()" ng-show="vm.kinSession.user.perms.userEdit">
+        <a ng-link="['User', 'List']">Users</a>
+      </li>
+      <li ng-class="vm.u.activeClass()" ng-show="vm.kinSession.user.perms.djangoAdmin">
+        <a ng-href="{{ vm.appConfig.urls.admin }}" target="_self">Django Admin</a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-sm-11 col-sm-offset-1">
+    <ng-outlet></ng-outlet>
+  </div>
+</div>

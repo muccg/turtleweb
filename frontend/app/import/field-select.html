@@ -1,0 +1,13 @@
+<div class="input-group">
+  <select ng-model="fieldName"
+          ng-options="name as field.verbose_name for ( name , field ) in schema.fields"
+          class="form-control">
+    <option value=""></option>
+  </select>
+  <span class="input-group-btn">
+    <button class="btn btn-link" type="button" ng-show="!!fieldName"
+            ng-click="old=fieldName; fieldName=null"><i class="glyphicon glyphicon-remove"></i></button>
+    <button class="btn btn-link" type="button" ng-show="!fieldName && old"
+            ng-click="fieldName=old"><i class="glyphicon glyphicon-asterisk"></i></button>
+  </span>
+</div><!-- /input-group -->

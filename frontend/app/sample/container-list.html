@@ -1,0 +1,15 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['App', 'Biobank']" title="Biobank"></kin-breadcrumb>
+  <kin-breadcrumb title="Containers"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-xs-12">
+    <kin-location-browse
+       levels="vm.levels" container="vm.container"
+       capacity="false"
+       show-matches="vm.search.items"
+       on-select="vm.sampleSelect($sampleId)">
+    </kin-location-browse>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<form class="form-horizontal" role="form" novalidate autocomplete="off"
+      name="queryForm" ng-submit="vm.submit()">
+  <div class="form-group query-form" ng-class="{ 'options-expand': vm.showOptions }">
+    <div class="col-xs-12">
+      <label class="sr-only" for="searchQuery">Search terms</label>
+      <kin-query ng-model="vm.search.expr" resource="vm.search.what">
+        <div class="input-group">
+          <input type="text" id="searchQuery"
+                 class="form-control input-lg"
+                 placeholder="Name, part of name or PID"
+                 spellcheck="false"
+                 ng-model="kinQuery.text"
+                 kin-query-input
+                 kin-query-auto-complete="vm.ac"
+                 kin-autofocus
+                 ng-readonly="vm.showOptions">
+          <span class="input-group-btn" uib-dropdown>
+            <button type="submit" ng-disabled="queryForm.$invalid" class="btn btn-lg btn-primary">
+              <span class="hidden-xs hidden-sm">Search</span>
+              <span class="visible-xs visible-sm"><i class="glyphicon glyphicon-search"></i></span>
+            </button>
+            <button type="button" class="btn btn-lg btn-default" uib-dropdown-toggle>
+              <span class="hidden-xs hidden-sm">Save <span class="caret"></span></span>
+              <span class="visible-xs visible-sm"><i class="glyphicon glyphicon-save"></i></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu" uib-dropdown-menu>
+              <li><a href="" ng-click="vm.createSearch()">Create saved search</a></li>
+              <li ng-if="vm.search.saved"><a href="" ng-click="vm.updateSearch()">Update <em>{{ vm.search.saved.name }}</em></a></li>
+              <li ng-class="{disabled:!$root.user.perms.patientEdit}"><a href="" ng-click="vm.addToStudyGroup()">Add to study group</a></li>
+              <li><a href="" ng-click="vm.createReport()">Create report</a></li>
+              <li><a target="_blank" ng-if="vm.search.getCsvLink()"
+                     ng-href="{{ vm.search.getCsvLink() }}">Download CSV</a></li>
+            </ul>
+            <button ng-disabled="vm.search.is_blank()" ng-click="vm.search.clearAndRefresh()"
+                    class="btn btn-lg btn-cancel hidden-xs hidden-sm">Clear</button>
+          </span>
+        </div>
+
+        <kin-query-auto-complete-menu pos="vm.ac.pos" info="vm.ac">
+        </kin-query-auto-complete-menu>
+
+      </kin-query>
+    </div>
+  </div>
+
+  <div class="well query-form" ng-if="vm.showOptions">
+    <kin-query-form ng-model="vm.search.expr">
+    </kin-query-form>
+  </div>
+
+  <div ng-if="false" class="form-group">
+    <div class="col-xs-2">
+      <button class="btn btn-default btn-sm" ng-click="vm.showOptions = !vm.showOptions">
+        <span class="glyphicon"
+              ng-class="{'glyphicon-expand': !vm.showOptions, 'glyphicon-collapse-down': vm.showOptions}">
+        </span>
+        {{ vm.showOptions ? "Hide" : "Show" }} search options
+      </button>
+    </div>
+    <div class="col-xs-2"></div>
+    <div class="col-xs-8">
+      <p ng-if="vm.search.searching">
+        Searching...
+      </p>
+      <p ng-if="!vm.search.searching && vm.search.total_count && vm.search.total_count > 0">
+        <span>{{ vm.search.total_count }}</span> records found.
+      </p>
+      <p ng-if="!vm.search.searching && vm.search.total_count === 0">
+        No matches found.
+      </p>
+    </div>
+  </div>
+</form>

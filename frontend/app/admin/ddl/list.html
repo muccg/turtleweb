@@ -1,0 +1,53 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['/App/Admin']" title="Admin"></kin-breadcrumb>
+  <kin-breadcrumb title="Drop-down Lists"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-sm-10">
+    <!--Body content-->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Num Items</th>
+          <th>Default</th>
+          <th class="hide"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in vm.lists" class="invisibutton">
+          <td>
+            <a ng-if="item.resource === 'abstractnamelist'"
+               ng-link="['Edit', { endpoint: item.list.endpoint}]">
+              {{ item.list.name|capToSpace }}
+            </a>
+            <a ng-if="item.resource === 'ddl'"
+               ng-link="['EditCustom', { name: item.list.name, id: item.list.id }]">
+              {{ item.list.name }}
+            </a>
+          </td>
+          <td>{{ item.list.desc }}</td>
+          <td>{{ item.list.num_items }}</td>
+          <td>{{ item.list.default }}</td>
+          <td class="hide">
+            <button type="button" class="btn btn-xs btn-danger"
+                    ng-if="item.list.id">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div><!--/span-->
+
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <a ng-link="['AddCustom']" class="btn btn-large btn-primary">
+        <i class="glyphicon glyphicon-plus"></i> Add
+      </a>
+    </li>
+  </ul>
+</div><!--/row-->

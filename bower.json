@@ -1,0 +1,52 @@
+{
+  "name": "turtleweb",
+  "description": "Turtleweb Frontend",
+  "authors": [
+    "CCG <devops@ccg.murdoch.edu.au>"
+  ],
+  "homepage": "https://github.com/muccg/turtleweb",
+  "license": "UNLICENSED",
+  "private": true,
+  "moduleType": [],
+  "main": [
+    "frontend/app/index.module.ts",
+    "frontend/app/index.less"
+  ],
+  "dependencies": {
+    "angular": "~1.5.0",
+    "angular-animate": "~1.5.0",
+    "angular-cookies": "~1.5.0",
+    "angular-touch": "~1.5.0",
+    "angular-sanitize": "~1.5.0",
+    "angular-component-router": "~0.2.0",
+    "jquery": "~2.1.4",
+    "restangular": "1.5.2",
+    "bootstrap": "3.3.6",
+    "angular-bootstrap": "1.2.4",
+    "moment": "~2.12.0",
+    "moment-timezone": "~0.5.1",
+    "lodash": "~4.6.1",
+    "angular-chart.js": "0.5.3",
+    "angular-ui-select": "0.16.0",
+    "angular-ui-sortable": "0.13.4",
+    "ng-file-upload": "5.0.9",
+    "bootbox": "4.4.0",
+    "ngstorage": "0.3.10"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.5.0"
+  },
+  "resolutions": {
+    "jquery": "~2.1.4",
+    "angular": "1.5.3"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/fonts/*",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  }
+}

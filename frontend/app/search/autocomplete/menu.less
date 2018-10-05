@@ -1,0 +1,213 @@
+
+kin-query, .kin-query {
+
+  // The dropdown menu (ul)
+  .kin-query-auto-complete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: @zindex-dropdown;
+    display: none; // none by default, but block on "open" of the menu
+    float: left;
+    min-width: 15em; // bootstrap dropdown is 160px
+    padding: 5px 0;
+    margin: 2px 0 0; // override default ul
+    list-style: none;
+    font-size: @font-size-base;
+    text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
+    background-color: @dropdown-bg;
+    border: 1px solid @dropdown-fallback-border; // IE8 fallback
+    border: 1px solid @dropdown-border;
+    border-radius: @border-radius-base;
+    .box-shadow(0 6px 12px rgba(0,0,0,.175));
+    background-clip: padding-box;
+
+    // Aligns the dropdown menu to right
+    //
+    // Deprecated as of 3.1.0 in favor of `.dropdown-menu-[dir]`
+    &.pull-right {
+      right: 0;
+      left: auto;
+    }
+
+    // Dividers (basically an hr) within the dropdown
+    .divider {
+      .nav-divider(@dropdown-divider-bg);
+    }
+
+    // Links within the dropdown menu
+    .kin-query-ac-option > a {
+      display: block;
+      padding: 3px 20px;
+      clear: both;
+      font-weight: normal;
+      line-height: @line-height-base;
+      color: @dropdown-link-color;
+      white-space: nowrap; // prevent links from randomly breaking onto new lines
+
+      & > span {
+        clear: both;
+        white-space: nowrap; // prevent links from randomly breaking onto new lines
+      }
+
+      & > small {
+        color: @text-muted;
+        float: right !important;
+        text-align: right;
+      }
+    }
+
+    // Paging buttons within the dropdown menu
+    .kin-query-ac-option.row {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+
+    .kin-query-ac-option {
+      & > .boolean, & > a.paging, & > span.paging {
+        display: inline-block;
+        padding: 3px 20px;
+        clear: none;
+        font-weight: normal;
+        line-height: @line-height-base;
+        color: @dropdown-link-color;
+        white-space: nowrap; // prevent links from randomly breaking onto new lines
+      }
+
+      & > a.paging {
+        padding-left: 4px;
+        padding-right: 4px;
+        &:last-child {
+          text-align: right;
+        }
+      }
+    }
+
+    .kin-query-ac-header {
+      display: block;
+      padding: 3px 20px;
+      font-size: @font-size-small;
+      line-height: @line-height-base;
+      color: @dropdown-header-color;
+      white-space: nowrap; // as with > li > a
+    }
+
+    & > .kin-query-auto-complete-close {
+      position: absolute;
+      right: 0.5em;
+      button {
+        float: none;
+      }
+    }
+  }
+
+  // The dropdown wrapper (div)
+  .dropup,
+  .dropdown {
+    position: relative;
+  }
+
+  // Prevent the focus on the dropdown toggle when closing dropdowns
+  .dropdown-toggle:focus {
+    outline: 0;
+  }
+
+
+  // Hover/Focus state
+  .kin-query-auto-complete .kin-query-ac-option > a {
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: @dropdown-link-hover-color;
+      background-color: @dropdown-link-hover-bg;
+    }
+  }
+
+  // Active state
+  .kin-query-auto-complete > .active > a {
+    &,
+    &:hover,
+    &:focus {
+      color: @dropdown-link-active-color;
+      text-decoration: none;
+      outline: 0;
+      background-color: @dropdown-link-active-bg;
+    }
+  }
+
+  // Disabled state
+  //
+  // Gray out text and ensure the hover/focus state remains gray
+
+  .kin-query-auto-complete > .disabled > a,
+  .kin-query-auto-complete .kin-query-ac-option > a.disabled {
+    &,
+    &:hover,
+    &:focus {
+      color: @dropdown-link-disabled-color;
+    }
+
+    // Nuke hover/focus effects
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      background-color: transparent;
+      background-image: none; // Remove CSS gradient
+      .reset-filter();
+      cursor: @cursor-disabled;
+    }
+  }
+
+  // Open state for the dropdown
+  .kin-query-auto-complete.open {
+    display: block;
+  }
+}
+
+
+/////////////////////////////////////////////////
+// submenu
+
+.kin-query-ac-submenu {
+    position: relative;
+}
+
+.kin-query-ac-submenu>.kin-query-auto-complete {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.kin-query-ac-submenu:hover>.kin-query-auto-complete {
+    display: block;
+}
+
+.kin-query-ac-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.kin-query-ac-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.kin-query-ac-submenu.pull-left {
+    float: none;
+}
+
+.kin-query-ac-submenu.pull-left>.kin-query-auto-complete {
+    left: -100%;
+    margin-left: 10px;
+    border-radius: 6px 0 6px 6px;
+}

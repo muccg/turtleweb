@@ -1,0 +1,21 @@
+<button type="button" class="btn btn-attachments" ng-class="$ctrl.btnClass"
+        ng-if="$ctrl.attachments"
+        ngf-select
+        ngf-change="$ctrl.upload($files)"
+        ngf-multiple="true">
+  <span ng-hide="$ctrl.attachments.uploading">
+    <i ng-show="$ctrl.files" class="glyphicon glyphicon-paperclip"></i>
+    <i ng-show="!$ctrl.files" class="glyphicon glyphicon-refresh"></i>
+    <span class="hidden-xs hidden-sm">Attach</span>
+    <span ng-if="$ctrl.files" class="badge">{{ $ctrl.files.length }}</span>
+  </span>
+
+  <span ng-show="$ctrl.attachments.uploading">
+    <div class="progress">
+      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="{{ $ctrl.attachments.progress }}" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: $ctrl.attachments.progress + '%' }">
+        <i class="glyphicon glyphicon-cloud-upload"></i>
+        {{ $ctrl.attachments.progress }}%
+      </div>
+    </div>
+  </span>
+</button>

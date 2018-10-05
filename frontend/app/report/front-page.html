@@ -1,0 +1,45 @@
+<table class="table" >
+  <thead>
+    <tr>
+      <th>Statistic</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+
+  <tbody ng-if="vm.reportFrontPage && vm.reportFrontPage.length">
+    <tr ng-repeat="rf in vm.reportFrontPage">
+      <td>{{ rf.report.name }}</td>
+      <td ng-if="!vm.editMode">{{ rf.count }}</td>
+      <td ng-if="vm.editMode">
+        <button type="button" class="close" aria-label="Close"
+                ng-click="vm.remove($index)" ng-show="vm.editMode"><span aria-hidden="true">&times;</span></button>
+      </td>
+    </tr>
+  </tbody>
+
+  <tbody class="empty" ng-if="vm.reportFrontPage && !vm.reportFrontPage.length">
+    <tr><td colspan="3">No reports configured</td></tr>
+  </tbody>
+
+  <tbody class="loading" ng-if="!vm.reportFrontPage">
+    <tr><td colspan="3"><i class="glyphicon glyphicon-refresh"></i> Loading</td></tr>
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <td ng-if="vm.editMode">
+        <select class="form-control" ng-if="vm.availableReports && vm.availableReports.length"
+                ng-options="r.name for r in vm.availableReports track by r.id"
+                ng-model="addedReport" ng-change="vm.addReport(addedReport)">
+          <option value="">– choose a report to add –</option>
+        </select>
+      </td>
+      <td ng-if="!vm.editMode">
+      </td>
+      <td>
+        <a href ng-click="vm.setEditMode(true)" ng-hide="vm.editMode" class="pull-right">edit</a>
+        <a href ng-click="vm.setEditMode(false)" ng-show="vm.editMode" class="pull-right">done</a>
+      </td>
+    </tr>
+  </tfoot>
+</table>

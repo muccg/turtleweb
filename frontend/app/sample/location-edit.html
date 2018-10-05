@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div ng-show="!location.container">
+      <p class="alert alert-info" ng-show="levels.length === 1">
+        Select the sample's location.
+      </p>
+      <p class="alert alert-warning" ng-show="levels.length > 1">
+        <button type="button" ng-click="upOneLevel()" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+        <span ng-show="!levels[levels.length-1].terminal">
+          Please select a <strong>{{ levels[levels.length-1].cls.name }}</strong> within
+          <em>{{ levels[levels.length-2].selected.name }}</em>.
+        </span>
+        <span ng-show="levels[levels.length-1].terminal">
+          Please select a <strong>position</strong> within the
+          {{ levels[levels.length-2].cls.name }}
+          <em>{{ levels[levels.length-2].selected.name }}</em>.
+        </span>
+      </p>
+    </div>
+    <div ng-show="location.container">
+      <p class="alert alert-success">
+        <button type="button" ng-click="reset()" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        Selected co-ordinate {{ location|containerGridCoord:location.container.cls }}.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row" ng-if="!levels">
+  <div class="col-xs-12"><p class="loading">Loading...</p></div>
+</div>
+
+<div class="row" ng-if="levels">
+  <div class="col-xs-6 col-sm-4 col-md-3"
+       ng-repeat-start="level in levels">
+
+    <div class="panel panel-default" ng-if="!level.terminal">
+      <div class="panel-heading"><h4>{{ level.cls.name }}</h4></div>
+      <div class="list-group">
+        <a href="" class="list-group-item"
+           ng-repeat="container in level.containers"
+           ng-click="openLevel($parent.$index, container)"
+           ng-class="{ active: level.selected === container }">
+          <span class="badge">
+            {{ container.num_samples }} / {{ container.capacity }}
+          </span>
+          {{ container.name }}
+        </a>
+      </div>
+    </div>
+
+    <kin-container-grid
+       ng-if="level.terminal"
+       selected="selCoord"
+       on-select="gridSelect($coord, $sampleId)"
+       samples="container.samples"
+       dim="level.cls.dim"
+       coord="level.cls.coord"
+       width="level.container.width"
+       height="level.container.height"
+       depth="level.container.depth">
+    </kin-container-grid>
+  </div>
+
+  <!-- add a clearfix after every 4th level on md size viewport -->
+  <div ng-repeat-end>
+    <div ng-if="$index % 4 === 3"
+         class="clearfix visible-md-block">
+    </div>
+  </div>
+</div><!--/row-->

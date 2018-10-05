@@ -1,0 +1,56 @@
+.navbar-breadcrumbs {
+  .navbar-vertical-align(@line-height-computed);
+  padding-left: 0px;
+
+  //padding: @breadcrumb-padding-vertical @breadcrumb-padding-horizontal;
+  //margin-bottom: @line-height-computed;
+
+  overflow-x: hidden;
+
+  list-style: none;
+  background-color: @breadcrumb-bg;
+  border-radius: @border-radius-base;
+
+  //@media (min-width: @grid-float-breakpoint) {
+    float: left;
+    margin-left: @navbar-padding-horizontal;
+    margin-right: @navbar-padding-horizontal;
+  //}
+
+  > li {
+    display: inline-block;
+
+    + li:before {
+      content: "@{breadcrumb-separator}\00a0"; // Unicode space added since inline-block means non-collapsing white-space
+      padding: 0 5px;
+      color: @breadcrumb-color;
+    }
+  }
+
+  // hide first navbar pill when screen <= sm
+  @media (max-width: @screen-sm-max) {
+    margin-left: 5px;
+
+    > li:first-child {
+      display: none;
+    }
+
+    > li:nth-child(2):before {
+      content: "\00a0";
+      padding: 0;
+    }
+  }
+
+  // compress spacing on xs
+  @media (max-width: @screen-xs-max) {
+    > li + li:before {
+      padding: 0 3px;
+      margin-right: -0.2em;
+      content: "@{breadcrumb-separator}";
+    }
+  }
+
+  > .active {
+    color: @breadcrumb-active-color;
+  }
+}

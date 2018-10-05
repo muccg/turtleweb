@@ -1,0 +1,62 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['/App/Admin']" title="Admin"></kin-breadcrumb>
+  <kin-breadcrumb link="['/App/Admin/Ddl/List']" title="Drop-down Lists">
+  </kin-breadcrumb>
+  <kin-breadcrumb title="{{ vm.item.model.verbose_name_plural|capitalize }}">
+  </kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row" ng-if="vm.isLoaded">
+  <div class="col-sm-10">
+      <!--Body content-->
+
+      <div ng-switch="vm.endpoint">
+        <!-- plain list of items, may have an additional desc field -->
+        <kin-ddl-edit ng-switch-default
+                      items="vm.items" ctrl="vm.ddlEdit">
+        </kin-ddl-edit>
+
+        <!-- list of event types, organized in a tree -->
+        <kin-event-type-edit ng-switch-when="eventtype"
+                             items="vm.items" ctrl="vm.ddlEdit">
+        </kin-event-type-edit>
+
+        <!-- studies -- can't just delete them -->
+        <kin-study-edit ng-switch-when="study"
+                        items="vm.items" ctrl="vm.ddlEdit">
+        </kin-study-edit>
+
+        <!-- list of things, categorized by study -->
+        <kin-patient-case-edit ng-switch-when="patientcase"
+                               items="vm.items" ctrl="vm.ddlEdit">
+        </kin-patient-case-edit>
+
+        <!-- container classes -->
+        <kin-containerclass-edit ng-switch-when="containerclass"
+                               items="vm.items" ctrl="vm.ddlEdit">
+        </kin-containerclass-edit>
+
+        <!-- containers -->
+        <kin-container-edit ng-switch-when="container"
+                            items="vm.items" ctrl="vm.ddlEdit">
+        </kin-container-edit>
+
+      </div>
+
+  </div><!--/span-->
+
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <button type="submit" id="save-btn" class="btn btn-success"
+              ng-click="vm.save()"
+              ng-disabled="vm.isClean()">
+        <i class="glyphicon glyphicon-save"></i> Save
+      </button>
+    </li>
+    <li>
+      <a ng-link="['List']" class="btn btn-large btn-default">
+        Cancel
+      </a>
+    </li>
+  </ul>
+</div><!--/row-->

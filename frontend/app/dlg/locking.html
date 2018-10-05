@@ -1,0 +1,25 @@
+<div class="modal-header bg-warning">
+  <h3 class="modal-title text-warning">Editing Conflict</h3>
+</div>
+<div class="modal-body">
+  <p>
+    The record has been simultaneously edited by another user
+    session.
+  </p>
+  <dl ng-if="revision">
+    <dt>User E-mail</dt>
+    <dd>{{ revision.user.email }}</dd>
+    <dt>Date</dt>
+    <dd>{{ revision.date_created | apiDateShow }}
+    <dt>Time</dt>
+    <dd>{{ revision.date_created | apiTimeShow }}
+  </dl>
+  <p>
+    This could be your session in another browser tab or device, or
+    another user.
+  </p>
+  <p>Please cancel editing then try again.</p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="$dismiss()">OK</button>
+</div>

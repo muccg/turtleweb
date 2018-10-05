@@ -1,0 +1,29 @@
+<div class="modal-header bg-danger">
+  <h3 class="modal-title text-danger">{{ title }}</h3>
+</div>
+<div class="modal-body">
+  <p>{{ msg }}</p>
+  <p class="loading" ng-if="!events">Loading events...</p>
+  <div ng-if="events && events.length">
+    <p>The patient has the following events attached:</p>
+    <ul>
+      <li ng-repeat="event in events">
+        <a ng-link="['/App/Studies', {study: event.study.slug}, 'Person/Event', {id: item.id}, 'Edit', {eventId: event.id}]" ng-click="$dismiss()">
+          {{ event.date|apiDateShow }} {{ event.type.name }}
+        </a>
+      </li>
+    </ul>
+    <p>
+      If you delete this patient record now, the events will continue
+      to exist, detached from any patient.
+    </p>
+    <p>
+      Unless you really want this, <strong>it's recommended to delete
+      the patient's events first</strong>.
+    </p>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="$close()">Delete <span ng-if="events.length">Anyway</span></button>
+  <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+</div>

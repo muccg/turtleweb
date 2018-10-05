@@ -1,0 +1,68 @@
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" ng-click="navbar.toggle()">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <a class="navbar-brand" ng-link="['Home']">
+        <!-- svg size 670 x 536 -->
+        <img ng-src="{{ $root.config.urls.base }}img/maori-turtle.svg"
+             alt="{{ instance.title }}"
+             class="turtle-tattoo"
+             kin-loading-anim />
+      </a>
+    </div>
+
+    <div class="navbar-collapse" uib-collapse="navbar.collapse">
+      <kin-navbar-breadcrumbs navbar="navbar">
+      </kin-navbar-breadcrumbs>
+
+      <ul class="nav navbar-nav">
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" ng-show="navbar.user.loggedIn">
+          <a href="" class="dropdown-toggle">
+            <i class="glyphicon glyphicon-user"></i>
+            <span class="hidden-xs hidden-sm" ng-bind="navbar.user.email"></span>
+            <span class="visible-sm-inline" title="{{navbar.user.email}}">{{ navbar.user.email | shortEmail }}</span>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li role="presentation" class="dropdown-header">
+              {{ navbar.user|personFullName }} ({{ navbar.user|userLevel }})
+            </li>
+            <li>
+              <a ng-link="['/App/Admin/User/Edit', {id: navbar.user.id}]" ng-click="navbar.close()">
+                <i class="glyphicon glyphicon-edit"></i>
+                Edit Profile
+              </a>
+            </li>
+            <li>
+              <a ng-link="['Home']" ng-click="navbar.close()">
+                <i class="glyphicon glyphicon-check"></i>
+                Settings
+              </a>
+            </li>
+            <li role="presentation" class="divider"></li>
+            <li>
+              <a ng-link="['App']" ng-click="navbar.kinSession.logout()" ng-click="navbar.close()">
+                <i class="glyphicon glyphicon-log-out"></i>
+                Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li ng-hide="navbar.user.loggedIn">
+          <a ng-link="['Login']">Log in</a>
+        </li>
+      </ul>
+
+      <kin-quick-search class="hidden-sm hidden-xs" ng-show="navbar.kinStudies.current"></kin-quick-search>
+
+    </div><!--/.nav-collapse -->
+  </div>
+</div>

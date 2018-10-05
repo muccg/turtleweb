@@ -1,0 +1,17 @@
+<div class="btn-group">
+  <button type="button" class="btn btn-primary"
+          ng-model="vm.allSelected" ng-change="vm.allSelectedChanged()"
+          uib-btn-checkbox>
+    <span ng-class="{ invisible: !vm.allSelected }">✓</span>
+    All
+  </button>
+  <button type="button" class="btn btn-primary"
+          ng-repeat="study in vm.studies"
+          ng-if="!study.archived"
+          ng-model="vm.selected[study.resource_uri]"
+          ng-change="vm.studySelectedChanged(study)"
+          uib-btn-checkbox>
+    <span ng-class="{ invisible: !vm.selected[study.resource_uri] }">✓</span>
+    {{ study.name }}
+  </button>
+</div>

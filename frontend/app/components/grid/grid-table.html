@@ -1,0 +1,41 @@
+<table class="table table-striped kin-grid">
+  <thead>
+    <th ng-repeat="col in vm.visibleCols"
+        ng-class="{ 'grid-col-sel': col.type === 'sel', 'grid-col-sortable': col.sortable }"
+        ng-click="vm.sortClicked(col)">
+      {{ col.heading }}<span class="grid-col-sort" ng-class="{ 'grid-col-unsorted': !col.sortDir }"><i class="glyphicon" ng-class="{ 'glyphicon-triangle-bottom': col.sortDir > 0, 'glyphicon-triangle-top': col.sortDir < 0, 'glyphicon-minus': !col.sortDir }"></i></span>
+      <input type="checkbox" aria-label="Select All"
+             ng-if="col.type === 'sel'" ng-model="col.selectAll">
+    </th>
+  </thead>
+  <thead class="hidden">
+    <tr ng-transclude></tr>
+  </thead>
+  <tbody ng-class="{ 'kin-grid-loading': vm.loading }">
+    <tr ng-click="vm.rowClicked($event, item)" ng-repeat="item in vm.items"
+        class="grid-row hover"
+        ng-class="vm.getRowClass(item)">
+      <td ng-repeat="col in vm.visibleCols"
+          ng-class="{ 'grid-col-sel': col.type === 'sel' }">
+        <span ng-if="col.type === 'col'">
+          <span ng-if="!col.sref">{{ item|kinGridCell:col }}</span>
+          <a ng-if="col.sref" ng-link="col.getLink(item)">{{ item|kinGridCell:col }}</a>
+        </span>
+        <input ng-if="col.type === 'sel'" type="checkbox" ng-model="vm.sel[item.resource_uri]" aria-label="Select">
+        <span ng-if="col.type === 'data' || col.type === 'event'">
+          {{ item|kinGridCell:col:col.loaded }}
+        </span>
+      </td>
+    </tr>
+    <tr ng-hide="vm.empty" class="kin-grid-loading">
+      <td>Loading...</td>
+    </tr>
+    <tr ng-hide="vm.empty"><!-- keeps the odd/even shading --></tr>
+    <tr ng-repeat="item in vm.empty track by $index" class="grid-empty" ng-class="{ 'kin-grid-loading': !!item }">
+      <td colspan="{{ vm.visibleCols.length }}">{{ item }}&nbsp;</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr><!-- <td colspan="{{ cols.length }}"></td>--></tr>
+  </tfoot>
+</table>

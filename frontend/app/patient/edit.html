@@ -1,0 +1,402 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs $router="$router">
+  <kin-breadcrumb link="['_', 'Person']" title="Patients">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id"
+                  link="['_', 'Person', 'Detail', {id: vm.item.id}]"
+                  title="{{ vm.item | patientId }} {{ vm.item | personFullName }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id" title="Edit"></kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id" title="Create"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<form class="form-horizontal" role="form" name="editForm" autocomplete="off">
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Patient Identification
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="col-sm-2 control-label required" for="surname">
+              Surname
+            </label>
+            <div class="col-sm-4">
+              <input type="text" ng-model="vm.item.last_name" class="form-control"
+                     id="surname" name="surname" required>
+              <p ng-show="editForm.surname.$dirty && editForm.surname.$error.required" class="help-block">
+                Surname is required.
+              </p>
+            </div>
+            <label class="col-sm-2 control-label" ng-if="vm.item.id">Patient ID</label>
+            <div class="col-sm-4" ng-if="vm.item.id">
+              <p class="form-control-static">{{ vm.item | patientId }}</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="first_name">
+              First name
+            </label>
+            <div class="col-sm-4">
+              <input type="text" ng-model="vm.item.first_name" class="form-control"
+                     id="first_name">
+            </div>
+            <label class="col-sm-2 control-label" for="second_name">
+              Middle name
+            </label>
+            <div class="col-sm-4">
+              <input type="text" ng-model="vm.item.second_name" class="form-control"
+                     id="second_name" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="item-sex">Alias</label>
+            <div class="col-sm-4">
+              <input type="text" ng-model="vm.item.other_name" class="form-control"
+                     id="other_name" />
+            </div>
+            <label class="col-sm-2 control-label" id="item-title">Title</label>
+            <div class="col-sm-4">
+              <kin-simple-select ng-model="vm.item.title" options="title" id="item-title">
+              </kin-simple-select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label required" for="item-sex">Sex</label>
+            <div class="col-sm-4">
+              <select ng-model="vm.item.sex" required id="item-sex" name="sex" class="form-control">
+                <option value="U">Unknown</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+              <p ng-show="editForm.sex.$touched && editForm.sex.$error.required" class="help-block">
+                Field is required.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" ng-class="{ required: vm.item.dob_checked }" for="dob">
+              Date of birth
+            </label>
+            <div class="col-sm-4">
+              <kin-date-picker id="dob" ng-model="vm.item.dob"
+                               ng-required="vm.item.dob_checked">
+              </kin-date-picker>
+              <p ng-show="editForm.dob.$error && editForm.dob.$dirty" class="help-block">
+                <span ng-show="editForm.dob.$error.date">
+                  That date is invalid.
+                </span>
+                <span ng-show="editForm.dob.$error.required">
+                  Date of birth is required.
+                </span>
+              </p>
+            </div>
+            <div class="col-sm-6" ng-show="false">
+              <div class="checkbox">
+                <label ng-show="vm.item.dob">
+                  <input type="checkbox" id="item-dob-checked"
+                         ng-model="vm.item.dob_checked" />
+                  This date of birth is known to be correct
+                </label>
+                <label ng-show="!vm.item.dob">
+                  <input type="checkbox" id="item-dob-checked"
+                         ng-model="vm.item.dob_checked"
+                         ng-false-value="true" ng-true-value="false" />
+                  The date of birth is unknown
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group hidden">
+            <label class="col-sm-2 control-label" for="item-deceased">
+              Deceased
+            </label>
+            <div class="col-sm-4">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="vm.item.deceased" id="item-deceased" />
+                  Patient has died
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-2 checkbox control-label">
+              <label>
+                <input type="checkbox" ng-model="vm.item.deceased" id="item-deceased"
+                       kin-tick-focus="#dod">
+                Date of death
+              </label>
+            </div>
+            <div class="col-sm-4">
+              <kin-date-picker id="dod" ng-model="vm.item.dod"
+                               ng-disabled="!vm.item.deceased"
+                               ng-required="vm.item.deceased && vm.item.dod_checked">
+              </kin-date-picker>
+              <p ng-show="editForm.dod.$error && editForm.dod.$dirty" class="help-block">
+                <span ng-show="editForm.dod.$error.date">
+                  That date is invalid.
+                </span>
+                <span ng-show="editForm.dod.$error.required">
+                  Date of death is required.
+                </span>
+              </p>
+            </div>
+            <div class="col-sm-6" ng-show="false">
+              <div class="checkbox">
+                <label ng-show="vm.item.dod">
+                  <input type="checkbox" id="item-dod-checked"
+                         ng-model="vm.item.dod_checked"
+                         ng-disabled="!vm.item.deceased" />
+                  This date of death is known to be correct
+                </label>
+                <label ng-show="!vm.item.dod">
+                  <input type="checkbox" id="item-dod-checked"
+                         ng-model="vm.item.dod_checked"
+                         ng-false-value="true" ng-true-value="false"
+                         ng-disabled="!vm.item.deceased" />
+                  The date of death is unknown
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="item-cause-of-death">
+              Cause of death
+            </label>
+            <div class="col-sm-10">
+              <input type="text" ng-model="vm.item.cause_of_death" class="form-control"
+                     id="item-cause-of-death" ng-disabled="!vm.item.deceased" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="item-comment">
+              Comment
+            </label>
+            <div class="col-sm-10">
+              <textarea class="form-control" ng-model="vm.item.comment">
+              </textarea>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel panel-warning"
+           ng-if="!vm.item.id" ng-show="vm.duplicates.count">
+        <div class="panel-heading">
+          Existing records
+        </div>
+        <div class="panel-body">
+          <p>The following records are possible matches for the data you
+            have entered.</p>
+        </div>
+        <kin-patient-dup-table duplicates="vm.duplicates">
+        </kin-patient-dup-table>
+      </div>
+
+      <div class="panel panel-default" ng-repeat="address in vm.addresses">
+        <div class="panel-heading">
+          Contact Details
+        </div>
+        <div class="panel-body">
+          <kin-edit-contact
+             ng-model="address.contact"
+             ng-model-options="{ allowInvalid: true }"
+             index="$index">
+          </kin-edit-contact>
+        </div>
+      </div>
+
+      <div class="panel panel-default"
+           ng-class="{ 'panel-loading': !vm.studyMember.consents }">
+        <div class="panel-heading">
+          Patient Consent
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="col-md-2 control-label required" for="consent-status">
+              Status
+            </label>
+            <div class="col-md-4 col-sm-6">
+              <kin-select
+                 ng-model="vm.studyMember.consents[0].status"
+                 options="consentstatus uri"
+                 id="consent-status"
+                 ng-required="true">
+              </kin-select>
+              <p ng-show="editForm['consent-status'].$touched && editForm['consent-status'].$error.required" class="help-block">
+                Consent status is required.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="consent-date">
+              Date
+            </label>
+            <div class="col-md-4 col-sm-6">
+              <kin-date-picker id="consent-date"
+                               ng-model="vm.studyMember.consents[0].date"
+                               ng-disabled="!vm.studyMember.consents[0].status">
+              </kin-date-picker>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="consent-by">
+              Consented By
+            </label>
+            <div class="col-md-4 col-sm-6">
+              <kin-select
+                 ng-model="vm.studyMember.consents[0].consented_by"
+                 options="consentobtainedby blank unknown uri"
+                 id="consent-by"
+                 ng-disabled="!vm.studyMember.consents[0].status">
+              </kin-select>
+            </div>
+          </div>
+
+          <kin-custom-data-edit
+             ng-if="vm.studyMember.consents[0].status"
+             ng-model="vm.studyMember.consents[0].data"
+             resource="studyconsent">
+          </kin-custom-data-edit>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Links to Other Databases
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="item-cancer-registry">
+              Cancer Registry Number
+            </label>
+            <div class="col-md-4 col-sm-6">
+              <input type="text" class="form-control" id="item-cancer-registry"
+                     ng-model="vm.item.data.wa_crn"
+                     ng-pattern="/\d+/">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="item-umrn">
+              UMRN
+            </label>
+            <div class="col-md-4 col-sm-6">
+              <input type="text" class="form-control" id="item-umrn"
+                     ng-model="vm.item.data.umrn">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="item-ark-pid">
+              ARK PID
+            </label>
+            <div class="col-md-4 col-sm-6">
+              <input type="text" class="form-control" id="item-ark-pid"
+                     ng-model="vm.item.data.wartn_subject_id">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="item-cameron-db-id">
+              Cameron's Database ID
+            </label>
+            <div class="col-md-4 col-sm-6">
+              <input type="text" class="form-control" id="item-cameron-db-id"
+                     ng-model="vm.item.data.cameron_db_id">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default" ng-if="!vm.patientCases || vm.patientCases.length">
+        <div class="panel-heading">
+          Diagnosis
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="item-cases">
+              Summary of Case(s)
+            </label>
+            <div class="col-md-4 col-sm-6" ng-if="vm.patientCases">
+              <ui-select multiple ng-model="vm.patientCaseList" reset-search-input="true" id="item-cases">
+                <ui-select-match placeholder="Select case(s)...">
+                  {{ $item.name }}
+                </ui-select-match>
+                <ui-select-choices repeat="case.resource_uri as case in vm.patientCases | filter:$select.search">
+                  <div ng-bind-html="case.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <p class="help-block">
+                The "case" is a broad classification of a patient within a
+                study. It represents at a high level both the site and
+                diagnosis of the disease.
+              </p>
+              <p class="help-block">
+                The main effect of setting a case will be limiting which
+                fields appear on patient events.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Other
+        </div>
+        <div class="panel-body">
+          <kin-custom-data-edit ng-model="vm.item.data" resource="person">
+          </kin-custom-data-edit>
+        </div>
+      </div>
+
+    </div>
+
+    <ul class="col-md-2 kin-view-actions">
+      <li>
+        <button type="submit" id="save-btn" class="btn btn-success"
+                ng-click="vm.save()" ng-disabled="editForm.$pristine || editForm.$invalid">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </li>
+      <li>
+        <a ng-link="vm.item.id ? ['Detail', {id: vm.item.id}] : ['List']" class="btn btn-large btn-default">
+          Cancel
+        </a>
+      </li>
+      <li>
+        <kin-versions-dropdown item="vm.item">
+        </kin-versions-dropdown>
+      </li>
+      <li>
+        <a kin-remove-from-study="vm.item" study-member="vm.studyMember"
+           ng-show="vm.item.id && vm.studyMember.id"
+           ng-disabled="vm.studyMembership.length <= 1"
+           $router="vm.$router"
+           class="btn btn-danger">
+          <i class="glyphicon glyphicon-minus"></i> Remove from Study
+        </a>
+      </li>
+      <li>
+        <a kin-delete-button="vm.item"
+           kin-delete-button-special="person"
+           ng-show="vm.item.id && vm.studyMember.id"
+           class="btn btn-danger"
+           $router="vm.$router">
+          <i class="glyphicon glyphicon-trash"></i> Delete
+        </a>
+      </li>
+    </ul>
+  </div>
+</form>
+</div>

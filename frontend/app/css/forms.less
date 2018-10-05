@@ -1,0 +1,18 @@
+/* see also: validation.less */
+
+/* Allow form field labels to have checkboxes next to them and still
+ * look like normal labels. */
+.checkbox.control-label label {
+    font-weight: bold;
+}
+
+/* Allow numeric text boxes without ugly up/down spinners */
+input.nospinner[type=number] {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    -moz-appearance:textfield;
+}

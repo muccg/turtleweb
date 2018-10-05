@@ -1,0 +1,36 @@
+<kin-navbar></kin-navbar>
+
+<kin-flash-messages></kin-flash-messages>
+
+<kin-breadcrumbs></kin-breadcrumbs>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-push-1" ng-class="{ 'col-sm-8': vm.kinHelp.show, 'col-sm-11': !vm.kinHelp.show }">
+      <div ng-if="!vm.$router.navigating">
+        <ng-outlet></ng-outlet>
+      </div>
+    </div>
+
+    <div class="col-sm-1 col-sm-pull-8 sidebar">
+      <kin-sidebar $router="vm.$router">
+      </kin-sidebar>
+
+      <div class="sidebar-version">
+        <small class="hidden">
+          <span class="visible-xs-inline-block">xs</span>
+          <span class="visible-sm-inline-block">sm</span>
+          <span class="visible-md-inline-block">md</span>
+          <span class="visible-lg-inline-block">lg</span>
+        </small>
+        <small ng-if="false" kin-idle-time></small>
+        v<span app-version></span>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-sm-push-1 helpbar"
+         ng-if="vm.kinHelp.show">
+      <kin-docs show="vm.kinHelp.show" on-close="vm.kinHelp.toggle(false)"></kin-docs>
+    </div>
+  </div>
+</div>

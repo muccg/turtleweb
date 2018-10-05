@@ -1,0 +1,24 @@
+<div>
+  <div class="input-group">
+    <input type="text" value="{{ selectLabel(item) }}" readonly="true"
+           class="form-control" placeholder="{{ placeholder }}" />
+    <div uib-dropdown class="input-group-btn">
+      <button type="button" class="btn btn-default" title="Clear"
+              ng-click="selectOption(null)" ng-hide="!item">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+      <button uib-dropdown-toggle id="{{ model }}-find" type="button" class="btn btn-default">Find <span class="caret"></span></button>
+      <ul uib-dropdown-menu class="dropdown-menu pull-right" role="menu">
+        <li>
+          <input id="{{ model }}-autocomplete" type="text" ng-model="q" class="form-control person-query" placeholder="search" />
+        </li>
+        <li class="divider" ng-if="autocomplete"></li>
+        <li ng-repeat="comp in autocomplete" class="completion" ng-click="selectOption(comp)">
+          <a href="" ng-click="selectOption(comp)">
+            {{ selectLabel(comp) }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

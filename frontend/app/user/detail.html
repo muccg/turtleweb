@@ -1,0 +1,190 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['/App/Admin']" title="Admin"></kin-breadcrumb>
+  <kin-breadcrumb link="['/App/Admin/User/List']" title="Users"></kin-breadcrumb>
+  <kin-breadcrumb title="{{ vm.item.email }} — {{ vm.item | personFullName }}">
+  </kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-sm-10">
+    <form class="form-horizontal">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Details</h4>
+        </div>
+
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              Name:
+            </label>
+            <div class="col-sm-10">
+              <p class="form-control-static">{{ vm.item | personFullName }}</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              E-mail:
+            </label>
+            <div class="col-sm-10">
+              <p class="form-control-static"><tt>{{ vm.item.email }}</tt></p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              Record ID:
+            </label>
+            <div class="col-sm-10">
+              <p class="form-control-static">{{ vm.item.id }}</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-2 control-label">
+              Role:
+            </label>
+            <div class="col-sm-10">
+              <p class="form-control-static">
+                {{ vm.item|userLevel }}
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-2 control-label">
+              Mobile phone:
+            </label>
+            <div class="col-sm-10">
+              <p class="form-control-static">
+                {{ vm.item.mobile_phone_number }}
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group" ng-if="vm.showLogs">
+            <label class="col-xs-2 control-label" for="logLimit">
+              Number of logs to show:
+            </label>
+            <div class="col-sm-2">
+              <select class="form-control" id="logLimit"
+                      ng-model="vm.limit"
+                      ng-options="n for n in [10, 20, 50, 100]">
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel panel-default" ng-if="vm.showLogs">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            Access Logs
+            <small ng-if="vm.accessLog">Showing {{ vm.accessLog|listItemCount }}</small>
+          </h4>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Resource</th>
+              <th>ID</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="log in vm.accessLog">
+              <td>{{ log.modified_on|apiDateShow }}</td>
+              <td>{{ log.modified_on|apiTimeShow }}</td>
+              <td>{{ log.resource_name }}</td>
+              <td>{{ log.object_id }}</td>
+              <td>{{ log.action|accessLogAction }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel panel-default" ng-if="vm.showLogs">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            Sessions
+            <small ng-if="vm.logins">Showing {{ vm.logins|listItemCount }}</small>
+          </h4>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>IP Address</th>
+              <th>User Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="log in vm.logins">
+              <td>{{ log.timestamp|apiDateShow }}</td>
+              <td>{{ log.timestamp|apiTimeShow }}</td>
+              <td>{{ log.ip_address }}</td>
+              <td>{{ log.user_agent }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel panel-default" ng-if="vm.showLogs">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            Failed Logins
+            <small ng-if="vm.failedLogins">Showing {{ vm.failedLogins|listItemCount }}</small>
+          </h4>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>IP Address</th>
+              <th>User Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="log in vm.failedLogins">
+              <td>{{ log.timestamp|apiDateShow }}</td>
+              <td>{{ log.timestamp|apiTimeShow }}</td>
+              <td>{{ log.ip_address }}</td>
+              <td>{{ log.user_agent }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <a ng-link="['Edit', { id: vm.item.id }]" class="btn btn-success">
+        <i class="glyphicon glyphicon-pencil"></i> Edit user
+      </a>
+    </li>
+    <li>
+      <a href class="btn btn-default"
+         ng-show="vm.item.is_active"
+         ng-click="vm.kinUserActionsUi.deactivateUsers([vm.item])">
+        Deactivate user
+      </a>
+    </li>
+    <li>
+      <a href class="btn btn-default"
+         ng-show="vm.item.is_active"
+         ng-click="vm.kinUserActionsUi.resetPassword([vm.item])">
+        Reset Password
+      </a>
+    </li>
+  </ul>
+</div>
+</div>

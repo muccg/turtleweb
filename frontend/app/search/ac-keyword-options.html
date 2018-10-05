@@ -1,0 +1,8 @@
+<div class="kin-query-ac-option"
+     ng-repeat="keyword in info.possibleKeywords">
+  <a href ng-click="completeKeyword(keyword, $event)">
+    <span ng-bind-html="keyword.name|highlight:info.level.keyword.current">
+    </span>{{ keyword.type === "related" ? "." : ":" }}
+    <small ng-if="keyword.title">{{ keyword.title }}</small>
+  </a>
+</div>

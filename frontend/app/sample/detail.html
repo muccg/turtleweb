@@ -1,0 +1,266 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['App', 'Biobank']" title="Biobank"></kin-breadcrumb>
+  <kin-breadcrumb title="{{ vm.item|sampleId }}"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+  <div class="row">
+    <div class="col-sm-10">
+      <uib-accordion close-others="false">
+        <uib-accordion-group is-open="true">
+          <uib-accordion-heading>
+            Sample Identification
+            <small class="kin-record-id">{{ vm.item|sampleId }}</small>
+          </uib-accordion-heading>
+          <form class="form-horizontal">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Patient:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          <a ng-if="vm.owner" ng-link="['/App/Studies', {study: vm.estudy ? vm.estudy.slug : '_'}, 'Person/Detail', {id: vm.owner.id}]">
+                            <span class="kin-record-id">{{ vm.owner|patientId }}</span>
+                            {{ vm.owner|personFullName }}
+                          </a>
+			  <em ng-if="!vm.owner">None</em>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Study:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          <span ng-if="vm.estudy">
+                            <a ng-if="!vm.owner" ng-link="['/App/Studies', { study: vm.estudy.slug }, 'StudyHome']">
+                              {{ vm.estudy.name }}
+                            </a>
+                            <a ng-if="vm.owner" ng-link="['/App/Studies', {study: vm.estudy.slug}, 'Person/Detail', {id: vm.owner.id}]">
+                              {{ vm.estudy.name }}
+                            </a>
+                          </span>
+                          <em ng-if="!vm.estudy">
+                            Unknown
+                          </em>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="pull-right">
+                      <img ng-if="vm.item" kin-sample-label="vm.item">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Type:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.cls.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Sub-type:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.subtype.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Stored In:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.stored_in.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Treatment:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.treatment.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Comments:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.comments }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" ng-if="vm.item.isTissue()">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Behaviour:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.behaviour.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" ng-if="vm.item.isDNA()">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        DNA Extraction Protocol:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.dna_extraction_protocol.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Amount:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static" ng-bind-html="vm.item|sampleAmount"></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4" ng-show="vm.item.isDNA()">
+                    <div class="form-group">
+                      <label class="col-xs-6 control-label">
+                        Concentration:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item.concentration|number:2 }}&nbsp;ng/µL
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4" ng-show="vm.item.isDNA()">
+                    <div class="form-group" title="Effective amount is concentration × actual amount">
+                      <label class="col-xs-6 control-label">
+                        Effective Amount:
+                      </label>
+                      <div class="col-xs-6">
+                        <p class="form-control-static">
+                          {{ vm.item|sampleEffectiveAmount|number:2 }}&nbsp;ng
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+          </form>
+        </uib-accordion-group>
+
+        <uib-accordion-group heading="Location" is-open="true">
+          <p ng-if="!vm.item.location">
+            Sample does not have a location.
+          </p>
+          <div class="row" ng-if="vm.item.location">
+            <div class="col-md-8">
+              <kin-sample-show-full-location location="vm.item.location">
+              </kin-sample-show-full-location>
+            </div>
+          </div>
+        </uib-accordion-group>
+
+        <uib-accordion-group is-open="true" ng-if="vm.item.transactions">
+          <uib-accordion-heading>
+            Transactions
+          </uib-accordion-heading>
+
+          <kin-sample-transactions-table sample="vm.item" after-edit="vm.refresh($xact)">
+          </kin-sample-transactions-table>
+        </uib-accordion-group>
+
+        <uib-accordion-group heading="Actions" is-open="true"
+                         ng-if="$root.user.perms.patientEdit && vm.item">
+          <kin-add-transaction-buttons sample="vm.item" after-add="vm.refresh($xact)">
+          </kin-add-transaction-buttons>
+        </uib-accordion-group>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">Other</h4>
+          </div>
+
+          <div class="panel-body">
+            <kin-custom-data-fields ng-model="vm.item.data" resource="sample" study="vm.estudy">
+            </kin-custom-data-fields>
+          </div>
+        </div>
+
+        <div ng-if="vm.pevent"
+             class="panel panel-default"
+             ng-class="{ 'panel-loading': vm.eventSamplesLoading }">
+          <div class="panel-heading">
+            <h4 class="panel-title">Event {{ vm.pevent.ident }}</h4>
+          </div>
+
+          <kin-event-samples-table
+             event="vm.pevent"
+             sample="vm.item"
+             is-loading="vm.eventSamplesLoading">
+          </kin-event-samples-table>
+        </div>
+      </uib-accordion>
+    </div>
+
+    <ul class="col-sm-2 kin-view-actions">
+      <li>
+        <a ng-link="['Edit', { id: vm.item.id }]" class="btn btn-success"
+           ng-if="$root.user.perms.patientEdit">
+          <i class="glyphicon glyphicon-pencil"></i> Edit record
+        </a>
+      </li>
+      <li>
+        <kin-label-print-button sample="vm.item"></kin-label-print-button>
+      </li>
+    </ul>
+
+  </div>
+</div>

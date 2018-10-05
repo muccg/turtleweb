@@ -1,0 +1,20 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <th>ID</th>
+    <th>Name</th>
+    <th>DOB</th>
+    <th>Study</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in duplicates.items">
+      <td><a ng-link="['Edit', { id: item.id }]" class="kin-record-id">{{ item|patientId }}</a></td>
+      <td><a ng-link="['Edit', { id: item.id }]">{{ item|personFullName }}</a></td>
+      <td>{{ item.dob|apiDateShow|fieldUnknown:!item.dob_checked }}</td>
+      <td>
+        <ul class="list-inline">
+          <li ng-repeat="study in item.studies">{{ study.name }}</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>

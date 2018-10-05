@@ -1,0 +1,97 @@
+<div class="modal-header">
+  <h3 class="modal-title">Columns</h3>
+</div>
+<div class="modal-body">
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Heading</th>
+        <th>Sort</th>
+        <th>
+          <input ng-if="false" type="checkbox" ng-model="vm.showAll" aria-label="show">
+          <kin-tick-button
+             ng-model="vm.showAll"
+             ng-change="vm.showAllChanged()"
+             class="btn btn-link btn-xs">
+          </kin-tick-button>
+          Show
+        </th>
+        <th>
+          <input ng-if="false" type="checkbox" ng-model="vm.xportAll" aria-label="show">
+          <kin-tick-button
+             ng-model="vm.xportAll"
+             ng-change="vm.xportAllChanged()"
+             class="btn btn-link btn-xs">
+          </kin-tick-button>
+          Export
+        </th>
+      </tr>
+    </thead>
+    <tbody ui-sortable="vm.sortableOptions" ng-model="vm.cols">
+      <tr ng-repeat="col in vm.cols">
+        <td class="col-xs-6 drag-handle">
+          {{ ::col.heading }}
+        </td>
+        <td class="col-xs-2">
+          <kin-sort-dir ng-if="col.sortable" ng-model="col.sortDir">
+          </kin-sort-dir>
+        </td>
+        <td class="col-xs-2">
+          <kin-tick-button
+             ng-model="col.show"
+             ng-change="vm.showChanged(col)"
+             class="btn btn-link btn-xs">
+          </kin-tick-button>
+        </td>
+        <td class="col-xs-2">
+          <kin-tick-button
+             ng-if="col.exportable"
+             ng-model="col.xport"
+             ng-change="vm.xportChanged(col)"
+             class="btn btn-link btn-xs">
+          </kin-tick-button>
+        </td>
+      </tr>
+    </tbody>
+    <tbody class="event-type" ng-repeat="(et, cols) in vm.eventTypeCols">
+      <tr class="event-type-heading" ng-show="vm.showHeading(et)">
+        <th colspan="4" ng-click="vm.toggle(et)">
+          <span ng-style="{ 'margin-left': vm.eventTypes[et].depth + 'em' }">
+            <span kin-expandy="vm.isExpanded(et)"></span>
+            {{ ::vm.eventTypes[et].name }}
+          </span>
+        </th>
+      </tr>
+      <tr ng-repeat="col in vm.groupCols(et)">
+        <td class="col-xs-6 event-type-field">
+          <span ng-style="{ 'margin-left': vm.eventTypes[et].depth + 'em' }">
+            {{ ::col.heading }}
+          </span>
+        </td>
+        <td class="col-xs-2">
+          <kin-sort-dir ng-if="col.sortable" ng-model="col.sortDir">
+          </kin-sort-dir>
+        </td>
+        <td class="col-xs-2">
+          <kin-tick-button
+             ng-model="col.show"
+             ng-change="vm.showChangedEvent(col)"
+             class="btn btn-link btn-xs">
+          </kin-tick-button>
+        </td>
+        <td class="col-xs-2">
+          <kin-tick-button
+             ng-model="col.xport"
+             ng-change="vm.xportChangedEvent(col)"
+             class="btn btn-link btn-xs">
+          </kin-tick-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="$close()">
+    Close
+  </button>
+</div>

@@ -1,0 +1,163 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th width="10%">Event</th>
+      <th width="10%">Date</th>
+      <th width="10%">ID</th>
+      <th>Type</th>
+      <th>Sub-type</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody ng-repeat="group in groups">
+    <tr class="hover" kin-toggle-expand-key="group.event.ident">
+      <td>
+        <a class="kin-record-id">
+          <i kin-expandy-key="group.event.ident"
+             ng-class="{ 'invisible': group.samples.length === 0 }"></i>
+          {{ group.event | eventId }}
+      </a>
+      </td>
+      <td>{{ group.event.date | apiDateShow }}</td>
+      <td colspan="3">
+        {{ group.event.type.name }}
+      </td>
+      <td>
+        <span class="pull-right">
+          <a class="btn btn-sm btn-primary"
+             ng-link="['Event', { id: patient.id }, 'AddSample', { eventId: group.event.id }]"
+             ng-click="$event.stopPropagation()"
+             ng-if="perms.patientEdit">
+            <i class="glyphicon glyphicon-tag"></i> Add Sample
+          </a>
+        </span>
+        <ng-pluralize
+           count="group.samples.length"
+           when="{'0': 'No samples',
+                 'one': '1 sample',
+                 'other': '{} samples'}">
+        </ng-pluralize>
+      </td>
+    </tr>
+
+    <tr class="hover" ng-show="kinExpandState.get(group.event.ident)"
+        ng-repeat-start="sample in group.samples"
+        kin-toggle-expand-key="sample.resource_uri">
+      <td></td>
+      <td>{{ getCollectionDate(sample) | apiDateShow }}</td>
+      <td>
+        <a ng-link="['/App/Biobank/Sample/Detail', { id: sample.id }]" ng-click="$event.stopPropagation()">
+          {{ sample|sampleId }}
+        </a>
+      </td>
+      <td>{{ classes[sample.cls].name }}</td>
+      <td>{{ sample.subtype.name }}</td>
+      <td ng-bind-html="sample|sampleAmount"></td>
+    </tr>
+    <tr ng-repeat-end ng-if="kinExpandState.get(group.event.ident) && kinExpandState.get(sample.resource_uri)">
+      <td colspan="2">
+        <div class="pull-right">
+          <a ng-link="['/App/Biobank/Sample/Detail', { id: sample.id }]">
+            <img kin-sample-label="sample">
+          </a>
+        </div>
+      </td>
+      <td colspan="4">
+        <dl class="dl-horizontal" ng-if="sample.transactions.length">
+          <dt ng-repeat-start="xact in sample.transactions">
+            {{ ::xact.date | apiDateShow }}
+          </dt>
+          <dd ng-repeat-end>
+            <span ng-switch="xact.type">
+              <span ng-switch-when="C">
+                {{ ::xact.date | apiTimeShow }} Collected
+              </span>
+              <span ng-switch-when="P">
+                {{ ::xact.date | apiTimeShow }} Processed
+              </span>
+              <span ng-switch-when="F">
+                {{ ::xact.date | apiTimeShow }} Frozen/Fixed
+              </span>
+              <span ng-switch-when="U">
+                Used <span ng-bind-html="sample|sampleAmount:xact.sampleuse.amount"></span>
+              </span>
+              <span ng-switch-when="X">
+                Sent to {{ ::xact.samplesending.collaborator }}
+              </span>
+              <span ng-switch-when="L">
+                Adjusted amount to
+                <span ng-bind-html="sample|sampleAmount:xact.sampleadjustment.amount"></span>
+              </span>
+              <span ng-switch-when="M">Moved</span>
+              <span ng-switch-when="D">Destroyed</span>
+              <span ng-switch-when="S">Subdivided</span>
+              <span ng-switch-when="A">Split</span>
+              <span ng-switch-when="J">Subcultured</span>
+              <span ng-switch-when="K">Subcultured from</span>
+            </span>
+            <span ng-if="xact.comment">— <em>{{ ::xact.comment }}</em></span>
+          </dd>
+        </dl>
+        <p ng-if="!sample.transactions.length">
+          No transactions recorded.
+        </p>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <a class="btn btn-primary btn-sm" role="button"
+               ng-link="['/App/Biobank/Sample/Detail', { id: sample.id }]"
+               ng-mouseenter="ui.tooltip='Edit the sample fields'"
+               ng-mouseleave="ui.tooltip=null"
+               ng-if="perms.patientEdit">
+              <i class="glyphicon glyphicon-tags"></i> Details
+            </a>
+
+            <kin-add-transaction-buttons
+               sample="sample"
+               after-add="afterAddTransaction($xact)"
+               button-class="btn-sm"
+               ng-if="perms.patientEdit">
+            </kin-add-transaction-buttons>
+          </div>
+        </div>
+
+        <table ng-if="false" class="table table-condensed">
+          <tbody ng-if="sample.transactions.length">
+            <tr ng-repeat="xact in sample.transactions">
+              <td>{{ xact.date | apiDateShow }}</td>
+              <td ng-switch="xact.type">
+                <span ng-switch-when="C">Collected</span>
+                <span ng-switch-when="U">Used</span>
+                <span ng-switch-when="D">Destroyed</span>
+                <span ng-switch-when="X">Sent</span>
+                <span ng-switch-when="S">Subdivided</span>
+              </td>
+              <td>
+                More info
+              </td>
+            </tr>
+          </tbody>
+          <tbody ng-if="!sample.transactions.length" class="empty">
+            <tr class="empty">
+              <td>No transactions recorded.</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+  <tbody ng-if="samples && samples.length === 0" class="empty">
+    <tr class="empty">
+      <td colspan="6">
+        No samples found. Samples are created through events.
+      </td>
+    </tr>
+  </tbody>
+  <tbody ng-if="!samples" class="loading">
+    <tr class="loading">
+      <td colspan="6">
+        Loading...
+      </td>
+    </tr>
+  </tbody>
+</table>

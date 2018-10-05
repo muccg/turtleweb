@@ -1,0 +1,19 @@
+<form class="form-inline" ng-if="vm.fields">
+  <div class="panel panel-default" ng-repeat="field in vm.fields track by $index">
+    <div class="panel-heading" ng-click="vm.fieldExpand[$index] = !vm.fieldExpand[$index]">
+      <h3 class="panel-title">
+        <i class="glyphicon" ng-class="{ 'glyphicon-triangle-right': !vm.fieldExpand[$index], 'glyphicon-triangle-bottom': vm.fieldExpand[$index] }"></i>
+        <span>{{ field.title || field.name }}
+          <small ng-if="field.name && field.title && field.title != field.name">{{ field.name }}</small>
+      </h3>
+    </div>
+    <div class="panel-body" ng-show="vm.fieldExpand[$index]">
+      <p>
+        {{ field.type|capitalize }} value is
+        <span ng-if="field.required">required</span>
+        <span ng-if="!field.required">optional</span>.
+      </p>
+      <p ng-if="field.description">{{ field.description }}</p>
+    </div>
+  </div>
+</form>

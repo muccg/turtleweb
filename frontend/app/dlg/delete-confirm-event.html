@@ -1,0 +1,37 @@
+<div class="modal-header bg-danger">
+  <h3 class="modal-title text-danger">{{ title }}</h3>
+</div>
+<div class="modal-body">
+  <p>{{ msg }}</p>
+  <p class="loading" ng-if="!samples">Loading samples...</p>
+  <div ng-if="samples && samples.length">
+    <p>The event has the following samples attached:</p>
+    <ul>
+      <li ng-repeat="sample in samples">
+        <a ng-link="['/App/Biobank/Sample/Detail', { id: sample.id }]"
+           ng-click="$dismiss()"
+           class="kin-record-id">
+          {{ sample|sampleId }}
+        </a>
+      </li>
+    </ul>
+    <p>
+      If you delete this event record now, the samples will continue
+      to exist, detached from any event.
+    </p>
+    <p>
+      Unless you really want this, <strong>it's recommended to delete
+      the event samples first</strong>.
+    </p>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger"
+          ng-if="false && samples.length" ng-click="$close({ cascade: true })">
+    Delete Event and Samples</span>
+  </button>
+  <button class="btn btn-danger" ng-click="$close()">
+    Delete <span ng-if="samples.length">Event Only</span>
+  </button>
+  <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+</div>

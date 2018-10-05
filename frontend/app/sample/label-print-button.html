@@ -1,0 +1,54 @@
+<div class="btn-group btn-block btn-fillsplit" uib-dropdown is-open="ui.open">
+  <div class="btn-leadcontainer">
+    <a ng-click="labelPrint.add(sample); ui.open=false" class="btn btn-primary btn-dropdown-lead">
+      <i class="glyphicon glyphicon-qrcode"></i> Print label
+      <span ng-if="labelPrint.labels.ids.length">
+        ({{ labelPrint.labels.ids.length }})
+      </span>
+    </a>
+  </div>
+  <button type="button" class="btn btn-primary dropdown-toggle"
+          aria-haspopup="true" aria-expanded="false"
+          uib-dropdown-toggle>
+    <span class="caret"></span>
+    <span class="sr-only">Toggle Dropdown</span>
+  </button>
+
+  <ul uib-dropdown-menu class="dropdown-menu label-print" role="menu">
+
+    <li class="dropdown-header btn-block">
+      <ng-pluralize count="images.length"
+                 when="{'0': 'No labels in print job.',
+                       'one': '1 label in print job.',
+                       'other': '{} labels in print job.'}">
+      </ng-pluralize>
+    </li>
+    <li ng-class="{ disabled: images.length === 0 }">
+      <a href="{{ labelsUrl }}" target="_blank" ng-click="clearAfterPrint($event); ui.open=false">
+        <i class="glyphicon glyphicon-print"></i> Print Now
+      </a>
+    </li>
+    <li ng-hide="images.length === 0">
+      <a href ng-click="ui.open=false"><i class="glyphicon glyphicon-ok-sign"></i> Later</a>
+    </li>
+    <li ng-show="images.length === 0 && sample">
+      <a href ng-click="add($event)">
+        <i class="glyphicon glyphicon-plus"></i> Add label to job
+      </a>
+    </li>
+    <li ng-hide="images.length === 0" class="labels">
+      <div>
+        <div ng-repeat="image in images track by $index">
+          <img ng-src="{{ image }}">
+        </div>
+      </div>
+    </li>
+    <li ng-hide="images.length === 0">
+      <a href ng-click="labelPrint.clear()">
+        <i class="glyphicon glyphicon-trash"></i> Clear List
+      </a>
+    </li>
+  </div>
+
+</div>
+

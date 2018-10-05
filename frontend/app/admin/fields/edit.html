@@ -1,0 +1,114 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['/App/Admin']" title="Admin"></kin-breadcrumb>
+  <kin-breadcrumb link="['/App/Admin/Ddl/List']" title="Drop-down Lists">
+  <kin-breadcrumb title="{{ vm.schema.model.verbose_name_plural|capitalize }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb title="Edit Fields">
+  </kin-breadcrumb>
+</kin-breadcrumbs>
+
+<form class="form-horizontal" role="form" name="editForm" autocomplete="off">
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="form-group">
+        <label for="studyTitle" class="col-sm-2 control-label required">Name</label>
+        <div class="col-sm-10">
+          <input ng-model="vm.item.name" type="text" class="form-control" id="studyTitle" placeholder="Title" required>
+        </div>
+      </div>
+
+      <div class="form-group hide">
+        <label class="col-sm-2 control-label">Super-type</label>
+        <div class="col-sm-10">
+          <input ng-model="vm.item.super_type" type="text" class="form-control" placeholder="Resource URI">
+          <p class="help-block">
+            This {{ vm.schema.model.verbose_name }} will be a sub-type
+            of the selected {{ vm.schema.model.verbose_name }}. This
+            means it will receive all of the fields from the
+            super-type.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Applies to</label>
+        <div class="col-sm-10">
+          <kin-study-select-multi ng-model="vm.item.studies">
+          </kin-study-select-multi>
+          <p class="help-block">
+            {{ vm.schema.model.verbose_name_plural|capitalize }} apply
+            to all studies by default, but you can select just a
+            subset of them.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Fields</label>
+        <div class="col-sm-6">
+          <kin-schema-editor ng-model="vm.item.fields">
+          </kin-schema-editor>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="vm.item.super_type">
+        <label class="col-sm-2 control-label">Inherited Fields</label>
+        <div class="col-sm-6">
+          <kin-show-parent-fields ng-model="vm.item">
+          </kin-show-parent-fields>
+
+          <p class="help-block">
+            {{ vm.schema.model.verbose_name_plural|capitalize }} receive
+            all of the fields from their parent {{ vm.schema.model.verbose_name }}.
+            To change those fields, you need to edit the parent object.
+          </p>
+        </div>
+      </div>
+
+      <kin-list-related-ddls schema="vm.item.fields">
+      </kin-list-related-ddls>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Field Visibility</label>
+        <div class="col-sm-10">
+          <div>
+            <button type="button" class="btn btn-sm btn-default"
+                    ng-model="ui.showCases" uib-btn-checkbox>
+              {{ ui.showCases ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+          <div ng-if="ui.showCases">
+            <kin-field-case-edit
+               ng-model="vm.item.fields.caseHiding"
+               properties="vm.item.fields.properties"
+               patient-cases="vm.patientCases"
+               studies="vm.item.studies">
+            </kin-field-case-edit>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="col-sm-2 kin-view-actions">
+      <li>
+        <button type="submit" id="save-btn" class="btn btn-success"
+                ng-click="vm.save()" ng-disabled="editForm.$pristine || editForm.$invalid">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </li>
+      <li>
+        <a ng-link="['..', '..', 'Ddl', 'Edit', {endpoint: vm.endpoint }]" class="btn btn-large btn-default">
+          Cancel
+        </a>
+      </li>
+      <li>
+        <a kin-delete-button="vm.item" ng-show="vm.item.id" class="btn btn-danger">
+          <i class="glyphicon glyphicon-trash"></i> Delete
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</form>
+</div>

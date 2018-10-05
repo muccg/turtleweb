@@ -1,0 +1,2 @@
+# Test dependencies go here.
+coverage==3.7.1

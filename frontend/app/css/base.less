@@ -1,0 +1,30 @@
+@extra-top-pad: 10px;
+
+body {
+  padding-top: @navbar-height + @extra-top-pad;
+}
+
+.panel-heading {
+  color: @gray-dark;
+  background-color: @panel-default-heading-bg;
+  border-color: @panel-default-border;
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+// Preventing selection and drag and drop.
+
+.kin-prevent-dnd {
+  /* user-select: none; */
+}
+
+.kin-allow-dnd {
+  /* user-select: initial; */
+}
+
+kin-navbar, kin-sidebar, // links areas
+.sidebar2,               // admin 2nd sidebar
+button.btn, a.btn        // button-like things
+{
+  user-select: none;
+}

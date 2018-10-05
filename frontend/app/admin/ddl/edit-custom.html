@@ -1,0 +1,56 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['/App/Admin']" title="Admin"></kin-breadcrumb>
+  <kin-breadcrumb link="['/App/Admin/Ddl/List']" title="Drop-down Lists">
+  <kin-breadcrumb hide="vm.item" title="{{ vm.schema.model.verbose_name_plural|capitalize }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item" title="{{ vm.item.name|capitalize }}">
+  </kin-breadcrumb>
+</kin-breadcrumbs>
+
+<form name="editForm" class="form-horizontal" role="form" autocomplete="off">
+
+<div class="row">
+  <div class="col-sm-10">
+    <!--Body content-->
+
+    <div class="form-group">
+      <label for="ddlName" class="col-sm-2 control-label">List Name</label>
+      <div class="col-sm-10">
+        <input ng-model="vm.item.name" type="text" class="form-control" id="ddlName" placeholder="name" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="ddlDesc" class="col-sm-2 control-label">Description</label>
+      <div class="col-sm-10">
+        <textarea ng-model="vm.item.desc" class="form-control" id="ddlDesc" placeholder="Description"></textarea>
+      </div>
+    </div>
+
+    <kin-ddl-edit list="vm.item" items="vm.items" ctrl="vm.ddlEdit">
+    </kin-ddl-edit>
+  </div><!--/span-->
+
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <button type="submit" id="save-btn" class="btn btn-success"
+              ng-click="vm.save()"
+              ng-disabled="(vm.ddlEdit.pristine() && editForm.$pristine) || editForm.$invalid">
+        <i class="glyphicon glyphicon-save"></i> Save
+      </button>
+    </li>
+    <li>
+      <a ng-link="['List']" class="btn btn-large btn-default">
+        Cancel
+      </a>
+    </li>
+    <li>
+      <a kin-delete-button="vm.item" ng-show="vm.item.id" class="btn btn-danger"
+         $router="vm.$router" next="['/App/Admin']">
+        <i class="glyphicon glyphicon-trash"></i> Delete
+      </a>
+    </li>
+  </ul>
+</div><!--/row-->
+</form>
+</div>

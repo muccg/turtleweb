@@ -1,0 +1,43 @@
+// progress bars inside buttons
+.btn .progress {
+  margin: 0px;
+
+  .glyphicon {
+    margin-left: 0.5px;
+  }
+}
+
+.btn.btn-attachments .progress {
+  width: 5em;
+}
+
+
+// block-level split dropdown buttons
+// adapted from http://stackoverflow.com/a/14707649
+.btn-block.btn-fillsplit {
+  position: relative;
+
+  .btn-dropdown-lead{
+    width: 100%;
+  }
+  .btn-leadcontainer {
+    left: 0;
+    position: absolute;
+    right: 30px;
+  }
+  button.dropdown-toggle{
+    width: 30px;
+    float: right;
+    box-sizing: border-box;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    top: 32px; // blah
+  }
+}
+
+// input group addons as dropdown buttons
+.input-group-btn.addon-dropdown-btn > .btn-default {
+  background-color: @input-group-addon-bg;
+}

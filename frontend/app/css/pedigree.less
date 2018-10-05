@@ -1,0 +1,229 @@
+
+@pedigree-fill: #fff;
+@pedigree-stroke: #000;
+@lighter-colour: #98afc7;
+
+.pedigree-scroll {
+  width: 100%;
+  overflow: auto;
+}
+
+.svg-pedigree .pedigree-node {
+  stroke: black;
+  stroke-width: 2;
+  fill: white;
+}
+
+.svg-pedigree .pedigree-node .pedigree-proband {
+  fill: black;
+}
+
+.svg-pedigree .pedigree-name {
+  text-anchor: middle;
+  font-size: small;
+  fill: black;
+}
+
+div.pedigree-container {
+    line{
+        stroke:@pedigree-stroke;
+        stroke-width:0.5mm;
+        stroke-linejoin:miter;
+        stroke-linecap:square;
+    }
+
+    rect{
+        stroke:@pedigree-stroke;
+        stroke-width:0.5mm;
+        stroke-linejoin:miter;
+        stroke-linecap:square;
+    }
+
+    ellipse{
+        stroke: @pedigree-stroke;
+        fill: @pedigree-fill;
+        stroke-width:0.25mm;
+    }
+
+    text{
+        font-family: inherit;
+        font-size:12px;
+    }
+
+    .smallText{
+        font-family: inherit;
+        font-size:9px;
+        fill: @gray;
+    }
+
+    .layer text{
+        fill:#930;
+    }
+
+    .layer line{
+        stroke:@pedigree-stroke;
+    }
+
+    .birthOrder,.unknownTwins{
+        font-size: 8px;
+    }
+
+    .header{
+        display: none;
+        font-size:18px;
+        font-weight:bold;
+    }
+
+    .keyBox{
+        fill:#e5e5e5;
+        stroke:#000;
+        stroke-width:0.5mm;
+        stroke-linejoin:miter;
+        stroke-linecap:square;
+    }
+
+    .mating:hover{
+        stroke-width:1mm;
+        stroke: @btn-primary-border;
+    }
+
+    .solid, .dashed {
+        stroke-width:0.5mm;
+        stroke-linecap:square;
+        stroke-linejoin:miter;
+        stroke: @pedigree-stroke;
+
+        // Madeline doesn't fill "solid" shapes because the background
+        // labelling is supposed to appear behind the shape, clipped
+        // to its border.
+        // However, some kind of fill is necessary so that the element
+        // receives all mouse events.
+        fill: @pedigree-fill;
+        fill-opacity: 0.01;
+
+        &.selectedIndividual{
+            stroke-width:1mm;
+            stroke-linecap:square;
+            stroke-linejoin:miter;
+            stroke:@btn-success-border;
+            fill:none;
+
+
+            &.dashed {
+                stroke-dasharray:2mm,2mm;
+            }
+        }
+
+        &.selectedIndividual:hover{
+            stroke: @btn-success-border;
+            fill: @btn-success-bg;
+            fill-opacity:0.70;
+        }
+    }
+
+    .dashed{
+        stroke: @lighter-colour;
+        stroke-dasharray:2mm,1mm;
+        stroke-dashoffset:1.0mm;
+    }
+
+    .individual {
+        cursor: pointer;
+
+        &:hover {
+            fill: @btn-primary-bg;
+            fill-opacity:0.70;
+            stroke: @btn-primary-border;
+            stroke-width:1mm;
+        }
+    }
+
+    .filled{
+        stroke-width:0.5mm;
+        stroke-linecap:square;
+        stroke-linejoin:miter;
+        stroke:@pedigree-stroke;
+        fill:@pedigree-stroke;
+    }
+
+    .specialIcons{
+        stroke-width:0.25mm;
+        stroke-linecap:round;
+        stroke-linejoin:miter;
+        stroke:#000;
+        fill:#fff;
+    }
+
+    .specialLines{
+        stroke-linecap:square;
+        stroke-linejoin:miter;
+        stroke:#000;
+        stroke-width:0.5mm;
+        fill:none;
+    }
+
+    .thinLine{
+        fill:none;
+        stroke: @pedigree-stroke;
+        stroke-width:0.25mm;
+    }
+
+    .curvedConnector{
+        stroke-linecap:square;
+        stroke-linejoin:miter;
+        stroke: @lighter-colour;
+        stroke-width:0.5mm;
+        stroke-dasharray:2mm,1mm;
+        stroke-dashoffset:1.0mm;
+        fill:none;
+    }
+
+    .curvedConnector:hover{
+        stroke: @btn-primary-border;
+    }
+
+    .whiteInkLetter_1{
+        font-size: 12px;
+        fill: #fff;
+    }
+
+    .whiteInkLetter_2{
+        font-size: 10px;
+        fill: #fff;
+    }
+
+    .whiteInkLetter_3{
+        font-size: 8px;
+        fill: #fff;
+    }
+
+    .whiteInkLetter{
+        font-size: 8px;
+        fill: #fff;
+    }
+
+    .blackInkLetter_1{
+        font-size: 12px;
+    }
+
+    .blackInkLetter_2{
+        font-size: 10px;
+    }
+
+    .blackInkLetter_3{
+        font-size: 8px;
+    }
+
+    .blackInkLetter{
+        font-size: 8px;
+        fill: #000;
+    }
+
+    .blackInk{
+        fill: #000;
+    }
+
+    .whiteInk{
+        fill: #fff;
+    }
+}

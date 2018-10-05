@@ -1,0 +1,238 @@
+<div class="kin-query-auto-complete">
+  <div class="kin-query-auto-complete-close">
+    <button type="button" class="close" aria-label="Close Menu"
+            title="Hide menu (press ESC)"
+            ng-click="vm.closeMenu()"><span aria-hidden="true">&times;</span></button>
+  </div>
+
+  <div ng-if="vm.info.level.keyword">
+    <div class="kin-query-ac-header">
+      Text or keyword
+    </div>
+
+    <!--
+    <kin-query-auto-complete-keyword-options
+       current="vm.info.level.value.current"
+       insert="vm.completeKeyword(acValue, $event)">
+    </kin-query-auto-complete-keyword-options>
+    -->
+
+    <div class="kin-query-ac-option"
+         ng-repeat="keyword in vm.currentKeywords"
+         ng-if="!keyword.hidden"
+         ng-class="{ 'kin-query-ac-submenu': !!keyword.sub }">
+      <a href ng-click="vm.completeKeyword(keyword, $event)" ng-if="!keyword.sub">
+         <span ng-bind-html="keyword.name|highlight:vm.info.level.keyword.current">
+         </span>{{ keyword.type === "related" ? "." : ":" }}
+         <small ng-if="keyword.title">{{ keyword.title }}</small>
+      </a>
+
+      <a href ng-if="keyword.sub" ng-click="vm.enterSub(keyword)">{{ keyword.name }}</a>
+      <div ng-if="keyword.sub && keyword.type !== 'group'" class="kin-query-auto-complete">
+
+        <div class="kin-query-ac-option"
+             ng-repeat="skeyword in keyword.sub"
+             ng-class="{ 'kin-query-ac-submenu': !!skeyword.sub }">
+          <a href ng-click="vm.completeKeyword(skeyword, $event)" ng-if="!skeyword.sub">
+            <span ng-bind-html="skeyword.name|highlight:vm.info.level.keyword.current">
+            </span>:
+            <small ng-if="skeyword.title">{{ skeyword.title }}</small>
+          </a>
+
+          <a href ng-if="skeyword.sub">{{ skeyword.name }}</a>
+          <div ng-if="skeyword.sub" class="kin-query-auto-complete">
+
+            <div class="kin-query-ac-option"
+                 ng-repeat="sskeyword in skeyword.sub"
+                 ng-class="{ 'kin-query-ac-submenu': !!sskeyword.sub }">
+              <a href ng-click="vm.completeKeyword(sskeyword, $event)">
+                <span ng-bind-html="sskeyword.name|highlight:vm.info.level.keyword.current">
+                </span>:
+                <small ng-if="sskeyword.title">{{ sskeyword.title }}</small>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider kin-query-ac-option"></div>
+  </div>
+
+  <div ng-if="vm.info.level.value">
+    <div class="kin-query-ac-header"
+         ng-switch="vm.info.level.value.keyword.type">
+      <span ng-switch-when="resourceId">
+        Select value from list, or enter partial text.
+      </span>
+      <span ng-switch-when="date">
+        Date or range of dates
+      </span>
+      <span ng-switch-when="string">
+        <span ng-if="vm.info.level.value.keyword.typeDesc"
+              ng-bind-html="vm.info.level.value.keyword.typeDesc"></span>
+        <span ng-if="!vm.info.level.value.keyword.typeDesc">
+          {{ vm.info.level.value.keyword.title || "Text" }}
+        </span>
+      </span>
+      <span ng-switch-when="number">
+        Number or numeric range
+      </span>
+      <span ng-switch-default>
+        Value <strong>{{ vm.info.level.value.keyword.type }}</strong>
+      </span>
+    </div>
+
+    <div ng-if="vm.info.level.value.keyword.type === 'date'">
+      <!-- dob/dod options -->
+      <div class="kin-query-ac-option">
+        <a href>dd/mm/yyyy-dd/mm/yyyy</a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href>-dd/mm/yyyy <small>Before</small></a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href>dd/mm/yyyy- <small>After</small></a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href>yyyy <small>Within year</small></a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href>mm/yyyy <small>Within month</small></a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href>dd/mm/yyyy <small>On date</small></a>
+      </div>
+    </div>
+
+    <div ng-if="vm.info.level.value.keyword.type === 'number'">
+      <div class="kin-query-ac-option">
+        <a href>42 <small>Integer value</small></a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href>0.00-0.05 <small>Decimal range</small></a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href>99- <small>Open range</small></a>
+      </div>
+    </div>
+
+    <div ng-if="vm.info.level.value.keyword.type === 'boolean'">
+      <div class="kin-query-ac-option">
+        <a href ng-click="vm.completeValue('true')">true</a>
+        <a href ng-click="vm.completeValue('false')">false</a>
+        <a href ng-click="vm.completeValue('')"><em>blank</em></a>
+      </div>
+    </div>
+
+    <div ng-if="vm.info.level.value.keyword.enum">
+      <div class="kin-query-ac-option"
+           ng-repeat="opt in vm.info.level.value.keyword.enum|filter:vm.info.level.value.current track by $index">
+        <a href ng-click="vm.completeValue(opt)"
+           ng-bind-html="opt|highlight:vm.info.level.value.current"></a>
+      </div>
+      <div class="kin-query-ac-option">
+        <a href ng-click="vm.completeValue('')"><em>blank</em></a>
+      </div>
+    </div>
+
+    <div ng-if="vm.info.level.value.keyword.type === 'resourceId'">
+      <kin-query-auto-complete-value-options
+         keyword="vm.info.level.value.keyword"
+         current="vm.info.level.value.current"
+         num-pages="vm.numPages"
+         current-page="vm.currentPage"
+         page-size="vm.pageSize"
+         insert="vm.completeValue(acValue, $event)">
+      </kin-query-auto-complete-value-options>
+    </div>
+
+    <div ng-if="vm.info.level.value.keyword.type === 'search'">
+      <kin-query-auto-complete-saved-searches
+         keyword="vm.info.level.value.keyword"
+         current="vm.info.level.value.current"
+         insert="vm.completeValue(acValue, $event)">
+      </kin-query-auto-complete-saved-searches>
+    </div>
+
+    <div class="divider kin-query-ac-option"></div>
+  </div>
+
+  <div ng-if="vm.info.level.keywordRelated">
+    <div class="kin-query-ac-header">
+      Keyword of <strong>{{ vm.info.level.keywordRelated.keyword.name }}</strong>
+    </div>
+
+    <div class="kin-query-ac-option"
+         ng-repeat="keyword in vm.currentKeywords"
+         ng-if="!keyword.hidden"
+         ng-class="{ 'kin-query-ac-submenu': !!keyword.sub }">
+      <a href ng-click="vm.completeKeyword(keyword, $event)" ng-if="!keyword.sub">
+         <span ng-bind-html="keyword.name|highlight:vm.info.level.keywordRelated.current">
+         </span>{{ keyword.type === "related" ? "." : ":" }}
+         <small ng-if="keyword.title">{{ keyword.title }}</small>
+      </a>
+      <a href ng-if="keyword.sub" ng-click="vm.enterSub(keyword)">{{ keyword.name }}</a>
+    </div>
+
+    <div class="divider kin-query-ac-option"></div>
+  </div>
+
+  <div ng-if="vm.info.level.wantSpace">
+    <div class="kin-query-ac-header">
+      ...
+    </div>
+    <div class="divider kin-query-ac-option"></div>
+  </div>
+
+  <div ng-if="vm.numPages > 1 || vm.currentMenu">
+    <div class="row kin-query-ac-option">
+      <a href ng-click="vm.changePage(-1)"
+         ng-if="vm.currentPage !== 0 || !vm.currentMenu"
+         ng-class="{ disabled: vm.currentPage <= 0 }"
+         class="paging col-xs-4">⮜&nbsp;prev</a>
+      <a href ng-click="vm.exitSub()"
+         ng-if="vm.currentPage === 0 && vm.currentMenu"
+         class="paging col-xs-4">▲&nbsp;up</a>
+    <span class="paging col-xs-4">
+      {{ vm.currentPage + 1 }}/{{ vm.numPages }}
+    </span>
+    <a href ng-click="vm.changePage(1)"
+       ng-class="{ disabled: vm.currentPage >= vm.numPages - 1 }"
+       class="paging col-xs-4">next&nbsp;⮞</a>
+    </div>
+    <div class="divider kin-query-ac-option"></div>
+  </div>
+
+  <div class="kin-query-ac-option">
+    <a href ng-click="vm.insertExpr('AND', $event)"
+       ng-class="{ disabled: !vm.info.expectedExpr.and }"
+       class="boolean col-xs-3">AND</a>
+    <a href ng-click="vm.insertExpr('OR', $event)"
+       ng-class="{ disabled: !vm.info.expectedExpr.or }"
+       class="boolean col-xs-3">OR</a>
+    <a href ng-click="vm.insertExpr('NOT', $event)"
+       ng-class="{ disabled: !vm.info.expectedExpr.not }"
+       class="boolean col-xs-3">NOT</a>
+    <a href ng-click="vm.insertBrackets()"
+       ng-class="{ disabled: !vm.info.expectedExpr.brackets }"
+       class="boolean col-xs-3">( )</a>
+  </div>
+
+  <div ng-if="false" class="debug">
+    <div class="divider kin-query-ac-option"></div>
+    <div class="kin-query-ac-option kin-query-ac-submenu">
+      <a href="#">
+        Expected
+      </a>
+      <div class="kin-query-auto-complete">
+        <div class="kin-query-ac-header">{{ vm.info.expected.token }} expected =</div>
+        <div class="kin-query-ac-option"
+             ng-repeat="e in vm.info.expected.expected track by $index">
+          <a>{{ e }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,3 @@
+<option ng-if="opts.blank && false" ng-value="''"><em>&mdash; None &mdash;</em></option>
+<option ng-if="opts.unknown" ng-value="''"><em>&mdash; Unknown &mdash;</em></option>
+<option ng-repeat="item in opts.items track by item.value" ng-value="item.value">{{ item.title }}</option>

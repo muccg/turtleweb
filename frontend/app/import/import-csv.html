@@ -1,0 +1,317 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Input File</h3>
+      </div>
+      <div class="panel-body"
+           ngf-drop=""
+           ng-model="files"
+           ng-model-rejected="rejFiles"
+           ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+           ngf-multiple="false"
+           ngf-allow-dir="false"
+           ngf-accept="accept"
+           ngf-drop-available="dropAvailable">
+        
+        <div class="row">
+          <div class="col-sm-6">
+            <a href class="btn btn-primary btn-block"
+               ngf-select="" ng-model="files" ngf-accept="accept">
+              <i class="glyphicon glyphicon-upload"></i>
+              Click to select a file.
+            </a>
+          </div>
+	  <div class="col-sm-6" ng-show="dropAvailable">
+            <p>Or, drop a CSV file in this box.</p>
+          </div>
+        </div>
+
+        <p></p>
+
+        <a ng-if="csvFile" class="btn btn-default pull-right" ng-click="showRaw(csvFile)">
+          <i class="glyphicon glyphicon-file"></i>
+        </a>
+
+        <div uib-dropdown class="btn-group" is-open="status.isopen" ng-show="history && history.length">
+          <button uib-dropdown-toggle type="button" class="btn dropdown-toggle"
+                  ng-class="{ 'btn-default': !csvFile, 'btn-success': !!csvFile }"
+                  ng-click="status.isopen = !status.isopen">
+            <span ng-show="!csvFile">
+              <i class="glyphicon glyphicon-open-file"></i>
+              Select Previous
+            </span>
+            <span ng-show="!!csvFile">
+              <i class="glyphicon glyphicon-ok"></i>
+              Loaded <strong>{{ csvFile.filename }}</strong>
+            </span>
+
+            <span class="caret"></span>
+          </button>
+          <ul uib-dropdown-menu role="menu">
+            <li ng-repeat="csv in history">
+              <a href ng-click="loadCsv(csv)">{{ csv.created|apiDateShow }} {{ csv.created|apiTimeShow }} {{ csv.filename }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <progressbar ng-if="files[0] && files[0].progress >= 0 && !csvFile"
+                     class="progress-striped active"
+                     value="files[0].progress">
+          {{ files[0].name }}
+          <span ng-show="files[0].progress < 100">{{ files[0].progress }}%</span>
+          <span ng-show="files[0].progress >= 100">Processing...</span>
+        </progressbar>
+
+        <div ng-if="csvError" class="alert alert-danger" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="csvError = null"><span aria-hidden="true">&times;</span></button>
+          <strong>Error loading CSV.</strong>
+          {{ csvError }}
+        </div>
+
+        <form ng-if="false" name="csvFormatForm" novalidate>
+          <div class="form-group">
+            <label for="csv-sep">Field Separator</label>
+            <select class="form-control" id="csv-sep" ng-model="csvFormat.sep">
+              <option value="">Autodetect</option>
+              <option value="t">Tab</option>
+              <option value=",">Comma</option>
+              <option value=";">Semicolon</option>
+              <option value="s">Space</option>              
+            </select>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="csvFormat.merge">
+              Merge delimiters
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6" ng-show="csvFile">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Input file statistics</h3>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt>Filename</dt><dd>{{ csvFile.filename }}</dd>
+          <dt>File size</dt><dd>{{ csvFile.size }} bytes</dd>
+          <dt>Number of rows</dt><dd>{{ csvFile.num_rows }}</dd>
+          <dt>Number of columns</dt><dd>{{ csvFile.num_cols }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" ng-show="csvFile">
+  <div class="col-md-3 col-md-push-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Options</h3>
+      </div>
+      <div class="panel-body">
+        <form name="optionsForm" novalidate>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="options.create" ng-required="!options.update">
+              Create new records.
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="options.update" ng-required="!options.create">
+              Update existing records when key field matches.
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="options.overwrite_empty">
+              Overwrite fields with empty values when CSV has empty values.
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="key-header">Key Heading</label>
+            <select class="form-control" id="key-field"
+                    ng-model="options.key"
+                    ng-options="header disable when !options.mapping[header] for header in csvFile.header"
+                    ng-required="options.update">
+              <option value=""></option>
+            </select>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-9 col-md-pull-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Column Mapping</h3>
+      </div>
+      <div class="panel-body">
+        <p>Assign columns in the CSV to fields. Setting a key field
+        makes it possible to update existing records. An empty field
+        means that the column won't be imported.</p>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>CSV Heading</th>
+            <th>Field</th>
+            <th>Key</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="header in csvFile.header track by $index">
+            <td class="col-xs-4">
+              {{ header }}
+            </td>
+            <td class="col-xs-6 invisibutton">
+              <kin-import-field-select
+                 ng-model="options.mapping[header]"
+                 resource="resource">
+              </kin-import-field-select>
+            </td>
+            <td class="col-xs-2">
+              <button class="btn btn-link btn-sm"
+                 ng-model="options.key"
+                 ng-disabled="!options.mapping[header]"
+                 uib-btn-radio="header">
+                <i class="glyphicon"
+                   ng-class="{'glyphicon-ok': options.key === header, 'glyphicon-minus': options.key !== header}"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default" ng-show="csvPreview">
+  <div class="panel-heading">
+    <h3 class="panel-title">Preview</h3>
+  </div>
+  <div class="panel-body">
+    <p>These are the first {{ csvPreview.limit }} rows from the
+    CSV.</p>
+  </div>
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th ng-repeat="header in csvPreview.fields track by $index">
+          {{ header }}
+        </th>
+        <th>OK</th>
+        <th>Create</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="update in csvPreview.updates track by $index"
+          ng-class="{ danger: !update.success }">
+        <td>{{ $index + 1 }}</td>
+        <td ng-repeat="field in csvPreview.fields track by $index">
+          {{ update.values[field] }}
+        </td>
+        <td>{{ update.success ? '✓' : '✗' }}</td>
+        <td>{{ update.pk ? '' : '✓' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel panel-default" ng-show="csvPreview">
+  <div class="panel-heading">
+    <h3 class="panel-title">Do It</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-10 col-xs-push-2">
+        <div ng-if="!importProgress">
+          <div ng-if="false" ng-show="csvPreview.success" class="alert alert-success" role="alert">
+            Ready to import.
+          </div>
+
+          <div ng-show="!csvPreview.success" class="alert alert-danger" role="alert">
+            The CSV can't be imported with these options.
+          </div>
+        </div>
+
+        <progressbar ng-if="importProgress" class="progress-striped active"
+                     value="importProgress">
+          Importing {{ importProgress }}%
+        </progressbar>
+      </div>
+
+      <div class="col-xs-2 col-xs-pull-10">
+        <button class="btn btn-lg btn-block"
+                ng-class="{'btn-success': csvPreview.success, 'btn-primary': !csvPreview.success}"
+                ng-disabled="!csvPreview.success"
+                ng-click="ctrl.doImport()">
+          <i class="glyphicon glyphicon-flash"></i>
+          Import Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="inline/import-csv-raw.html">
+  <div class="modal-header">
+    <h3 class="modal-title">{{ result.filename }}</h3>
+  </div>
+  <div class="modal-body">
+    <pre>{{ result.preview }}</pre>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$close()">Close</button>
+  </div>
+</script>
+
+<script type="text/ng-template" id="inline/import-csv-success.html">
+  <div class="modal-header">
+    <h3 class="modal-title">CSV Import Complete</h3>
+  </div>
+  <div class="modal-body">
+    <dl class="dl-horizontal">
+      <dt>Number of rows read</dt>
+      <dd>{{ result.num_rows }}</dd>
+      <dt>Number of records updated</dt>
+      <dd>{{ result.num_updated }}</dd>
+      <dt>Number of records created</dt>
+      <dd>{{ result.num_created }}</dd>
+      <dt>Number of fields changed</dt>
+      <dd>{{ result.fields_changed }}</dd>
+      <dt>Number of error rows</dt>
+      <dd>{{ result.num_error_rows }}</dd>
+      <dt>Number of error fields</dt>
+      <dd>{{ result.num_errors }}</dd>
+    </ul>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$close()">Close</button>
+  </div>
+</script>
+
+<script type="text/ng-template" id="inline/import-csv-failure.html">
+  <div class="modal-header">
+    <h3 class="modal-title">CSV Import Failed</h3>
+  </div>
+  <div class="modal-body">
+    <p>With the given settings, this CSV could not be imported.</p>
+    <p>{{ result.error }}</p>
+    <pre>{{ result|json }}</pre>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$close()">Close</button>
+  </div>
+</script>

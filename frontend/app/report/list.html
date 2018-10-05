@@ -1,0 +1,53 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb title="Reports"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-sm-10">
+
+    <div class="col-sm-6 col-md-4" ng-repeat="report in vm.reports">
+      <div class="thumbnail thumbnail-study">
+        <img class="pull-right" alt="{{report.name}}"
+             ng-if="report.logo" ng-src="assets/images/{{report.logo}}">
+        <div class="caption">
+          <h3>
+            {{report.name}}
+            <small class="hide">{{ report.owner }}</small>
+          </h3>
+          <p>{{report.desc}}</p>
+          <small>
+            <ng-pluralize count="report.members.length"
+                          when="{'0': 'No members', 'one': '1 member', 'other': '{} members'}">
+            </ng-pluralize>
+          </small>
+        </div>
+        <div class="buttons">
+          <a ng-link="['Edit', {id: report.id}]" class="btn btn-default">
+            <i class="glyphicon glyphicon-pencil"></i>
+            Edit
+          </a>
+
+          <a ng-link="['Detail', {id: report.id}]" class="btn btn-primary">
+            <i class="glyphicon glyphicon-th-list"></i>
+            Detail
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4" ng-if="vm.reports.length === 0">
+      <p>There are no reports in this study yet.</p>
+    </div>
+
+    <div class="col-sm-6 col-md-4" ng-if="!vm.reports">
+      <p class="loading">Loading...</p>
+    </div>
+  </div>
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <a ng-link="['Add']" class="btn btn-large btn-primary">
+        <i class="glyphicon glyphicon-plus"></i> Create Report
+      </a>
+    </li>
+  </ul>
+</div><!--/row-->

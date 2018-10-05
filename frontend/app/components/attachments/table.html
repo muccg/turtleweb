@@ -1,0 +1,38 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th width="16"></th>
+      <th>Filename</th>
+      <th width="10%">Date</th>
+      <th width="10%">Time</th>
+      <th>Uploader</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="file in $ctrl.files">
+      <td>
+        <i class="glyphicon glyphicon-paperclip"></i>
+      </td>
+      <td><a ng-href="{{ file.url }}" target="_self">{{ ::file.name }}</a></td>
+      <td>{{ ::file.created | apiDateShow }}</td>
+      <td>{{ ::file.created | apiTimeShow }}</td>
+      <td><kin-username ng-model="file.creator"></kin-username></td>
+    </tr>
+  </tbody>
+  <tbody ng-if="$ctrl.files && $ctrl.files.length === 0" class="empty">
+    <tr class="empty">
+      <td></td>
+      <td colspan="4">
+        No file attachments.
+      </td>
+    </tr>
+  </tbody>
+  <tbody ng-if="!$ctrl.files" class="loading">
+    <tr class="loading">
+      <td></td>
+      <td colspan="4">
+        Loading...
+      </td>
+    </tr>
+  </tbody>
+</table>

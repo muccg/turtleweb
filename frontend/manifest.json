@@ -1,0 +1,18 @@
+{
+  "short_name": "Turtleweb",
+  "name": "Turtleweb",
+  "icons": [
+    {
+      "src": "img/favicon-turtle-48.png",
+      "sizes": "48x48"
+    }, {
+      "src": "img/favicon-turtle-96.png",
+      "sizes": "96x96"
+    }. {
+      "src": "img/favicon-turtle-192.png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone"
+}

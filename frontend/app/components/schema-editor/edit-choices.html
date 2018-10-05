@@ -1,0 +1,14 @@
+<ul class="list-unstyled">
+  <li ng-repeat="choice in vm.choices track by $index">
+    <kin-edit-label ng-model="vm.choices[$index]"
+                    editing="vm.editing[$index]"
+                    on-delete="vm.deleteChoice($index)" show-delete="true"></kin-edit-label>
+  </li>
+  <li>
+    <button type="button" class="btn btn-sm btn-primary"
+            ng-click="vm.addChoice()">
+      <i class="glyphicon glyphicon-plus"></i>
+      Add
+    </button>
+  </li>
+</ul>

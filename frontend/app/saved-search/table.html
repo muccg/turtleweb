@@ -1,0 +1,30 @@
+<table class="table" >
+  <thead>
+    <tr>
+      <th>Saved search</th>
+      <th>Description</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody ng-if="searches && searches.length">
+    <tr ng-repeat="search in searches" class="invisibutton">
+      <td><a ng-link="searchViewLink(search)" ng-click="selectSearch(search)">{{ search.name }}</a></td>
+      <td>{{ search.desc }}</td>
+      <td>
+        <button type="button" class="btn btn-xs btn-default"
+                ng-link="searchEditLink(search)">
+          <i class="glyphicon glyphicon-pencil"></i> Edit
+        </button>
+      </td>
+    </tr>
+  </tbody>
+
+  <tbody class="empty" ng-if="searches && !searches.length">
+    <tr><td>No saved searches yet</td></tr>
+  </tbody>
+
+  <tbody class="loading" ng-if="!searches">
+    <tr><td><i class="glyphicon glyphicon-refresh"></i> Loading</td></tr>
+  </tbody>
+</table>

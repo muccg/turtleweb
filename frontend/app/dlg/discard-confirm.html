@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h3 class="modal-title">Save changes?</h3>
+</div>
+<div class="modal-body">
+  <p ng-if="!dirtyTime">
+    This will discard any changes made to the record.
+  </p>
+  <p ng-if="dirtyTime">
+    This will discard any changes made since {{ dirtyTime.fromNow(false) }}.
+  </p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="$close(false)">Discard Changes</button>
+  <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button class="btn btn-success" ng-click="$close(true)">Save</button>
+</div>

@@ -1,0 +1,63 @@
+<div class="modal-header">
+  <h3 class="modal-title">Patient Consent</h3>
+</div>
+<div class="modal-body">
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="study">Study</th>
+        <th class="status">Status</th>
+        <th class="date">Date</th>
+        <th class="consented-by">Consented By</th>
+      </tr>
+    </thead>
+    <tbody ng-hide="vm.consents.length === 1">
+      <tr ng-repeat="consent in vm.consents track by $index">
+        <td class="study">
+          <a ng-link="['/App/Studies', { study: consent.study.slug }, 'Person/Detail', { id: vm.personId }]">
+            {{ consent.study.name }}
+          </a>
+        </td>
+        <td class="status">{{ consent.status.name }}</td>
+        <td class="date">{{ consent.date|apiDateShow }}</td>
+        <td class="consented-by">
+          <kin-ddl-lookup uri="consent.consented_by">
+          </kin-ddl-lookup>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot class="consent-outcome">
+      <tr ng-class="{ success: vm.outcome.consent === true, danger: vm.outcome.consent === false, warning: vm.outcome.consent === null }">
+        <td class="study">{{ vm.outcome.study.name }}</td>
+        <td class="status">
+          <i class="glyphicon"
+             ng-class="{ 'glyphicon-thumbs-up': vm.outcome.consent === true, 'glyphicon-thumbs-down': vm.outcome.consent === false }"></i>
+          {{ vm.outcome.status.name }}
+        </td>
+        <td class="date">
+          {{ vm.outcome.date|apiDateShow }}
+        </td>
+        <td class="consented-by">
+          <kin-ddl-lookup uri="vm.outcome.consented_by">
+          </kin-ddl-lookup>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="3">
+          <kin-custom-data-fields ng-model="vm.outcome.data" resource="studyconsent" study="vm.outcome.study">
+          </kin-custom-data-fields>
+          <kin-files-table-lite item="vm.outcome">
+          </kin-files-table-lite>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div class="modal-footer">
+  <span class="pull-left">
+  <kin-attach-button item="vm.outcome" ng-if="vm.outcome && user.perms.patientEdit">
+  </kin-attach-button>
+  </span>
+  <button class="btn btn-primary" ng-click="$dismiss()">Close</button>
+</div>

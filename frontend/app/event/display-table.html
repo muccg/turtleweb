@@ -1,0 +1,54 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Event Type</th>
+      <th>Study</th>
+      <th>Event Date</th>
+      <th class="hidden">Event Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat-start="event in events" class="hover"
+        kin-toggle-expand-key="event.resource_uri">
+      <td width="10%">
+        <a class="kin-record-id">
+          <i kin-expandy-key="event.resource_uri"></i>
+          {{ event|eventId }}
+        </a>
+      </td>
+      <td>
+        {{ event.type.name }}
+      </td>
+      <td>{{ event.study|studyLookup }}</td>
+      <td>{{ event.date | apiDateShow }}</td>
+      <td class="hidden">{{ event.date | apiTimeShow }}</td>
+    </tr>
+    <tr ng-repeat-end ng-if="kinExpandState.get(event.resource_uri)">
+      <td>
+        <a class="btn btn-link"
+           ng-link="eventLink(event, 'Edit')"
+           ng-if="perms.patientEdit">
+          <i class="glyphicon glyphicon-pencil"></i> Edit
+        </a>
+        <a class="btn btn-link"
+           ng-link="eventLink(event, 'AddSample')"
+           ng-if="perms.patientEdit">
+          <i class="glyphicon glyphicon-tag"></i> Add Sample
+        </a>
+        <kin-attach-button item="event" btn-class="btn-link"
+                           ng-if="perms.patientEdit">
+        </kin-attach-button>
+      </td>
+      <td colspan="3">
+        <kin-event-fields
+           ng-model="event.data"
+           event-type="event.type"
+           patient-has-cases="patientHasCases">
+        </kin-event-fields>
+        <kin-files-table-lite item="event">
+        </kin-files-table-lite>
+      </td>
+    </tr>
+  </tbody>
+</table>

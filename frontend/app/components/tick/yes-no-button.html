@@ -1,0 +1,12 @@
+<div class="btn-group">
+  <label class="btn"
+         ng-class="{'btn-success': val, 'btn-default': !item.val}"
+         ng-model="val" uib-btn-radio="true">
+    Yes
+  </label>
+  <label class="btn"
+         ng-class="{'btn-danger': !val, 'btn-default': val}"
+         ng-model="val" uib-btn-radio="false">
+    No
+  </label>
+</div>

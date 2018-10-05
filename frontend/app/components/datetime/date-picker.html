@@ -1,0 +1,17 @@
+<div>
+  <p class="input-group">
+    <input id="{{ ::$ctrl.inputId }}" name="{{ ::$ctrl.inputId }}"
+           type="text" class="form-control"
+           placeholder="dd/mm/yyyy"
+           uib-datepicker-popup="{{ ::$ctrl.formats[0] }}"
+           ng-model="$ctrl.dt"
+           alt-input-formats="$ctrl.formats"
+           is-open="$ctrl.opened" datepicker-options="$ctrl.dateOptions"
+           ng-required="$ctrl.ngRequired"
+           ng-disabled="$ctrl.ngDisabled"
+           close-text="Close">
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="$ctrl.open($event)" ng-disabled="$ctrl.isDisabled"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+  </p>
+</div>

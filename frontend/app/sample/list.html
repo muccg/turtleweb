@@ -1,0 +1,199 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['App', 'Biobank']" title="Biobank"></kin-breadcrumb>
+  <kin-breadcrumb title="Search"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-sm-12">
+    <form class="form-horizontal" role="form" novalidate autocomplete="off"
+          name="queryForm" ng-submit="vm.submit()">
+      <div class="form-group query-form">
+        <div class="col-xs-12">
+          <label class="sr-only" for="searchQuery">Search terms</label>
+
+          <kin-query class="kin-query" ng-model="vm.search.expr" resource="vm.search.what">
+            <div class="input-group">
+              <input type="text" id="searchQuery"
+                     class="form-control input-lg"
+                     placeholder="Sample query"
+                     spellcheck="false"
+                     ng-model="kinQuery.text"
+                     kin-query-input
+                     kin-query-auto-complete="vm.ac"
+                     kin-autofocus
+                     ng-readonly="show_options">
+              <span class="input-group-btn" uib-dropdown>
+                <button type="submit" ng-disabled="queryForm.$invalid" class="btn btn-lg btn-primary">
+                  <span class="hidden-xs hidden-sm">Search</span>
+                  <span class="visible-xs visible-sm"><i class="glyphicon glyphicon-search"></i></span>
+                </button>
+                <button type="button" ng-disabled="queryForm.$invalid"
+                        class="btn btn-lg btn-default"
+                        uib-dropdown-toggle>
+                  <span class="hidden-xs hidden-sm">Save <span class="caret"></span></span>
+                  <span class="visible-xs visible-sm"><i class="glyphicon glyphicon-save"></i></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" uib-dropdown-menu>
+                  <li><a href="" ng-click="vm.kinSavedSearch.create(vm.search)">Create saved search</a></li>
+                  <li ng-if="vm.search.saved"><a href ng-click="vm.kinSavedSearch.update(vm.search)">Update <em>{{ vm.search.saved.name }}</em></a></li>
+                  <li><a target="_blank" ng-if="vm.search.getCsvLink()"
+                         ng-href="{{ vm.search.getCsvLink() }}">Download CSV</a></li>
+                </ul>
+                <button ng-disabled="vm.search.is_blank()" ng-click="vm.search.clearAndRefresh()"
+                        class="btn btn-lg btn-cancel hidden-xs hidden-sm">Clear</button>
+              </span>
+            </div>
+
+            <kin-query-auto-complete-menu pos="vm.ac.pos" info="vm.ac">
+            </kin-query-auto-complete-menu>
+
+          </kin-query>
+        </div>
+      </div>
+    </form>
+
+    <kin-container-path
+       levels="vm.levels" container="vm.container"
+       capacity="false"
+       show-matches="vm.search.items"
+    </kin-container-path>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <p class="loading" ng-if="vm.kinContainers.tree === null">Loading...</pre>
+</div>
+</div><!--/row-->
+
+<div class="row">
+  <div class="col-xs-12">
+
+    <kin-grid on-select="vm.sampleSelect(item.id)">
+      <kin-grid-search search="vm.search"></kin-grid-search>
+
+      <kin-grid-col
+         heading="Biospec ID" show="true" export="true"
+         field="specimen_id" sort-dir="1"
+         cell-sref="['Detail', {id: item.id}]">
+      </kin-grid-col>
+      <kin-grid-col
+         heading="Patient" show="true" export="true"
+         field="owner.pid_full_name" sortable="false"
+         expr="item.owner|patientIdFullName"
+         cell-sref="['/App/Studies', {study: '_'}, 'Person', 'Detail', {id: item.owner.id}]">
+      </kin-grid-col>
+      <kin-grid-col
+         heading="Location" show="true" export="true"
+         field="location"
+         expr="item.location|sampleLocation:true">
+      </kin-grid-col>
+      <kin-grid-col
+         heading="Type" show="true" export="true"
+         field="cls"
+         expr="item.cls.name">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Sub-type" show="false" export="false"
+         field="subtype"
+         expr="item.subtype.name">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Stored In" show="false" export="false"
+         field="stored_in"
+         expr="item.stored_in.name">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Treatment" show="false" export="false"
+         field="treatment"
+         expr="item.treatment.name">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Behaviour" show="false" export="false"
+         field="behaviour"
+         expr="item.behaviour.name">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="DNA Extraction Protocol" show="false" export="false"
+         field="dna_extraction_protocol"
+         expr="item.dna_extraction_protocol.name">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Amount" show="false" export="false"
+         field="amount">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Concentration" show="false" export="false"
+         field="concentration">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Collection Date"
+         show="false" export="true"
+         expr="item|sampleTransactionDate:'samplecollection'|apiDateShow"
+         field="collection.date"
+         sort-field="transactions__samplecollection__date">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Collection Time"
+         show="false" export="true"
+         expr="item|sampleTransactionDate:'samplecollection'|apiTimeShow"
+         field="collection.date"
+         sort-field="transactions__samplecollection__date">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Processed Date"
+         show="false" export="true"
+         expr="item|sampleTransactionDate:'sampleprocessed'|apiDateShow"
+         field="processed.date"
+         sort-field="transactions__sampleprocessed__date">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Processed Time"
+         show="false" export="true"
+         expr="item|sampleTransactionDate:'sampleprocessed'|apiTimeShow"
+         field="processed.date"
+         sort-field="transactions__sampleprocessed__date">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Frozen/Fixed Date"
+         show="false" export="true"
+         expr="item|sampleTransactionDate:'samplefrozenfixed'|apiDateShow"
+         field="frozenfixed.date"
+         sort-field="transactions__samplefrozenfixed__date">
+      </kin-grid-col>
+
+      <kin-grid-col
+         heading="Frozen/Fixed Time"
+         show="false" export="true"
+         expr="item|sampleTransactionDate:'samplefrozenfixed'|apiTimeShow"
+         field="frozenfixed.date"
+         sort-field="transactions__samplefrozenfixed__date">
+      </kin-grid-col>
+
+      <!-- transactions__samplecollection__event__type__name -->
+      <kin-grid-col
+         heading="Event Type"
+         show="true"
+         export="true"
+         sortable="false"
+         field="event.type"
+         expr="item|sampleEventType">
+      </kin-grid-col>
+
+      <kin-grid-data-cols data="item.data" schema="sample">
+      </kin-grid-data-cols>
+    </kin-grid>
+  </div>
+</div>

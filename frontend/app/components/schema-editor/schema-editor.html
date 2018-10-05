@@ -1,0 +1,111 @@
+<form class="form-inline" autocomplete="off">
+  <div ui-sortable="sortableOptions" ng-model="vm.fields">
+    <div class="panel panel-default" ng-repeat="field in vm.fields track by $index">
+      <div class="panel-heading" ng-click="vm.fieldExpand[$index] = !vm.fieldExpand[$index]">
+        <h3 class="panel-title field-title">
+          <i class="glyphicon" ng-class="{ 'glyphicon-triangle-right': !vm.fieldExpand[$index], 'glyphicon-triangle-bottom': vm.fieldExpand[$index] }"></i>
+          <span>{{ field.title || field.name || 'New field' }}
+            <small ng-if="field.name && field.title && field.title != field.name">{{ field.name }}</small>
+
+            <button type="button" class="btn btn-danger btn-xs pull-right"
+                    ng-show="vm.fieldExpand[$index]"
+                    ng-click="vm.fields.splice($index, 1)"
+                    title="Remove this field">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </h3>
+      </div>
+      <div class="panel-body" ng-if="vm.fieldExpand[$index]">
+
+        <div class="col-xs-12">
+
+          <ng-form name="fieldForm">
+            <div class="form-group">
+              <label for="fieldTitle" class="control-label">Title</label>
+              <input ng-model="field.title" type="text" class="form-control" id="fieldTitle" placeholder="Title">
+              <span class="help-block">
+                Optional readable text describing the field.
+              </span>
+            </div>
+            <div class="form-group">
+              <label for="fieldName" class="control-label required">Name</label>
+              <input type="text" class="form-control" id="fieldName" name="fieldName" placeholder="Name"
+                     ng-model="field.name" pattern="[a-z_][a-z0-9_]*" required>
+              <p ng-show="fieldForm.fieldName.$error && fieldForm.fieldName.$dirty" class="help-block">
+                <span ng-show="fieldForm.fieldName.$error.required">
+                  A field name is required.
+                </span>
+                <span ng-show="fieldForm.fieldName.$error.pattern">
+                  Name must be made up of only lowercase letters,
+                  underscores, and digits.
+                </span>
+              </p>
+              <span class="help-block">
+                The name used for storing field values.
+              </span>
+            </div>
+            <div class="form-group">
+              <label for="fieldDescription" class="control-label">Help text</label>
+              <input ng-model="field.description" type="text" class="form-control" id="fieldDescription" placeholder="Description">
+              <span class="help-block">
+                The text will be shown in a block like this when editing values.
+              </span>
+            </div>
+            <div class="form-group">
+              <label for="fieldType" class="control-label required">Type</label>
+              <select class="form-control" id="fieldType"
+                      ng-model="field.type" required
+                      ng-options="t.type as t.name for t in vm.typeOptions">
+              </select>
+            </div>
+
+            <div class="form-group" ng-if="field.type === 'choices'">
+              <label for="fieldChoices" class="control-label">Choices</label>
+              <kin-edit-choices ng-model="field.enum">
+              </kin-edit-choices>
+            </div>
+
+            <div class="form-group" ng-if="field.type === 'ddl'">
+              <label for="fieldResource" class="control-label required">Name List</label>
+              <select class="form-control" id="fieldResource" name="fieldResource"
+                      ng-model="field.resource" required
+                      ng-options="o.id as o.list.name for o in vm.lists">
+              </select>
+              <p ng-show="fieldForm.fieldResource.$error.required && fieldForm.fieldResource.$touched" class="help-block">
+                A name list is required.
+              </p>
+            </div>
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="field.required"> Value Required
+              </label>
+            </div>
+          </ng-form>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</form>
+
+<div class="panel panel-default" ng-hide="vm.hasPlaceholder()">
+  <div class="panel-heading">
+    <h3 class="panel-title">Add a field</h3>
+  </div>
+  <div class="panel-body">
+
+    <button type="button" class="btn btn-primary"
+            ng-click="vm.addField()">
+      <i class="glyphicon glyphicon-plus"></i>
+      Add a field
+    </button>
+
+  </div>
+</div>
+
+<p class="help-block">
+  Fields can be expanded/collapsed by clicking on their headings. To
+  re-order the list, just drag and drop field headings.
+</p>

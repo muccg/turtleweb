@@ -1,0 +1,6 @@
+<ol class="navbar-breadcrumbs">
+  <li ng-repeat="crumb in $ctrl.crumbs" ng-class="{ active: $last }" ng-if="!crumb.hide">
+    <a ng-if="!$last && crumb.href" ng-href="{{ crumb.href }}" ng-click="$ctrl.navbar.close()">{{ crumb.title }}</a>
+    <span ng-if="$last || !crumb.href">{{ crumb.title }}</span>
+  </li>
+</ol>

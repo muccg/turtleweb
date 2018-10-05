@@ -1,0 +1,11 @@
+<div class="modal-header">
+  <h4 class="modal-title">Session idle</h4>
+</div>
+<div class="modal-body">
+  <p>Due to inactivity, your session will be automatically
+    closed in {{ pinger.timeRemaining }} seconds.</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="$close()">Log out now</button>
+  <button type="submit" class="btn btn-success" ng-click="$dismiss()" autofocus>Go back</button>
+</div>

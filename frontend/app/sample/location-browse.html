@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-xs-6 col-sm-4 col-md-3"
+       ng-repeat-start="level in levels">
+
+    <div class="panel panel-default" ng-if="!level.terminal">
+      <div class="panel-heading"><h4>{{ level.cls.name }}</h4></div>
+      <div class="list-group">
+        <a href="" class="list-group-item"
+           ng-repeat="container in level.containers"
+           ng-click="openLevel($parent.$index, container)"
+           ng-class="{ active: level.selected === container }">
+          <span ng-if="capacity" class="badge">
+            {{ container.num_samples }} / {{ container.capacity }}
+          </span>
+          <span ng-if="showMatches" class="badge">
+            {{ container.num_samples_match }}
+            {{ container.num_samples_match !== undefined ? '/' : '' }}
+            {{ container.num_samples }}
+          </span>
+          {{ container.name }}
+        </a>
+      </div>
+    </div>
+
+    <kin-container-grid
+       ng-if="level.terminal"
+       samples="container.samples"
+       dim="level.cls.dim"
+       coord="level.cls.coord"
+       width="level.container.width"
+       height="level.container.height"
+       depth="level.container.depth"
+       on-select="onSelect({ $sampleId: $sampleId, $coord: $coord })">
+    </kin-container-grid>
+  </div>
+
+  <!-- add a clearfix after every 4th level on md size viewport -->
+  <div ng-repeat-end>
+    <div ng-if="$index % 4 === 3"
+         class="clearfix visible-md-block">
+    </div>
+  </div>
+</div><!--/row-->

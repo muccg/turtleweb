@@ -1,0 +1,50 @@
+<div class="row" ng-repeat="study in vm.allStudies">
+  <div class="col-md-6">
+    <h3>{{ study.name }}</h3>
+
+    <ul class="list-group"
+        ui-sortable="sortableOptions" ng-model="vm.groupedItems[study.resource_uri]">
+      <li class="list-group-item invisibutton"
+          ng-repeat="item in vm.groupedItems[study.resource_uri]">
+        <div class="row">
+          <div class="drag-handle col-xs-1">
+            <i class="glyphicon glyphicon-menu-hamburger"
+               ng-style="{ 'margin-left': angular.isDefined(item.depth) ? item.depth + 'em' : null }">
+            </i>
+          </div>
+          <div class="col-xs-8">
+            <kin-edit-label ng-model="item.name"></kin-edit-label>
+          </div>
+          <div class="col-xs-3">
+            <span class="pull-right">
+              <span ng-if="item.default" class="label label-primary">Default</span>
+              <button type="button" class="btn btn-default btn-xs"
+                      ng-click="vm.toggleDefault(item)">
+                <i ng-hide="item.default" class="glyphicon glyphicon-ok"></i>
+                {{ item.default ? "&times;" : "Set Default" }}
+              </button>
+
+              <button type="button" class="btn btn-danger btn-xs"
+                      ng-click="vm.deleteItem(item)"
+                      title="Remove">
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-xs-8 col-xs-offset-1">
+            <button type="button" class="btn btn-primary btn-sm"
+                    ng-click="vm.addItem(study)">
+              <i class="glyphicon glyphicon-plus"></i>
+              Add Item
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

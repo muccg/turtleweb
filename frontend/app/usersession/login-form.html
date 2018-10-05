@@ -1,0 +1,48 @@
+<form novalidate class="form-signin" autocomplete="off" ng-submit="vm.login()" name="login" method="post">
+  <!-- tricks chrome into not rememebering login details -->
+  <input class="login-fake" type="email" name="fakeemailremembered"/>
+  <input class="login-fake" type="password" name="fakepasswordremembered"/>
+
+  <input type="email" name="email" class="form-control" autocomplete="off"
+         placeholder="E-mail address" focus-on="loginEmail"
+         ng-model="vm.creds.email"
+         ng-show="!vm.s.token_wait" ng-disabled="vm.s.checking" />
+  <input type="password" name="password" class="form-control"
+         placeholder="Password" autocomplete="off"
+         ng-model="vm.creds.password"
+         ng-show="!vm.s.token_wait" ng-disabled="vm.s.checking"
+         focus-on="loginPassword" />
+  <div class="checkbox" ng-show="!vm.s.token_wait">
+    <label>
+      <input type="checkbox" ng-model="vm.remember.rememberEmail"> Remember e-mail address
+    </label>
+  </div>
+  <input type="number" class="form-control nospinner" name="code"
+         placeholder="Enter {{ vm.tokenDigits }}-digit PIN" focus-on="enterToken"
+         ng-model="vm.creds.token" ng-show="vm.s.token_wait"
+         ng-minlength="vm.tokenDigits" ng-maxlength="vm.tokenDigits"
+         kin-token-code="vm.tokenDigits"
+         ng-pattern="/^[0-9]+$/" ng-required="vm.s.token_wait" />
+  <button type="submit" ng-disabled="vm.s.checking || !vm.creds.email || !vm.creds.password || (vm.s.token_wait && !vm.creds.token)" class="btn btn-lg btn-primary btn-block">
+    <span ng-show="vm.s.token_wait && !vm.s.checking">Sign in</span>
+    <span ng-show="!vm.s.token_wait && !vm.s.checking">Get Token</span>
+    <span ng-show="vm.s.checking">
+      <i class="glyphicon glyphicon-refresh"></i> Checking
+    </span>
+  </button>
+</form>
+
+<div class="alert alert-danger" ng-if="vm.s.error_msg">
+  <strong>Could not log in.</strong>
+  <span>
+    This doesn't normally happen. Please check
+    your <span ng-if="vm.s.token_wait">token,</span> e-mail address and
+    password, and try again.
+  </span>
+</div>
+
+<p ng-if="vm.s.token_wait">
+  If you do not receive a token code SMS, please check that you have
+  entered the correct e-mail address and password.
+  <a href="" ng-click="vm.s.token_wait = false">Try again</a>.
+</p>

@@ -1,0 +1,18 @@
+.well.query-form {
+    /* this cancels out .form-group margin */
+    margin-top: -15px;
+
+    /* no corners at join with input */
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* no corners at join with the expanded options well */
+.form-group.query-form.options-expand {
+    input:first-child {
+        border-bottom-left-radius: 0;
+    }
+    button:last-child {
+        border-bottom-right-radius: 0;
+    }
+}

@@ -1,0 +1,4 @@
+<span ng-if="vm.location">
+  {{ vm.location|sampleLocation:vm.cs.classUri }}
+</span>
+<span ng-if="vm.location === undefined" class="loading">Loading...</span>

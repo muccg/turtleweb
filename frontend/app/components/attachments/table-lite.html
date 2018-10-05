@@ -1,0 +1,6 @@
+<div class="row" ng-repeat="file in $ctrl.files">
+  <div class="col-xs-12">
+    <i class="glyphicon glyphicon-paperclip"></i>
+    <a ng-href="{{ ::file.url }}" target="_self">{{ ::file.name }}</a>
+  </div>
+</div>

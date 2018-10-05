@@ -1,0 +1,21 @@
+<a class="btn btn-default {{ vm.buttonClass }}" role="button"
+   ng-link="['/App/Biobank/Sample/Edit', { id: vm.sample.id }]"
+   ng-mouseenter="vm.tooltip='Edit the sample fields'"
+   ng-mouseleave="vm.tooltip=null">
+  Edit
+</a>
+
+<span ng-repeat="action in vm.actions">
+  <a class="btn btn-default {{ vm.buttonClass }}" role="button"
+     ng-click="vm.addTransaction(vm.sample, action)"
+     ng-mouseenter="vm.tooltip=action.tooltip"
+     ng-mouseleave="vm.tooltip=null"
+     ng-disabled="action.disabled">
+    {{ action.title }}
+  </a>
+</span>
+
+<p class="alert alert-info help-text" role="alert" ng-show="vm.tooltip">{{ vm.tooltip }}</p>
+<p class="alert help-text" role="alert" ng-show="!vm.tooltip">
+  Edit the sample or add a transaction record.
+</p>

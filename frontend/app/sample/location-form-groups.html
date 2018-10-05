@@ -1,0 +1,66 @@
+<div ng-if="vm.levels">
+  <div class="form-group"
+       ng-repeat="level in vm.levels track by $index"
+       ng-if="level.container || (level.containers.length && $last)">
+    <label for="level{{ $index }}"
+           class="col-sm-4 control-label"
+           ng-class="{ required: vm.ngRequired }">
+      {{ level.cls.name }}
+    </label>
+    <div class="col-sm-8">
+      <p class="form-control-static" ng-if="level.container">
+        {{ level.container.name }}
+        <button type="button" class="close pull-right"
+                title="Choose another {{ level.cls.name }}"
+                aria-label="Choose another {{ level.cls.name }}"
+                ng-click="vm.closeLevel($index, level.container)"><span aria-hidden="true">&times;</span></button>
+      </p>
+
+      <div class="list-group" ng-if="level.containers.length && $last">
+        <a href class="list-group-item"
+           ng-repeat="container in level.containers"
+           ng-click="vm.openLevel($parent.$index, container)"
+           ng-class="{ active: level.selected === container }">
+          <span class="badge">
+            {{ container.num_samples }} / {{ container.capacity }}
+          </span>
+          {{ container.name }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group"
+       ng-if="vm.levels && vm.levels.length && vm.levels[vm.levels.length - 1].terminal">
+    <div class="col-sm-4 kin-container-coord">
+      <label class="control-label" ng-class="{ required: vm.ngRequired }">
+        Co-ordinate
+      </label>
+      <ol ng-class="{ 'list-unstyled': vm.numPicks === undefined || vm.numPicks === 1 }">
+        <li ng-repeat="pick in vm.picks track by $index"
+            ng-class="{ 'active-pick': vm.nextPickIndex === $index }">
+          <span ng-if="pick.container !== vm.levels[vm.levels.length - 1].container">
+            {{ pick.container.name }}
+          </span>
+          {{ pick|containerGridCoord:vm.cs.classUri[pick.container.cls] }}
+        </li>
+      </ol>
+    </div>
+    <div class="col-sm-8">
+      <kin-container-grid
+         highlight="vm.initialLocation"
+         num-picks="vm.numPicks"
+         on-pick="vm.gridOnPick($coord, $index, $picks)"
+         init-picks="vm.gridInitPicks()"
+         next-pick-index="vm.nextPickIndex"
+         on-select="vm.gridSelect($coord, $sampleId)"
+         samples="vm.levels[vm.levels.length - 1].samples"
+         dim="vm.levels[vm.levels.length - 1].cls.dim"
+         coord="vm.levels[vm.levels.length - 1].cls.coord"
+         width="vm.levels[vm.levels.length - 1].container.width"
+         height="vm.levels[vm.levels.length - 1].container.height"
+         depth="vm.levels[vm.levels.length - 1].container.depth">
+      </kin-container-grid>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+@unconsented-bg: @state-danger-bg;
+@consent-withdrawn-bg: darken(@state-danger-bg, 20%);
+
+table.kin-grid > tbody > tr.grid-row {
+  &.unconsented {
+    background-color: @unconsented-bg;
+    &:nth-of-type(odd) {
+      background-color: darken(@unconsented-bg, 5%);
+    }
+    &:hover td {
+      background-color: lighten(@unconsented-bg, 5%);
+    }
+  }
+
+  &.consent-withdrawn {
+    background-color: @consent-withdrawn-bg;
+    &:nth-of-type(odd) {
+      background-color: darken(@consent-withdrawn-bg, 5%);
+    }
+    &:hover td {
+      background-color: lighten(@consent-withdrawn-bg, 5%);
+    }
+  }
+}

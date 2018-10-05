@@ -1,0 +1,10 @@
+<select class="form-control {{ $ctrl.extraClass }}"
+        id="{{ ::$ctrl.id }}" name="{{ ::$ctrl.id }}"
+        ng-model="$ctrl.item"
+        ng-change="$ctrl.optionChanged()"
+        ng-options="option.name for option in $ctrl.opts.items | orderBy:'order'"
+        ng-required="$ctrl.ngRequired"
+        ng-disabled="$ctrl.ngDisabled">
+  <option ng-if="$ctrl.opts.blank" value=""><em>&mdash; None &mdash;</em></option>
+  <option ng-if="$ctrl.opts.unknown && false" value=""><em>&mdash; Unknown &mdash;</em></option>
+</select>

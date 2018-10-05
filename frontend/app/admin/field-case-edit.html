@@ -1,0 +1,39 @@
+<table class="table table-condensed" ng-if="filteredPatientCases.length > 0">
+  <thead>
+    <tr>
+      <th rowspan="2">Field</th>
+      <th ng-repeat="group in filteredPatientCaseGroups"
+          colspan="{{ group.cases.length }}">
+        {{ group.study.name }}
+      </th>
+    </tr>
+    <tr>
+      <th ng-repeat="case in filteredPatientCases">
+        {{ case.name }}
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="field in fields" ng-if="field.name">
+      <td>{{ field.name }}</td>
+      <td ng-repeat="case in filteredPatientCases">
+        <kin-tick-button-invert
+           ng-model="field.disabled[case.resource_uri]"
+           class="btn btn-link btn-sm">
+        </kin-tick-button-invert>
+      </td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr ng-if="fields.length === 0" class="empty">
+      <td colspan="{{ filteredPatientCases.length }}">
+        No fields are defined.
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p ng-if="filteredPatientCases.length === 0">
+  The study/studies for which this event type applies don't have any
+  patient cases defined. Therefore, all fields will always be visible.
+</p>

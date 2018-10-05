@@ -1,0 +1,131 @@
+<ul class="nav nav-sidebar">
+  <li ng-class="vm.u.activeClass('studygroup')" ng-show="vm.study">
+    <a ng-link="['Studies', { study: vm.study.slug }, 'StudyGroup']">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Groups</span>
+    </a>
+  </li>
+  <li ng-show="vm.study">
+    <a ng-link="['Studies', { study: vm.study.slug }, 'Person', 'List']">
+      <i class="glyphicon glyphicon-user"></i>
+      <span>Patients</span>
+    </a>
+    <ul class="nav nav-sidebar" ng-show="vm.u.isActive('patient')">
+      <li ng-class="vm.u.activeClass('patient/list')">
+        <a ng-link="['Studies', {study: vm.study.slug}, 'Person', 'List']">
+          <i class="glyphicon glyphicon-search"></i>
+          <span>Search</span>
+        </a>
+      </li>
+      <li ng-class="vm.u.activeClass('patient/add')">
+        <a ng-link="['Studies', {study: vm.study.slug}, 'Person', 'Add']"
+           ng-if="vm.perms.patientEdit">
+          <i class="glyphicon glyphicon-plus"></i>
+          <span>Add Patient</span>
+        </a>
+      </li>
+      <li ng-class="vm.u.activeClass('patient/import')">
+        <a ng-link="['Studies', {study: vm.study.slug}, 'Person', 'Import']"
+           ng-if="vm.perms.patientEdit">
+          <i class="glyphicon glyphicon-import"></i>
+          <span>Import CSV</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li ng-show="vm.study">
+    <a ng-link="['Studies', {study: vm.study.slug}, 'Event', 'List']">
+      <i class="glyphicon glyphicon-flash"></i>
+      <span>Events</span>
+    </a>
+    <ul class="nav nav-sidebar" ng-show="vm.u.isActive('event')">
+      <li ng-class="vm.u.activeClass('event/list')">
+        <a ng-link="['Studies', {study: vm.study.slug}, 'Event', 'List']">
+          <i class="glyphicon glyphicon-search"></i>
+          <span>Search</span>
+        </a>
+      </li>
+      <li ng-if="false" ng-class="vm.u.activeClass('event/import')">
+        <a ng-link="['Studies', {study: vm.study.slug}, 'Event', 'Import']"
+           ng-if="vm.perms.patientEdit">
+          <i class="glyphicon glyphicon-import"></i>
+          <span>Import CSV</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a ng-link="['App', 'Biobank', 'Sample', 'List']">
+      <i class="glyphicon glyphicon-tags"></i>
+      <span>BioBank</span>
+    </a>
+    <ul class="nav nav-sidebar"
+        ng-show="vm.u.isActive('sample') || vm.u.isActive('container')">
+      <li ng-class="vm.u.activeClass('biobank/sample/list')">
+        <a ng-link="['Biobank', 'Sample', 'List']">
+          <i class="glyphicon glyphicon-search"></i>
+          <span>Search</span>
+        </a>
+      </li>
+      <li ng-class="vm.u.activeClass('biobank/container/list')">
+        <a ng-link="['Biobank', 'Container', 'List']">
+          <i class="glyphicon glyphicon-unchecked"></i>
+          <span>Browse</span>
+        </a>
+      </li>
+      <li ng-if="false" ng-class="vm.u.activeClass('sample/import')">
+        <a ng-link="['Biobank', 'Sample', 'Import']"
+           ng-if="vm.perms.patientEdit">
+          <i class="glyphicon glyphicon-import"></i>
+          <span>Import CSV</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li ng-show="vm.study">
+    <a ng-link="['Studies', {study: vm.study.slug}, 'Report', 'List']">
+      <i class="glyphicon glyphicon-stats"></i>
+      <span>Reports</span>
+    </a>
+    <ul class="nav nav-sidebar" ng-show="vm.u.isActive('report')">
+      <li ng-class="vm.u.activeClass('report/list')">
+        <a ng-link="['Studies', {study: vm.study.slug}, 'Report', 'List']">
+          <i class="glyphicon glyphicon-th-list"></i>
+          <span>List of reports</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{ vm.urls.explorer }}" target="_self"
+           ng-if="vm.perms.djangoAdmin">
+          <i class="glyphicon glyphicon-dashboard"></i>
+          <span>SQL Explorer</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li ng-class="vm.u.activeClass('manage')" ng-show="vm.perms.djangoAdmin">
+    <a ng-link="['Admin', 'AdminHome']">
+      <i class="glyphicon glyphicon-cog"></i>
+      <span>Admin</span>
+    </a>
+  </li>
+
+  <li ng-class="{ active: vm.kinHelp.show }">
+    <a ng-href="{{ vm.urls.docs }}" target="_blank"
+       ng-click="vm.kinHelp.toggle(); $event.preventDefault()">
+      <i class="glyphicon glyphicon-book"></i>
+      <span>Help</span>
+    </a>
+  </li>
+
+  <li ng-repeat="s in vm.studies"
+      ng-if="!s.archived"
+      ng-hide="vm.u.isHome() && !study"
+      ng-class="vm.u.activeClass('/' + s.slug + '/', { 'nav-study-first': $first })"
+      class="nav-study">
+    <a ng-link="['Studies', {study: s.slug}, 'StudyHome']">
+      {{ s.name }}
+    </a>
+  </li>
+</ul>

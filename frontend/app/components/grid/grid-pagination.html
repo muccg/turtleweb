@@ -1,0 +1,52 @@
+<!-- full pagination -->
+<uib-pagination ng-if="vm.paging"
+                total-items="vm.totalCount"
+                ng-model="vm.paging.current"
+                ng-change="vm.pageChanged()"
+                items-per-page="vm.paging.pageSize" max-size="vm.pagingOptions.maxSize"
+                class="pagination-sm kin-grid hidden-sm hidden-xs"
+                boundary-links="true" rotate="true">
+</uib-pagination>
+<!-- compact pagination -->
+<uib-pagination total-items="vm.totalCount"
+                ng-model="vm.paging.current"
+                ng-change="vm.pageChanged()"
+                items-per-page="vm.paging.pageSize" max-size="5"
+                class="pagination-sm kin-grid visible-sm visible-xs"
+                boundary-links="false" rotate="true" force-ellipsize="true"
+                previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+
+</uib-pagination>
+<div class="pagination-controls">
+  <form class="form-inline">
+    <div class="form-group form-group-sm hidden-sm hidden-xs">
+      <label class="control-label">Page size:
+        <select class="form-control input-sm"
+                ng-model="vm.pageSize" ng-change="vm.pageSizeChanged()"
+                ng-options="s.value as s.name for s in vm.pageSizes">
+        </select>
+      </label>
+    </div>
+    <div class="form-group spaced">
+      <p class="form-control-static">
+        <span ng-show="!vm.searching && !vm.error">
+          <ng-pluralize count="vm.totalCount"
+                        when="{'0': 'No records found.',
+                              'one': '1 record found.',
+                              'other': '{} records found.'}">
+          </ng-pluralize>
+          <ng-pluralize count="vm.selection.length"
+                        when="{'0': '',
+                              'one': '1 selected.',
+                              'other': '{} selected.'}">
+          </ng-pluralize>
+        <span ng-show="vm.showQueryTime && vm.queryTime">({{ vm.queryTime }}s)</span>
+        </span>
+        <span ng-show="vm.searching">Searching...</span>
+        <span ng-show="vm.error">{{ vm.error }}</span>
+      </p>
+    </div>
+  </form>
+</div>
+<div ng-transclude class="pagination-controls pull-right">
+</div>

@@ -1,0 +1,12 @@
+exclude .gitignore
+prune .git
+prune *.egg-info
+recursive-include kindred/app/templates *.html
+recursive-include kindred/app/static *.js *.css *.less *.html *.json
+recursive-include kindred/biobank *.svg
+recursive-include kindred/people/scripts *.xsl
+recursive-include kindred/contacts/migrations *.csv
+recursive-include requirements *.txt
+graft scripts
+graft uwsgi
+exclude *~

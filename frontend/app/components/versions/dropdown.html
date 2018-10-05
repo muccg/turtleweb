@@ -1,0 +1,32 @@
+<div ng-if="vm.item.id" uib-dropdown class="btn-group" is-open="vm.isOpen">
+  <button uib-dropdown-toggle type="button" class="btn btn-default dropdown-toggle">
+    Versions
+    <span class="caret"></span>
+  </button>
+  <ul uib-dropdown-menu role="menu">
+    <li ng-if="!vm.versions" class="loading">
+      <a role="presentation">Loading...</a></li>
+    <li ng-if="vm.versions && vm.versions.length === 0" class="empty">
+      <a role="presentation">No previous versions</a>
+    </li>
+
+    <li ng-if="vm.versions && vm.versions.length > 0"
+        role="presentation" class="dropdown-header">
+      Select a version to restore
+    </li>
+
+    <li ng-if="vm.versions && vm.versions.length > 0"
+        ng-repeat="version in vm.versions"
+        title="{{ version.revision.user.email }}">
+      <a href="" role="menuitem" ng-click="vm.loadVersion(version)">
+        {{ version.revision.date_created|apiDateShow }}
+        {{ version.revision.date_created|apiTimeShow }}
+        <small>{{ version.revision.user.email }}</small>
+      </a>
+    </li>
+    <li ng-show="false" role="presentation" class="divider"></li>
+    <li ng-show="false">
+      <a href="" role="menuitem">Complete revision history</a>
+    </li>
+  </ul>
+</div>

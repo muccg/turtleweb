@@ -1,0 +1,54 @@
+<kin-breadcrumbs title="Study Groups">
+  <kin-breadcrumb title="Study Groups"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-sm-10">
+
+    <div class="col-sm-6 col-md-4" ng-repeat="studygroup in vm.studyGroups">
+      <div class="thumbnail thumbnail-studygroup">
+        <img class="pull-right" alt="{{studygroup.name}}"
+             ng-if="studygroup.logo" ng-src="assets/images/{{studygroup.logo}}">
+        <div class="caption">
+          <h3>
+            {{studygroup.name}}
+            <small class="hide">{{ studygroup.owner }}</small>
+          </h3>
+          <p>{{studygroup.desc}}</p>
+          <small>
+            <ng-pluralize count="studygroup.members.length"
+                          when="{'0': 'No members', 'one': '1 member', 'other': '{} members'}">
+            </ng-pluralize>
+          </small>
+        </div>
+        <div class="buttons">
+          <a ng-link="['Edit', {id: studygroup.id }]" class="btn btn-default"
+             ng-if="vm.perms.patientEdit">
+            <i class="glyphicon glyphicon-pencil"></i>
+            Edit
+          </a>
+
+          <a ng-link="['Detail', {id: studygroup.id }]"class="btn btn-primary">
+            <i class="glyphicon glyphicon-th-list"></i>
+            List members
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p ng-if="vm.studyGroups.length === 0">
+      There are no groups in this study yet.
+    </p>
+
+    <p class="loading" ng-if="!vm.studyGroups">Loading...</p>
+  </div>
+
+  <ul class="col-sm-2 kin-view-actions">
+    <li ng-if="vm.perms.patientEdit">
+      <a ng-link="['Add']" class="btn btn-large btn-primary">
+        <i class="glyphicon glyphicon-plus"></i> Create Study Group
+      </a>
+    </li>
+  </ul>
+
+</div>

@@ -1,0 +1,355 @@
+<kin-breadcrumbs title="{{ vm.person | patientId }} {{ vm.person | personFullName }}">
+  <kin-breadcrumb link="['App', 'Biobank']" title="Biobank"></kin-breadcrumb>
+  <kin-breadcrumb hide="true || !vm.person || !vm.pevent"
+                  link="['App', 'Studies', {study: vm.pevent.study.slug}, 'Person', 'List']" title="Patients">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.person || !vm.pevent"
+                  link="['App', 'Studies', {study: vm.pevent.study.slug}, 'Person', 'Detail', {id: vm.person.id}]"
+                  title="{{ vm.person | patientId }} {{ vm.person | personFullName }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.pevent" title="{{ vm.pevent.type.name }} {{ vm.pevent.date | apiDateShow }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.pevent || !vm.item.id" title="Samples">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id" title="{{ vm.item|sampleId }}" link="['/App/Biobank/Sample/Detail', {id: vm.item.id}]">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id" title="Create"></kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id" title="Edit"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div ng-if="vm.isLoaded">
+<form name="editForm" class="form-horizontal" role="form" autocomplete="off">
+
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="form-group" ng-show="!vm.item.id">
+        <label for="count" class="col-sm-2 control-label required"
+               uib-tooltip="Multiple samples can be created at once">
+          Number of Samples
+        </label>
+        <div class="col-sm-2">
+          <input type="number" id="count" class="form-control"
+                 min="1" max="50" ng-model="vm.items.length" ng-change="vm.updateSampleCount()">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="date" class="col-sm-2 control-label required"
+               uib-tooltip="Sample collection date">
+          Date
+        </label>
+        <div class="col-sm-4">
+          <kin-date-picker id="date" ng-model="vm.transaction.date"
+                           type="isodatetime" ng-required="true">
+          </kin-date-picker>
+          <p ng-show="editForm.date.$error && editForm.date.$dirty" class="help-block">
+            <span ng-show="editForm.date.$error.date">
+              That date is invalid.
+            </span>
+            <span ng-show="editForm.date.$error.required">
+              Date and time are required.
+            </span>
+          </p>
+        </div>
+        <label for="time" class="col-sm-2 control-label required"
+               uib-tooltip="Sample collection time">
+          Time
+        </label>
+        <div class="col-sm-4">
+          <div class="input-group">
+            <input type="text" id="time" name="time" placeholder="HH:MM:SS"
+                   kin-time-picker="isodatetime" ng-model="vm.transaction.date"
+                   class="form-control" required>
+            <span class="input-group-addon">24h format</span>
+          </div>
+          <p ng-show="editForm.time.$error && editForm.time.$dirty" class="help-block">
+            <span ng-show="editForm.time.$error.parse">
+              That time is invalid.
+            </span>
+            <span ng-show="editForm.time.$error.required">
+              Date and time are required.
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div ng-repeat="item in vm.items track by $index">
+
+        <div class="form-group">
+          <label for="cls{{ $index }}" class="col-sm-2 control-label required">
+            Type
+            <span ng-if="vm.items.length > 1">{{ $index + 1 }}</span>
+          </label>
+          <div class="col-sm-4">
+            <select class="form-control" required
+                    id="cls{{ $index }}" name="cls{{ $index }}"
+                    ng-model="item.cls"
+                    ng-options="c as c.name for c in vm.sampleClasses track by c.id">
+            </select>
+            <p ng-show="editForm['cls' + $index].$touched && editForm['cls' + $index].$error.required" class="help-block">
+              Sample type is required.
+            </p>
+          </div>
+
+          <div ng-show="item.cls">
+            <label for="amount{{ $index }}" class="col-sm-2 control-label required">Amount</label>
+            <div class="col-sm-4">
+              <div class="input-group">
+                <input type="number" class="form-control"
+                       id="amount{{ $index }}" name="amount{{ $index }}"
+                       min="0" step="any" placeholder="" aria-describedby="amount-unit"
+                       ng-model="item.amount" required>
+                <div class="input-group-btn addon-dropdown-btn" uib-dropdown>
+                  <button type="button" class="btn btn-default" id="amount-unit" uib-dropdown-toggle>
+                    {{ item|sampleUnit:'?' }}
+                    <span class="caret"></span>
+                  </button>
+                  <ul uib-dropdown-menu role="menu" class="dropdown-menu-right">
+                    <li ng-repeat="entry in vm.units"
+                        ng-class="{ 'dropdown-header': entry.header }">
+                      <span ng-if="entry.header">{{ entry.header }}</span>
+                      <a ng-if="entry.unit" href="" role="menuentry" ng-click="item.display_unit = entry.unit">{{ entry.unit }}</a>
+                    </li>
+                  </ul>
+                </div><!-- /btn-group -->
+              </div>
+              <p ng-show="editForm['amount' + $index].$dirty && editForm['amount' + $index].$error.required" class="help-block">
+                Amount is required.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-show="item.isDNA()">
+          <label for="concentration{{ $index }}" class="col-sm-2 control-label">Concentration</label>
+          <div class="col-sm-4">
+            <div class="input-group">
+              <input type="number" class="form-control" id="concentration{{ $index }}"
+                     min="0" step="any"
+                     placeholder="" aria-describedby="concentration-unit{{ $index }}"
+                     ng-model="item.concentration">
+              <span class="input-group-addon" id="concentration-unit{{ $index }}">ng/µL</span>
+            </div>
+          </div>
+
+          <label class="col-sm-2 control-label">Effective Amount</label>
+          <div class="col-sm-4">
+            <p class="form-control-static">
+              {{ item|sampleEffectiveAmount|number:2 }} ng
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="subtype{{ $index }}" class="col-sm-2 control-label required">
+            Sub-type
+            <span ng-if="vm.items.length > 1">{{ $index + 1 }}</span>
+          </label>
+          <div class="col-sm-4">
+            <kin-simple-select
+               ng-model="item.subtype"
+               required
+               options="samplesubtype"
+               filter="{ cls: { resource_uri: item.cls.resource_uri } }"
+               id="subtype{{ $index }}">
+            </kin-simple-select>
+            <p ng-show="editForm['subtype' + $index].$touched && editForm['subtype' + $index].$error.required" class="help-block">
+              Sample sub-type is required.
+            </p>
+          </div>
+
+          <label for="treatment{{ $index }}" class="col-sm-2 control-label">
+            Treatment
+            <span ng-if="vm.items.length > 1">{{ $index + 1 }}</span>
+          </label>
+          <div class="col-sm-4">
+            <kin-simple-select
+               ng-model="item.treatment"
+               options="sampletreatment"
+               id="treatment{{ $index }}">
+            </kin-simple-select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label for="stored_in" class="col-sm-2 control-label required">Stored In</label>
+        <div class="col-sm-4">
+          <kin-simple-select
+             ng-model="vm.item.stored_in"
+             required
+             options="samplestoredin"
+             id="stored_in">
+          </kin-simple-select>
+          <p ng-show="editForm.stored_in.$touched && editForm.stored_in.$error.required" class="help-block">
+            Stored In is required.
+          </p>
+
+        </div>
+
+        <label for="behaviour" class="col-sm-2 control-label"
+               ng-show="vm.item.isTissue()">
+          Behaviour
+        </label>
+        <div class="col-sm-4" ng-show="vm.item.isTissue()">
+          <kin-simple-select
+             ng-model="vm.item.behaviour"
+             options="samplebehaviour"
+             id="behaviour">
+          </kin-simple-select>
+        </div>
+
+        <label for="dna_extraction_protocol" class="col-sm-2 control-label"
+               ng-show="vm.item.isDNA()">
+          DNA Extraction Protocol
+        </label>
+        <div class="col-sm-4" ng-show="vm.item.isDNA()">
+          <kin-simple-select
+             ng-model="vm.item.dna_extraction_protocol"
+             options="dnaextractionprotocol"
+             id="dna_extraction_protocol">
+          </kin-simple-select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="processed_date">
+          Processed Date
+        </label>
+
+        <div class="col-sm-4">
+          <kin-date-picker id="processed_date" ng-model="vm.processedDate" type="isodatetime">
+          </kin-date-picker>
+        </div>
+
+        <label class="col-sm-2 control-label" for="processed_time">
+          Processed Time
+        </label>
+        <div class="col-sm-4">
+          <div class="input-group">
+            <input type="text" id="processed_time" placeholder="HH:MM:SS"
+                   kin-time-picker="isodatetime" ng-model="vm.processedDate"
+                   class="form-control">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button"
+                      title="Use the sample collection date and time"
+                      ng-click="vm.processedDate=vm.transaction.date">Copy above</button>
+              <button class="btn btn-default" type="button"
+                      title="Clear the processed date and time"
+                      ng-disabled="!vm.processedDate"
+                      ng-click="vm.processedDate=null">
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="frozen_fixed_date">
+          Frozen/Fixed Date
+        </label>
+
+        <div class="col-sm-4">
+          <kin-date-picker id="frozen_fixed_date" ng-model="vm.frozenFixedDate" type="isodatetime">
+          </kin-date-picker>
+        </div>
+
+        <label class="col-sm-2 control-label" for="frozen_fixed_time">
+          Frozen/Fixed Time
+        </label>
+        <div class="col-sm-4">
+          <div class="input-group">
+            <input type="text" id="frozen_fixed_time" placeholder="HH:MM:SS"
+                   kin-time-picker="isodatetime" ng-model="vm.frozenFixedDate"
+                   class="form-control">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button"
+                      title="Use the processed date and time"
+                      ng-click="vm.frozenFixedDate=vm.processedDate || vm.transaction.date">Copy above</button>
+              <button class="btn btn-default" type="button"
+                      title="Clear the frozen/fixed date and time"
+                      ng-disabled="!vm.frozenFixedDate"
+                      ng-click="vm.frozenFixedDate=null">
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="comments">
+          Comments
+        </label>
+        <div class="col-sm-4">
+              <textarea class="form-control" id="comments" rows="8"
+                      ng-model="vm.item.comments">
+              </textarea>
+        </div>
+      </div>
+
+      <div class="form-group" ng-show="!vm.item.id">
+        <div class="col-sm-10 col-sm-offset-2">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="vm.exists">
+              Allocate location for sample now?
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" ng-if="vm.exists">
+        <div class="col-md-6">
+          <kin-sample-location-form-groups
+             ng-model="vm.item.location"
+             ng-required="vm.exists"
+             num-picks="vm.items.length"
+             on-pick="vm.onPick($coord, $index, $picks)">
+          </kin-sample-location-form-groups>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Other Fields
+        </div>
+        <div class="panel-body">
+          <kin-custom-data-edit ng-model="vm.item.data" resource="sample">
+          </kin-custom-data-edit>
+        </div>
+      </div>
+
+    </div>
+
+    <ul class="col-sm-2 kin-view-actions">
+      <li>
+        <button type="submit" id="save-btn" class="btn btn-success"
+                ng-click="vm.save()" ng-disabled="editForm.$pristine || editForm.$invalid">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </li>
+      <li ng-if="vm.item.id">
+        <kin-versions-dropdown item="vm.item">
+        </kin-versions-dropdown>
+      </li>
+      <li>
+        <a ng-if="vm.pevent && vm.person"
+           ng-link="['/App/Studies', {study: vm.pevent.study.slug}, 'Person', 'Detail', {id: vm.person.id}]" class="btn btn-large btn-default">
+          Cancel
+        </a>
+        <a ng-if="!vm.pevent || !vm.person"
+           ng-link="['/App/Biobank/Sample/Detail', {id: vm.item.id}]" class="btn btn-large btn-default">
+          Cancel
+        </a>
+      </li>
+      <li ng-if="vm.item.id">
+        <a kin-delete-button="vm.item" class="btn btn-danger">
+          <i class="glyphicon glyphicon-trash"></i> Delete
+        </a>
+      </li>
+    </ul>
+  </div>
+</form>
+</div>

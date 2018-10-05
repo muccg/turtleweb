@@ -1,0 +1,146 @@
+/* appointment request session table */
+
+table.session-select tr.session, table.appt-list tr.appt {
+    cursor: pointer;
+}
+
+/* calendar styling */
+.fc-event {
+    border: 1px solid @brand-primary;
+    background-color: @brand-primary;
+    color: #fff;
+    cursor: pointer;
+}
+
+.fc-event.available.empty {
+    border: 1px solid @brand-primary;
+    background-color: @brand-primary;
+    color: #fff;
+}
+
+.fc-event.available {
+    border: 1px solid @state-success-border;
+    background-color: @state-success-bg;
+    color: @state-success-text;
+}
+
+.fc-event.unavailable {
+    border: 1px solid @gray-light;
+    background-color: #ccc;
+}
+
+.fc-event.overbooked {
+    border: 1px solid @state-danger-border;
+    background-color: @state-danger-bg;
+    color: @state-danger-text;
+}
+
+.fc-event.close {
+    color: @btn-primary-color;
+    opacity: 90%;
+}
+
+/* appointment maker page */
+.appt-header {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 0.5em;
+}
+
+.appt-time-header .hour {
+    display: inline-block;
+    position: relative;
+    /*border: 1px solid green;*/
+}
+
+.appt-maker-rooms {
+    border-top: 1px solid #ccc;
+    padding-top: 0.5em;
+}
+
+.appt-maker-slot, .appt-maker-booked {
+    display: inline-block;
+    position: absolute;
+    border-radius: 4px;
+    padding-left: 0.1em;
+    color: @gray-dark;
+    overflow: hidden;
+    text-overflow: clip;  /* could be "ellipsis" */
+    white-space: nowrap;
+}
+
+.slot-shadow-mixin() {
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+
+.appt-maker-slot {
+    .slot-shadow-mixin();
+
+    .time {
+        position: relative;
+    }
+
+    &.free {
+        color: @state-success-text;
+        background-color: @state-success-bg;
+        border-color: @state-success-border;
+    }
+
+    &.selected {
+        color: @state-info-text;
+        background-color: @state-info-bg;
+        border-color: @state-info-border;
+        .time { font-weight: bold; }
+    }
+
+    &.busy {
+        color: @state-danger-text;
+        background-color: @state-danger-bg;
+        border-color: @state-danger-border;
+    }
+}
+
+.appt-maker-booked {
+    color: rgba(0, 0, 0, 0);
+    background-color: @state-warning-bg;
+    border-color: @state-warning-border;
+}
+
+.appt-maker-slots.selectable .appt-maker-slot {
+    cursor: pointer;
+    &.busy {
+        cursor: default;
+    }
+}
+
+.appt-maker-booking {
+    .slot-shadow-mixin();
+    opacity: 50%;
+    position: absolute;
+    color: @state-info-text;
+    background-color: @state-info-bg;
+    border-color: @state-info-border;
+}
+
+.appt-maker-resize {
+    overflow-y: hidden;
+
+    & > div {
+        height: 50%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+}
+
+.tab-heading-inuse {
+    font-weight: bold;
+    &:after {
+        content: ' *'
+    }
+}
+
+table.appt-attendees > tbody > tr.placeholder {
+    td:first-child {
+        color: #ccc;
+    }
+}

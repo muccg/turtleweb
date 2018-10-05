@@ -1,0 +1,9 @@
+<div class="kin-query-ac-option" ng-repeat="option in vm.options">
+  <a href ng-click="vm.selectOption(option)" title="{{ option.desc }}">
+    <span ng-bind-html="option.name|highlight:vm.current">
+    </span>
+  </a>
+</div>
+<div class="kin-query-ac-option">
+  <a href ng-click="vm.selectOption(null)"><em>blank</em></a>
+</div>

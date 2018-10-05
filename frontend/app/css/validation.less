@@ -1,0 +1,38 @@
+@import "bower_components/bootstrap/less/mixins/vendor-prefixes.less";
+
+/* fixme: figure out how to import these styles with a bootstrap mixin.
+ * problem is that the bootstrap mixin depends on a .has-success container.
+ */
+.form-control {
+    /* wondering if the success green is too flamboyant */
+    &.ng-valid.ng-dirty {
+        border-color: @state-success-text;
+        .box-shadow(inset 0 1px 1px rgba(0,0,0,.075)); // Redeclare so transitions work
+        &:focus {
+            border-color: darken(@state-success-text, 10%);
+            @shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px lighten(@state-success-text, 20%);
+            .box-shadow(@shadow);
+        }
+    }
+
+    /* make ng-invalid inputs red. Don't show red if the input hasn't been
+     * touched/edited yet. */
+    &.ng-invalid.ng-dirty,
+    &.ng-invalid.ng-touched {
+        border-color: @state-danger-text;
+        .box-shadow(inset 0 1px 1px rgba(0,0,0,.075)); // Redeclare so transitions work
+        &:focus {
+            state-danger-text: darken(@state-danger-text, 10%);
+            @shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px lighten(@state-danger-text, 20%);
+            .box-shadow(@shadow);
+        }
+    }
+}
+
+.control-label.required:after {
+  content: ' *';
+  vertical-align: super;
+  font-size: 0.95em;
+  margin-left: -0.1em;
+  color: @text-muted;
+}

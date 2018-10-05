@@ -1,0 +1,55 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Fields</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody ng-if="vm.items" ui-sortable="sortableOptions" ng-model="vm.items">
+    <tr ng-repeat="item in vm.items">
+      <td class="drag-handle">
+        <i class="glyphicon glyphicon-menu-hamburger"></i>
+
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-link"
+                  ng-disabled="!vm.canDeindent(item)"
+                  ng-click="vm.deindent(item)">
+            <i class="glyphicon glyphicon-arrow-left"></i>
+          </button>
+          <button type="button" class="btn btn-link"
+                  ng-disabled="!vm.canIndent(item, $index)"
+                  ng-click="vm.indent(item)">
+            <i class="glyphicon glyphicon-arrow-right"></i>
+          </button>
+        </div>
+      </td>
+      <td>
+        <span ng-style="{ 'margin-left': item.depth + 'em' }">
+        </span>
+        <kin-edit-label ng-model="item.name"></kin-edit-label>
+      </td>
+      <td>
+        <a ng-link="['..', '..', 'Fields', 'Edit', {endpoint: 'eventtype', id: item.id}]"
+           ng-if="item.id" class="btn btn-link">Edit Fields</a>
+      </td>
+      <td>
+        <button type="button" class="close" aria-label="Delete"
+                ng-click="vm.deleteItem(item)"><span aria-hidden="true">&times;</span></button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot ng-hide="vm.hasPlaceholder()">
+    <tr>
+      <td></td>
+      <td colspan="{{ 3 + $root.studies.length }}">
+        <button type="button" class="btn btn-default btn-sm"
+                ng-click="vm.addItem()">
+          <i class="glyphicon glyphicon-plus"></i>
+          Add Item
+        </button>
+      </td>
+    </tr>
+  </tfoot>
+</table>

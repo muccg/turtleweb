@@ -1,0 +1,9 @@
+{% load staticfiles %}
+<script src="{% static "lib/codemirror/codemirror.min.js" %}"></script>
+<script src="{% static "lib/codemirror/sql.min.js" %}"></script>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById('id_sql'), {
+        mode: "text/x-sql",
+        lineNumbers: 't'
+    });
+</script>

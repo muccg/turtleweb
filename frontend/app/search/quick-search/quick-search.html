@@ -1,0 +1,19 @@
+<form class="kin-quick-search navbar-form navbar-right" role="form" autocomplete="off">
+  <div class="form-group has-feedback kinNavSearchExpandy" ng-class="{ focus: focus }">
+    <label class="control-label sr-only" for="hasSearch">Search</label>
+    <input type="text" class="form-control" placeholder="Search"
+           ng-model="query" ng-focus="focus=true" ng-blur="focus=false"
+           typeahead-editable="true"
+           typeahead-min-length="2"
+           uib-typeahead="result.name for result in getResults($viewValue)"
+           typeahead-loading="loadingResults"
+           typeahead-on-select="onSelect($item, $model, $label)">
+    <!-- typeahead-template-url="/static/partials/turtle/quick-search-result.html" -->
+    <!-- typeahead-template-url="{{ templateUrl }}" -->
+
+    <span class="glyphicon glyphicon-refresh form-control-feedback text-muted"
+          ng-show="loadingResults" aria-hidden="true"></span>
+    <span class="glyphicon glyphicon-search form-control-feedback text-muted"
+          ng-show="!loadingResults" aria-hidden="true"></span>
+  </div>
+</form>

@@ -1,0 +1,34 @@
+# data only container pattern
+data:
+  image: muccg/debian8-base:latest
+  volumes:
+    - .:/app
+    - ./data/dev:/data
+
+db:
+  image: postgres:10
+  environment:
+    - POSTGRES_USER=turtle
+    - POSTGRES_PASSWORD=turtle
+  ports:
+    - "5432"
+
+cache:
+  image: memcached:1.4
+
+web:
+  build: .
+  command: migrate
+  environment:
+    - DJANGO_SETTINGS_MODULE=kindred.settings
+    - DBUSER=turtle
+    - WAIT_FOR_DB=1
+    - WAIT_FOR_CACHE=1
+  volumes_from:
+    - data
+  ports:
+    - "3000:3000"
+    - "3001:3001"
+  links:
+    - db
+    - cache

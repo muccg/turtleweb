@@ -1,0 +1,59 @@
+<h2>Search Parser test</h2>
+
+<form name="search" novalidate role="form" class="form-horizontal">
+  <kin-query class="kin-query" ng-model="vm.search.expr"
+             resource="{{ vm.resource }}" study="vm.study">
+    <div class="row">
+      <div class="col-xs-12">
+        <input type="text" id="searchQuery"
+               class="form-control"
+               ng-model="kinQuery.text"
+               kin-query-input
+               kin-query-auto-complete="vm.ac"
+               spellcheck="false">
+
+        <kin-query-auto-complete-menu pos="vm.ac.pos" info="vm.ac">
+        </kin-query-auto-complete-menu>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <select class="form-control" ng-model="vm.resource" ng-options="resource for resource in vm.resources">
+          <option>None</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <kin-simple-select ng-model="vm.study" options="study" id="study">
+        </kin-simple-select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>Parsed Expr</h3>
+        <pre>{{ vm.search.expr|json }}</pre>
+      </div>
+      <div class="col-sm-6">
+        <h3>{{ resource }} API Expr</h3>
+        <pre>{{ vm.apiExpr|json }}</pre>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>Cursor</h3>
+        <pre>menu pos = {{ vm.ac.pos }}</pre>
+        <pre class="hidden">ac={{ vm.ac|json }}</pre>
+        <p>focus</p>
+      </div>
+
+      <div class="col-sm-6">
+        <h3>Expected</h3>
+        <pre>ac.level = {{ vm.ac.level|json }}</pre>
+      </div>
+    </div>
+  </kin-query>
+</form>

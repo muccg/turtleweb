@@ -1,0 +1,28 @@
+<div class="row" ng-repeat="field in fields">
+  <label class="col-sm-3 control-label">
+    {{ field.title }}
+  </label>
+  <div class="col-sm-9" ng-switch="field.type">
+    <span ng-switch-when="boolean">
+      {{ d[field.name]|yesnomaybe }}      
+    </span>
+    <span ng-switch-when="resourceId">
+      <kin-field-resource ng-model="d[field.name]" field="field">
+      </kin-field-resource>
+    </span>
+    <span ng-switch-when="date">
+      {{ d[field.name]|apiDateShow }}
+    </span>
+    <span ng-switch-when="datetime">
+      {{ d[field.name]|apiDateShow }}
+      {{ d[field.name]|apiTimeShow }}
+    </span>
+    <span ng-switch-default>
+      {{ d[field.name] }}
+    </span>
+  </div>
+</div>
+<div class="row other-fields" ng-repeat="field in other_fields">
+  <label class="col-sm-4 control-label">{{ field }}</label>
+  <div class="col-sm-8">{{ d[field] }}</div>
+</div>

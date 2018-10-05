@@ -1,0 +1,89 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb title="Patients"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div class="row" ng-if="!vm.$router.navigating">
+  <div class="col-sm-12">
+    <!--Body content-->
+
+    <kin-query-box search="vm.search" on-double-search="vm.rowSelect(item)">
+    </kin-query-box>
+
+    <kin-grid on-select="vm.rowSelect(item)">
+      <kin-grid-search search="vm.search"></kin-grid-search>
+
+      <kin-grid-col heading="P-ID" sort-dir="1"
+                    show="true" export="true"
+                    field="patient_id"></kin-grid-col>
+      <kin-grid-col heading="Name" show="true" export="true"
+                    field="full_name"
+                    expr="item|personFullName"
+                    sort-field="last_name"
+                    cell-sref="['Detail', {id: item.id}, 'Detail']"></kin-grid-col>
+
+      <kin-grid-col heading="First Name"
+                    show="false" export="true"
+                    field="first_name"></kin-grid-col>
+      <kin-grid-col heading="Last Name"
+                    show="false" export="true"
+                    field="last_name"></kin-grid-col>
+      <kin-grid-col heading="Other Names"
+                    show="false" export="true"
+                    field="other_name"></kin-grid-col>
+      <kin-grid-col heading="Title"
+                    show="false" export="false"
+                    expr="item.title.name"
+                    field="title"></kin-grid-col>
+
+
+      <kin-grid-col
+         heading="DOB" show="true" export="true"
+         expr="item.dob|apiDateShow|fieldUnknown:!item.dob_checked"
+         field="dob"></kin-grid-col>
+      <kin-grid-col
+         heading="DOD" show="false" export="true"
+         expr="item.dod|apiDateShow|fieldUnknown:!item.dod_checked"
+         field="dod"></kin-grid-col>
+
+      <kin-grid-col
+         heading="Cause of Death"
+         show="false" export="true"
+         field="cause_of_death"
+         sortable="false"></kin-grid-col>
+      <kin-grid-col
+         heading="Deceased"
+         show="false" export="true"
+         field="deceased" expr="item.deceased|yesno"></kin-grid-col>
+
+
+      <kin-grid-col heading="Sex"
+                    show="true" export="true"
+                    field="sex"></kin-grid-col>
+
+      <kin-grid-col heading="Studies"
+                    show="false" export="false"
+                    field="+studies"></kin-grid-col>
+      <kin-grid-col heading="Case"
+                    show="false" export="false"
+                    field="case"></kin-grid-col>
+
+      <kin-grid-col heading="Consent Status"
+                    show="false" export="true"
+                    field="consent_status"
+                    expr="item._extra.consent"></kin-grid-col>
+      <kin-grid-col heading="Consent Date"
+                    show="false" export="true"
+                    field="consent_date"
+                    expr="item._extra.consent_date|apiDateShow"></kin-grid-col>
+
+      <kin-grid-data-cols data="item.data" schema="person">
+      </kin-grid-data-cols>
+
+      <!--
+      <kin-grid-row class="{ 'unconsented': !item._extra.consent, 'consent-withdrawn': item._extra.consent === false }">
+      </kin-grid-row>
+      -->
+    </kin-grid>
+
+  </div><!--/span-->
+</div><!--/row-->

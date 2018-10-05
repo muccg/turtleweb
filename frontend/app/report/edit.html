@@ -1,0 +1,137 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs title="{{ vm.item.name }}">
+  <kin-breadcrumb link="['_', 'Report', 'List']" title="Reports">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id"
+                  link="['_', 'Report', 'Detail', {id: vm.item.id}]"
+                  title="{{ vm.item.name }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id" title="Edit"></kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id" title="Create New Report"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<!--Body content-->
+<form name="editForm" class="form-horizontal" role="form" autocomplete="off">
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="row"><div class="col-sm-12 col-md-10 col-lg-8">
+        <div class="form-group hide">
+          <label class="col-sm-2 control-label">Owner</label>
+          <div class="col-sm-10">
+            <input ng-model="vm.item.owner" type="text" class="form-control" placeholder="Owner" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reportTitle" class="col-sm-2 control-label required">Title</label>
+          <div class="col-sm-10">
+            <input ng-model="vm.item.name" type="text" class="form-control"
+                   id="reportTitle" name="reportTitle" placeholder="Title" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reportDesc" class="col-sm-2 control-label">Description</label>
+          <div class="col-sm-10">
+            <textarea ng-model="vm.item.desc" class="form-control" id="reportDesc" placeholder="Description"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="what" class="col-sm-2 control-label required">What</label>
+          <div class="col-sm-10">
+            <select ng-model="vm.item.resource" class="form-control" required
+                    ng-options="opt.resource as opt.name for opt in vm.resourceOptions">
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reportQuery" class="col-sm-2 control-label">Query</label>
+          <div class="col-sm-10">
+
+            <kin-query ng-model="vm.item.query" resource="vm.item.resource">
+              <input type="text" class="form-control"
+                     id="reportQuery" placeholder="Query expression"
+                     ng-model="kinQuery.text" kin-query-input
+                     kin-query-auto-complete="ac">
+
+              <kin-query-auto-complete-menu pos="ac.pos" info="ac">
+              </kin-query-auto-complete-menu>
+            </kin-query>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reportOrderBy" class="col-sm-2 control-label">Order By</label>
+          <div class="col-sm-4">
+            <ui-select multiple ng-model="vm.item.order_by">
+              <ui-select-match placeholder="Select fields...">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="field in vm.orderFieldNames | filter:$select.search">
+                {{field}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reportGroupBy" class="col-sm-2 control-label">Group By</label>
+          <div class="col-sm-4">
+            <ui-select multiple ng-model="vm.item.group_by">
+              <ui-select-match placeholder="Select fields...">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="field in vm.groupFieldNames | filter:$select.search">
+                {{field}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reportColumns" class="col-sm-2 control-label">Show Columns</label>
+          <div class="col-sm-4">
+            <ui-select multiple ng-model="vm.item.list_columns">
+              <ui-select-match placeholder="Select fields...">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="field in vm.colFieldNames | filter:$select.search">
+                {{field}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reportColumns" class="col-sm-2 control-label">Chart Type</label>
+          <div class="col-sm-10">
+            <label class="radio-inline">
+              <input type="radio" id="reportChartNone" ng-model="vm.item.chart" value=""> None
+            </label>
+            <label class="radio-inline">
+              <input type="radio" id="reportChartBar" ng-model="vm.item.chart" value="bar"> Bar
+            </label>
+            <label class="radio-inline">
+              <input type="radio" id="reportChartPie" ng-model="vm.item.chart" value="pie"> Pie
+            </label>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <ul class="col-sm-2 kin-view-actions">
+      <li>
+        <button type="submit" id="save-btn" class="btn btn-success"
+                ng-click="vm.save()" ng-disabled="editForm.$pristine || editForm.$invalid">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </li>
+      <li>
+        <kin-versions-dropdown item="vm.item">
+        </kin-versions-dropdown>
+      </li>
+      <li>
+        <a ng-link="vm.item.id ? ['Detail', {id: vm.item.id}] : ['List']" class="btn btn-large btn-default">
+          Cancel
+        </a>
+      </li>
+      <li>
+        <a kin-delete-button="vm.item" ng-show="vm.item.id" class="btn btn-danger">
+          <i class="glyphicon glyphicon-trash"></i> Delete
+        </a>
+      </li>
+    </ul>
+  </div>
+</form>

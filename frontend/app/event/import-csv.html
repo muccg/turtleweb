@@ -1,0 +1,24 @@
+<kin-breadcrumbs title="Import CSV">
+  <li><a ng-link="['List']">Events</a></li>
+  <li class="active">Import CSV</li>
+</kin-breadcrumbs>
+
+<div class="row">
+  <div class="col-sm-10">
+    <kin-import-csv resource="event" name="importCtrl" on-finish="$ctrl.$router.navigate(['List']))">
+    </kin-import-csv>
+  </div>
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <button type="submit" id="save-btn" class="btn btn-success"
+              ng-click="importCtrl.doImport()" ng-disabled="importCtrl.invalid">
+        <i class="glyphicon glyphicon-flash"></i> Import
+      </button>
+    </li>
+    <li>
+      <a ng-link="['List']" class="btn btn-large btn-default">
+        Cancel
+      </a>
+    </li>
+  </ul>
+</div>

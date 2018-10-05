@@ -1,0 +1,52 @@
+<div ng-if="vm.dim === 1">
+  <div class="list-group">
+    <a href="" class="list-group-item"
+       ng-repeat="col in vm.cols"
+       ng-click="vm.select($index)"
+       ng-class="{ full: !!vm.grid[0][0][$index], empty: !vm.grid[0][0][$index] }">
+      {{ $index + 1 }}
+    </a>
+  </div>
+</div>
+
+<div ng-if="vm.dim === 2" class="container-grid"
+     ng-class="{ highlight: !!vm.highlight }">
+  <div class="container-grid-inside"
+       kin-square-dnd="vm.onGridDnd(x, y, ev)"
+       square-width="vm.cols.length" square-height="vm.rows.length">
+    <div class="container-grid-row"
+         ng-repeat="row in vm.rows"
+         ng-class="vm.rowClass($index)"
+         ng-style="{ height: 100/vm.rows.length + '%' }">
+      <a href="" class="container-grid-cell"
+         ng-repeat="col in vm.cols"
+         ng-click="vm.select($index, $parent.$index)"
+         kin-sample-id-popover="vm.grid[0][$parent.$index][$index]"
+         ng-style="{ width: 100/vm.cols.length + '%' }"
+         ng-class="vm.cellClass($index, $parent.$index)">
+        <span class="cell-coord cell-coord-x" ng-if="$parent.$index === 0">
+          {{ $parent.$index|containerGridIndex:vm.coord[0] }}
+        </span>
+        <span class="cell-coord cell-coord-y" ng-if="$index === 0">
+          {{ $parent.$parent.$index|containerGridIndex:vm.coord[1] }}
+        </span>
+        <span class="cell-dot"
+              ng-if="vm.isFull($index, $parent.$index)">●</span>
+        <span class="pick-num" ng-if="vm.numPicks > 1 && vm.isPicked($index, $parent.$index)">
+          <svg width="100%" height="100%" viewBox="0 -100 100 100"
+               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <text font-size="100" text-anchor="middle" x="50" dy="-0.15em" fill="white">
+              {{ vm.getPickNum($parent.$index, $parent.$parent.$index) || "" }}
+            </text>
+          </svg>
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div ng-if="dim === 3">
+  <div class="alert alert-info" role="alert">
+    <strong>todo</strong> 3-D boxes not implemented.
+  </div>
+</div>

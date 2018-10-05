@@ -1,0 +1,124 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Transaction</th>
+      <th>Details</th>
+      <th>Comment</th>
+      <th ng-if="$root.user.perms.patientEdit"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="xact in vm.sample.transactions" class="invisibutton">
+      <td>{{ xact.date | apiDateShow }}</td>
+      <td>{{ xact.date | apiTimeShow }}</td>
+      <td ng-switch="xact.type">
+        <span ng-switch-when="C">
+          Collected
+        </span>
+        <span ng-switch-when="U">
+          Used
+        </span>
+        <span ng-switch-when="D">
+          Destroyed
+        </span>
+        <span ng-switch-when="X">
+          Sent to {{ xact.samplesending.collaborator }}.
+          <span ng-if="xact.samplesending.last_location">
+            Location before sending was
+            {{ xact.samplesending.last_location|sampleLocation:vm.cs.classUri }}
+          </span>
+        </span>
+        <span ng-switch-when="L">
+          Adjusted amount to {{ xact.sampleadjustment.amount }}.
+        </span>
+        <span ng-switch-when="S">
+          Subdivided
+        </span>
+        <span ng-switch-when="A">
+          Split
+        </span>
+        <span ng-switch-when="J">
+          Subcultured
+        </span>
+        <span ng-switch-when="K">
+          Subcultured from
+        </span>
+        <span ng-switch-when="M">
+          Moved
+        </span>
+        <span ng-switch-when="P">
+          Processed
+        </span>
+        <span ng-switch-when="F">
+          Frozen/Fixed
+        </span>
+        <span ng-switch-when="">
+          Note
+        </span>
+      </td>
+      <td ng-switch="xact.type" colspan="{{ xact.type ? 1 : 2 }}">
+        <span ng-switch-when="C">
+          Event:
+          <kin-event-summary
+             ng-model="xact.samplecollection.event"
+             link="true">
+          </kin-event-summary>
+        </span>
+        <span ng-switch-when="U" ng-bind-html="vm.sample|sampleAmount:xact.sampleuse.amount"></span>
+        <span ng-switch-when="X" ng-bind-html="vm.sample|sampleAmount:xact.samplesending.amount"></span>
+        <span ng-switch-when="L" ng-bind-html="vm.sample|sampleAmount:xact.sampleadjustment.amount"></span>
+        <span ng-switch-when="D">
+          <span ng-if="xact.sampledestroy.last_location">
+          Location before destruction was
+          {{ xact.sampledestroy.last_location|sampleLocation:vm.cs.classUri }}
+          </span>
+        </span>
+        <span ng-switch-when="M">
+          {{ xact.samplemove.fro|sampleLocation:vm.cs.classUri:xact.samplemove.to }}
+          →
+          {{ xact.samplemove.to|sampleLocation:vm.cs.classUri:xact.samplemove.fro }}
+        </span>
+        <span ng-switch-when="A">
+          <span ng-bind-html="vm.sample|sampleAmount:xact.samplesplit.total_amount"></span>
+          split into {{ xact.samplesplit.count }} parts.
+          <kin-sample-subdivision-links origin="xact">
+          </kin-sample-subdivision-links>
+        </span>
+        <span ng-switch-when="J">
+          <span ng-bind-html="vm.sample|sampleAmount:xact.samplesubcultured.consumed_amount"></span>
+          subcultured creating {{ xact.samplesubcultured.created_count }} samples, each
+          <span ng-bind-html="vm.sample|sampleAmount:xact.samplesubcultured.created_amount"></span>
+          <kin-sample-subculture-links origin="xact">
+          </kin-sample-subculture-links>
+        </span>
+        <span ng-switch-when="S">
+          <span ng-bind-html="vm.sample|sampleAmount:xact.samplesubdivision.amount"></span>
+          subdivided from
+          <kin-xact-sample-link uri="xact.samplesubdivision.origin">
+          </kin-xact-sample-link>. Part
+          {{ xact.samplesubdivision.number + 1 }}/{{ xact.samplesubdivision.count }}.
+        </span>
+        <span ng-switch-when="K">
+          <span ng-bind-html="vm.sample|sampleAmount:xact.samplesubculturedfrom.amount"></span>
+          subcultured from
+          <kin-xact-sample-link uri="xact.samplesubculturedfrom.origin">
+          </kin-xact-sample-link>. Sample
+          {{ xact.samplesubculturedfrom.number + 1 }}/{{ xact.samplesubculturedfrom.count }}.
+        </span>
+        <span ng-switch-when="">
+          {{ xact.comment }}
+        </span>
+      </td>
+      <td ng-if="xact.type">{{ xact.comment }}</td>
+      <td ng-if="$root.user.perms.patientEdit">
+        <a href="" class="invisitarget pull-right btn btn-xs btn-default"
+           ng-click="vm.editTransaction(xact); $event.stopPropagation()">
+          <i class="glyphicon glyphicon-pencil"></i>
+          Edit
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,35 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Sub-type</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="hover"
+        ng-repeat="sample in vm.samples"
+        ng-click="vm.$rootRouter.navigate(sample.link)">
+      <td>
+        <i ng-if="sample.id === vm.currentSample.id" class="glyphicon glyphicon-triangle-right"></i>
+      </td>
+      <td>
+        <a ng-link="sample.link" ng-click="$event.stopPropagation()">
+          {{ sample|sampleId }}
+        </a>
+      </td>
+      <td>{{ sample.cls.name }}</td>
+      <td>{{ sample.subtype.name }}</td>
+      <td ng-bind-html="sample|sampleAmount"></td>
+    </tr>
+  </tbody>
+  <tbody ng-if="!vm.samples" class="loading">
+    <tr class="loading">
+      <td colspan="5">
+        Loading...
+      </td>
+    </tr>
+  </tbody>
+</table>

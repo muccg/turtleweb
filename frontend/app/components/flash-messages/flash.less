@@ -1,0 +1,51 @@
+.flash-messages {
+  position: absolute;
+  top: -@alert-padding;
+  left: 0;
+  right: 0;
+
+  .flash-message {
+    position: relative;
+    top: 0;
+    z-index: 1050;
+    padding: @alert-padding;
+    height: @navbar-height + @alert-padding;
+
+    border: 1px solid transparent;
+    .border-bottom-radius(@alert-border-radius);
+    .box-shadow(0 0 6px rgba(0,0,0,.175));
+
+    &.success {
+      .alert-variant(@alert-success-bg; @alert-success-border; @alert-success-text);
+    }
+
+    &.info {
+      .alert-variant(@alert-info-bg; @alert-info-border; @alert-info-text);
+    }
+
+    &.warning {
+      .alert-variant(@alert-warning-bg; @alert-warning-border; @alert-warning-text);
+    }
+
+    &.danger {
+      .alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text);
+    }
+
+
+    &.ng-enter {
+      transition: all linear 0.1s;
+    }
+    &.ng-leave {
+      transition: all linear 0.8s;
+    }
+
+    &.ng-enter, &.ng-leave.ng-leave-active {
+      transform: translate(0, -3em);
+      opacity: 0;
+    }
+    &.ng-leave, &.ng-enter.ng-enter-active {
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+  }
+}

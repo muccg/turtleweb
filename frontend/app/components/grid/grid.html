@@ -1,0 +1,33 @@
+<kin-grid-table
+   cols="kinGrid.cols"
+   items="kinGrid.search.items"
+   selection="kinGrid.selection"
+   on-select="kinGrid.onSelect({ item: item })"
+   fields="kinGrid.search.fields"
+   on-row-height="setRowHeight(height)"
+   page-size="kinGrid.search.paging.pageSize"
+   loading="kinGrid.search.searching">
+  <ng-transclude></ng-transclude>
+</kin-grid-table>
+<kin-grid-pagination
+   paging-options="kinGrid.pagingOptions"
+   on-changed="kinGrid.pagingChanged(paging)"
+   paging="kinGrid.search.paging"
+   total-count="kinGrid.search.totalCount"
+   query-time="kinGrid.search.queryTime"
+   searching="kinGrid.search.searching"
+   error="kinGrid.search.error"
+   selection="kinGrid.selection"
+   csv-link="kinGrid.search.getCsvLink()"
+   on-pagination-height="setPaginationHeight(height)">
+  <a href kin-grid-edit-cols="kinGrid.cols" class="btn btn-primary btn-sm">
+    <i class="glyphicon glyphicon-cog"></i>
+  </a>
+
+  <a target="_blank" class="btn btn-primary btn-sm"
+     ng-if="kinGrid.search.getCsvLink()"
+     ng-href="{{ kinGrid.search.getCsvLink() }}">
+    <i class="glyphicon glyphicon-export"></i> Save CSV
+  </a>
+
+</kin-grid-pagination>

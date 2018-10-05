@@ -1,0 +1,210 @@
+<div class="modal-header">
+  <h3 class="modal-title" ng-switch="vm.item.type">
+    <span ng-switch-when="C">Sample Collection</span>
+    <span ng-switch-when="P">Sample Processed</span>
+    <span ng-switch-when="F">Sample Frozen/Fixed</span>
+    <span ng-switch-when="U">Use Sample</span>
+    <span ng-switch-when="D">Destroy Sample</span>
+    <span ng-switch-when="M">
+      <span ng-if="vm.item.sample.location !== null">Move Sample</span>
+      <span ng-if="vm.item.sample.location === null">Allocate Sample</span>
+    </span>
+    <span ng-switch-when="L">Adjust Sample</span>
+    <span ng-switch-when="X">Send Sample</span>
+    <span ng-switch-when="A">Subdivide Sample</span>
+    <span ng-switch-when="J">Subculture Sample</span>
+    <span ng-switch-when=""><span ng-if="!vm.item.id">Add</span> Note</span>
+    <span ng-switch-default><span ng-if="!vm.item.id">Add</span> Transaction</span>
+  </h3>
+</div>
+<div class="modal-body">
+  <form name="transactionForm" class="form-horizontal" role="form" autocomplete="off">
+    <div class="form-group">
+      <label for="date" class="col-sm-4 control-label required">Date</label>
+      <div class="col-sm-8">
+        <kin-date-picker id="date" required
+                         ng-model="vm.item.date" type="isodatetime" >
+        </kin-date-picker>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="time" class="col-sm-4 control-label required">Time</label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input type="text" id="time" placeholder="HH:MM:SS"
+                 class="form-control" required
+                 ng-model="vm.item.date" kin-time-picker="isodatetime">
+          <span class="input-group-addon">24h format</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="vm.item.type==='U' || vm.item.type==='X'">
+      <label for="amount" class="col-sm-4 control-label required">Amount</label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input type="number" class="form-control" id="amount"
+                 aria-describedby="amount-unit" step="any"
+                 ng-model="vm.item.amount" required>
+          <span class="input-group-addon" id="amount-unit">
+            {{ vm.item.sample|sampleUnit:'?' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="vm.item.type==='X'">
+      <label for="collaborator" class="col-sm-4 control-label required">Collaborator Name</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" ng-model="vm.item.collaborator" id="collaborator" required>
+      </div>
+    </div>
+
+    <kin-sample-location-form-groups
+       ng-if="vm.item.type==='M'"
+       ng-model="vm.item.to"
+       num-picks="1"
+       ng-required="true">
+    </kin-sample-location-form-groups>
+    <div class="form-group" ng-if="false && vm.item.type==='M' && vm.item.id">
+      <label class="col-sm-4 control-label required">Location</label>
+      <div class="col-sm-8">
+        <p class="form-control-static">
+          {{ vm.item.to|sampleLocation:vm.kinContainers.classUri:vm.item.fro }}
+        </p>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="vm.item.type==='A'">
+      <label for="total-amount" class="col-sm-4 control-label required">Total Amount</label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input type="number" class="form-control" id="total-amount"
+                 min="0" step="any" placeholder="" aria-describedby="total-amount-unit"
+                 ng-model="vm.item.total_amount" required>
+          <span class="input-group-addon" id="total-amount-unit">
+            {{ vm.item.sample|sampleUnit:'?' }}
+          </span>
+        </div>
+        <p class="help-block">
+          How much of this specimen to split off.
+        </p>
+      </div>
+    </div>
+
+    <div ng-if="vm.item.type==='A' && !vm.item.id">
+      <div class="form-group">
+        <label for="count" class="col-sm-4 control-label required">Subdivisions</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control" id="count"
+                 min="1" integer required
+                 ng-model="vm.item.count"
+                 ng-model-options="{ allowInvalid: true }"
+                 ng-change="vm.subdivisionCountChanged()">
+          <p class="help-block">
+            The number of new specimens to create from this one.
+          </p>
+        </div>
+      </div>
+
+      <div ng-repeat="subdiv in vm.subdivisions track by $index">
+        <div class="form-group">
+          <label for="cls{{ $index }}" class="col-sm-4 control-label required">
+            Type {{ $index + 1 }}
+          </label>
+          <div class="col-sm-8">
+            <select class="form-control" required
+                    id="cls{{ $index }}" name="cls{{ $index }}"
+                    ng-model="subdiv.cls"
+                    ng-options="c as c.name for c in vm.sampleClasses track by c.id">
+            </select>
+            <p ng-show="transactionForm['cls' + $index].$touched && transactionForm['cls' + $index].$error.required" class="help-block">
+              Sample type is required.
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subtype{{ $index }}" class="col-sm-4 control-label required">
+            Sub-type {{ $index + 1 }}
+          </label>
+          <div class="col-sm-8">
+            <kin-simple-select
+               ng-model="subdiv.subtype"
+               required
+               options="samplesubtype"
+               filter="{ cls: { resource_uri: subdiv.cls.resource_uri } }"
+               id="subtype{{ $index }}">
+            </kin-simple-select>
+            <p ng-show="transactionForm['subtype' + $index].$touched && transactionForm['subtype' + $index].$error.required" class="help-block">
+              Sample sub-type is required.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="vm.item.type==='J'">
+      <label for="consumed" class="col-sm-4 control-label required">Amount consumed</label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input type="number" class="form-control" id="consumed"
+                 min="0" step="any" placeholder="" aria-describedby="consumed-unit"
+                 ng-model="vm.item.consumed_amount" required>
+          <span class="input-group-addon" id="total-amount-unit">
+            {{ vm.item.sample|sampleUnit:'?' }}
+          </span>
+        </div>
+        <p class="help-block">
+          How much of this sample consumed for subculture.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="vm.item.type==='J' && !vm.item.id">
+      <label for="count" class="col-sm-4 control-label required">Samples created</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="created_count"
+               min="0" ng-model="vm.item.created_count" integer required>
+        <p class="help-block">
+          The number of new samples created by subculturing.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="vm.item.type==='J' && !vm.item.id">
+      <label for="created_amount" class="col-sm-4 control-label required">Created amount</label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input type="number" class="form-control" id="created_amount"
+                 min="0" step="any" placeholder="" aria-describedby="created_amount-unit"
+                 ng-model="vm.item.created_amount" required>
+          <span class="input-group-addon" id="created_amount-unit">
+            {{ vm.item.sample|sampleUnit:'?' }}
+          </span>
+        </div>
+        <p class="help-block">
+          Size of samples created by subculturing.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="comment" class="col-sm-4 control-label"
+             ng-class="{ required: !vm.item.type }">Comment</label>
+      <div class="col-sm-8">
+        <textarea class="form-control" ng-model="vm.item.comment" ng-required="!vm.item.type">
+        </textarea>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger pull-left"
+          ng-if="vm.item.id" ng-disabled="!vm.canDelete()"
+          ng-click="vm.confirmDelete()">Delete Transaction</button>
+  <em ng-if="vm.saving">Saving...</em>
+  <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="!transactionForm.$valid">Save</button>
+</div>

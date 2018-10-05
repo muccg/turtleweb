@@ -1,0 +1,57 @@
+<div class="container signin" ng-class="{ success: user.loggedIn }">
+  <div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h1>
+        Turtleweb
+        <span class="login-flash-message" kin-flash-last-message>
+          {{ msg.text }}
+        </span>
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 col-md-push-7">
+      <div ng-if="!user.loggedIn">
+        <kin-login creds="creds" ctrl="loginCtrl"></kin-login>
+        <p class="login-note">
+          You will need your mobile phone handy to enter the
+          {{ loginCtrl.tokenDigitsWord }}-digit PIN which will be sent to it.
+        </p>
+
+        <p>
+          Forgotten your password?
+          <a href="" kin-password-reset="creds.email">Reset password</a>.<br/>
+          Can't receive messages?
+          <a href="" kin-mail-user-admins="creds.email">Request assistance.</a>
+        </p>
+      </div>
+      <div ng-if="user.loggedIn">
+        Redirecting...
+      </div>
+    </div>
+
+    <div class="col-md-6 col-md-offset-1 col-md-pull-4">
+      <div class="row logo-margin">
+        <div class="col-xs-6">
+          <img ng-src="{{ $root.config.urls.base }}img/ccg-logo.png" width="150" height="50">
+        </div>
+        <div class="col-xs-6">
+          <img ng-src="{{ $root.config.urls.base }}img/murdoch-logo.png">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="footer">
+        <p>A St John of God Health Care web application.</p>
+        <p>Developed by the Centre for Comparative Genomics, Murdoch University © 2015.</p>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<kin-breadcrumbs></kin-breadcrumbs>

@@ -1,0 +1,94 @@
+<kin-breadcrumbs $router="$router">
+  <kin-breadcrumb hide="!vm.person" link="['_', 'Person']" title="Patients">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.person"
+                  link="['_', 'Person', 'Detail', {id: vm.person.id}]"
+                  title="{{ vm.person | patientId }} {{ vm.person | personFullName }}">
+  </kin-breadcrumb>
+  <kin-breadcrumb hide="vm.person" link="['_', 'Event', 'List']" title="Events"></kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id" title="{{ vm.item | eventId }}"></kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id" title="{{ vm.eventType.name }}"></kin-breadcrumb>
+  <kin-breadcrumb hide="!vm.item.id" title="Edit"></kin-breadcrumb>
+  <kin-breadcrumb hide="vm.item.id" title="Create"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<form class="form-horizontal" name="editForm" autocomplete="off">
+  <div class="col-md-10">
+    <div class="form-group" ng-if="vm.item.id">
+      <label for="type" class="col-sm-2 control-label required">Type</label>
+      <div class="col-sm-10">
+        <select class="form-control" required id="type"
+                ng-model="vm.eventType"
+                ng-options="et as vm.indentedEventName(et) for et in vm.eventTypes track by et.resource_uri">
+        </select>
+      </div>
+    </div>
+
+    <kin-event-type-change-warning event-type="vm.eventType" data="vm.item.data">
+    </kin-event-type-change-warning>
+
+    <div class="form-group">
+      <label for="date" class="col-sm-2 control-label">Event Date</label>
+      <div class="col-sm-4">
+        <kin-date-picker id="date" ng-model="vm.item.date" type="isodatetime">
+        </kin-date-picker>
+        <p ng-show="editForm.date.$error && editForm.date.$dirty" class="help-block">
+          <span ng-show="editForm.date.$error.date">
+            That date is invalid.
+          </span>
+          <span ng-show="editForm.date.$error.required">
+            Date of event is required.
+          </span>
+        </p>
+      </div>
+      <label for="time" class="col-sm-2 control-label" ng-if="false">Event Time</label>
+      <div class="col-sm-4" ng-if="false">
+        <div class="input-group">
+          <input type="text" id="time" placeholder="HH:MM:SS"
+                 kin-time-picker="isodatetime" ng-model="vm.item.date"
+                 class="form-control">
+          <span class="input-group-addon">24h format</span>
+        </div>
+      </div>
+    </div>
+    <kin-event-fields-edit
+       ng-if="vm.item && vm.eventType"
+       ng-model="vm.item.data"
+       event-type="vm.eventType"
+       patient-has-cases="vm.patientHasCase">
+    </kin-event-fields-edit>
+  </div>
+
+  <ul class="col-md-2 kin-view-actions">
+    <li>
+      <button type="submit" id="save-btn" class="btn btn-success"
+              ng-click="vm.save()" ng-disabled="editForm.$pristine || editForm.$invalid">
+        <i class="glyphicon glyphicon-save"></i> Save
+      </button>
+    </li>
+
+    <li>
+      <kin-versions-dropdown ng-if="vm.item" item="vm.item">
+      </kin-versions-dropdown>
+    </li>
+
+    <li>
+      <a ng-link="['..', '..', 'Detail', { id: vm.person.id }]" class="btn btn-large btn-default">
+        Cancel
+      </a>
+    </li>
+    <li>
+      <kin-attach-button item="vm.item" ng-if="vm.item">
+      </kin-attach-button>
+    </li>
+    <li>
+      <a kin-delete-button="vm.item"
+         kin-delete-button-special="event"
+         ng-show="vm.item.id" class="btn btn-danger">
+        <i class="glyphicon glyphicon-trash"></i> Delete
+      </a>
+    </li>
+  </ul>
+
+</div>
+</form>

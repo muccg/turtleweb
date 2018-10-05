@@ -1,0 +1,37 @@
+# data only container pattern
+dataprod:
+  image: debian:jessie
+  volumes:
+    - ./data/prod:/data
+
+dbprod:
+  extends:
+    file: docker-compose-common.yml
+    service: db
+
+cacheprod:
+  extends:
+    file: docker-compose-common.yml
+    service: cache
+
+nginxprod:
+  extends:
+    file: docker-compose-common.yml
+    service: nginx
+  links:
+    - uwsgiprod:uwsgi
+
+uwsgiprod:
+  image: muccg/turtle:${GIT_TAG}
+  command: uwsgi
+  environment:
+    - DBUSER=turtleapp
+    - WAIT_FOR_DB=1
+    - WAIT_FOR_CACHE=1
+    - DEPLOYMENT=test
+    - ALLOWED_HOSTS=*
+  volumes_from:
+    - dataprod
+  links:
+    - dbprod:db
+    - cacheprod:cache

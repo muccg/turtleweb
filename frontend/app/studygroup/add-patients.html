@@ -1,0 +1,32 @@
+<div class="add-patients-modal">
+  <div class="modal-header">
+    <h3 class="modal-title">Add {{ vm.count === 1 ? "Patient" : "Patients" }} to Study Group</h3>
+  </div>
+  <div class="modal-body">
+    <p>Please select a study group:</p>
+    <div class="studygroup-list">
+      <div class="list-group">
+        <a class="list-group-item" href="" ng-click="vm.selectGroup(null)">
+          <h4 class="list-group-item-heading">
+            <i class="glyphicon glyphicon-plus"></i> Create Group
+          </h4>
+          <p class="list-group-item-text">
+            Create a new study group<span ng-if="vm.count !== 1"> with the patient list</span>.
+          </p>
+        </a>
+
+        <a ng-repeat="group in vm.studyGroups" class="list-group-item" href="" ng-click="vm.selectGroup(group)">
+          <span class="badge">
+            {{ group.members.length }}
+            {{ group.members.length === 1 ? "member" : "members" }}
+          </span>
+          <h4 class="list-group-item-heading">{{ group.name }}</h4>
+          <p class="list-group-item-text">{{ group.desc }}</p>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+  </div>
+</div>

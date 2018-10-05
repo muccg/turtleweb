@@ -1,0 +1,50 @@
+#
+FROM muccg/turtle-base
+MAINTAINER https://github.com/muccg/
+
+ARG ARG_GIT_TAG=next_release
+
+ENV GIT_TAG $ARG_GIT_TAG
+ENV PIP_NO_CACHE_DIR="off"
+ENV PIP_INDEX_URL="https://pypi.python.org/simple"
+ENV PIP_TRUSTED_HOST="127.0.0.1"
+
+RUN env | sort
+
+# Project specific deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  build-essential \
+  git \
+  openssh-client \
+  graphviz \
+  imagemagick \
+  librsvg2-bin \
+  tcl8.6-dev \
+  liblcms2-dev \
+  libfreetype6-dev \
+  libgnutls28-dev \
+  libpcre3-dev \
+  libjpeg62-turbo-dev \
+  libopenjpeg-dev \
+  libtiff-dev \
+  libwebp-dev \
+  libxml2-dev \
+  libxslt1-dev \
+  zlib1g-dev \
+  nano \
+  nodejs-legacy \
+  npm \
+  postgresql-client-9.4 \
+  postgresql-server-dev-9.4 \
+  wget \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY docker-entrypoint-build.sh /app/docker-entrypoint-build.sh
+
+VOLUME ["/data"]
+
+ENV HOME /data
+WORKDIR /data
+
+ENTRYPOINT ["/app/docker-entrypoint-build.sh"]
+CMD ["releasetarball"]

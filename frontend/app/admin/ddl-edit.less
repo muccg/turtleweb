@@ -1,0 +1,36 @@
+.kin-edit-label {
+  &.kin-edit-label-blank {
+    font-style: italic;
+  }
+
+  .label-delete {
+    margin-left: 3em;
+  }
+}
+
+li.list-group-item-interactive {
+  color: @list-group-link-color;
+  cursor: pointer;
+
+  .list-group-item-heading {
+    color: @list-group-link-heading-color;
+  }
+
+  // Hover state
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: @list-group-link-hover-color;
+    background-color: @list-group-hover-bg;
+  }
+}
+
+li.list-group-item.active {
+  .text-muted {
+    color: mix(@list-group-active-color, @list-group-active-bg, 66%);
+  }
+}
+
+.list-group-item .container-count {
+  margin-left: 1em;
+}

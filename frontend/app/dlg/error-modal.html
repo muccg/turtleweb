@@ -1,0 +1,52 @@
+<div class="modal-header bg-danger">
+  <h3 class="modal-title text-danger text-center">
+    <i class="glyphicon glyphicon-fire pull-left"></i>
+    Sorry, an error occurred.
+    <i class="glyphicon glyphicon-fire pull-right"></i>
+  </h3>
+</div>
+<div class="modal-body" ng-switch="error.type">
+  <div ng-switch-when="router">
+    <p>This page could not be loaded.</p>
+  </div>
+  <div ng-switch-when="restangular">
+    <p>The server could not handle that request.</p>
+    <dl>
+      <dt>Status</dt>
+      <dd>{{ error.data.status }} {{ error.data.statusText }}</dd>
+      <dt>Method</dt>
+      <dd>{{ error.data.config.method }}</dd>
+      <dt>URL</dt>
+      <dd>{{ error.data.config.url }}</dd>
+      <dt>Params</dt>
+      <dd>{{ error.data.config.params }}</dd>
+    </dl>
+  </div>
+  <div ng-switch-when="upload">
+    <p>The file could not be uploaded —
+      {{ error.data.status }} {{ error.data.statusText }}.</p>
+  </div>
+  <div ng-switch-when="exception">
+    <p>It was a javascript exception.</p>
+    <p ng-if="!error.data.stack">{{ error.data.message }}</p>
+    <pre ng-if="error.data.stack">{{ error.data.stack }}</pre>
+  </div>
+  <pre ng-switch-default>
+    {{ error|json }}
+  </pre>
+
+  <p ng-hide="sent || sendFailed">
+    <em>Logging report into system...</em>
+  </p>
+  <p ng-show="sendFailed">
+    <em>Could not log error report. Please contact site
+    administrators.</em>
+  </p>
+  <p ng-show="sent">
+    The error has been logged for the attention of the site
+    administrators.
+  </p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="$dismiss()">Continue</button>
+</div>

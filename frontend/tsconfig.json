@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "declaration": true
+  },
+  "exclude": [
+    "protractor",
+    "test",
+    "config"
+  ]
+}

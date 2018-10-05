@@ -1,0 +1,72 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs title="{{ vm.item.name }}">
+  <kin-breadcrumb link="['_', 'Report', 'List']" title="Reports"></kin-breadcrumb>
+  <kin-breadcrumb title="{{ vm.item.name }}"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<!--Body content-->
+<div class="row">
+  <div class="col-sm-10">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>{{ vm.item.name }} <small>{{ vm.item.owner }}</small></h3>
+        <p ng-if="vm.item.desc">{{ vm.item.desc }}</p>
+        <kin-show-query
+           query="vm.item.query"
+           resource="vm.item.resource"
+           study="$root.study">
+        </kin-show-query>
+        <p ng-if="!vm.grouping">Number of items: {{ vm.item.count }}</p>
+      </div>
+      <div ng-if="vm.grouping && vm.item.chart" class="col-sm-3">
+        <canvas ng-if="vm.item.chart==='bar'"
+                class="chart chart-bar img-thumbnail"
+                data="vm.barchart.data" labels="vm.barchart.labels"
+                series="vm.barchart.series">
+        </canvas>
+        <canvas ng-if="vm.item.chart==='pie'"
+                class="chart chart-pie img-thumbnail"
+                data="vm.piechart.data" labels="vm.piechart.labels">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="row" ng-if="grouping">
+      <div class="col-xs-12">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th ng-repeat="group in vm.item.group_by">{{ group }}</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="result in vm.item.result track by $index">
+              <td ng-repeat="group in result.group track by $index">{{ group|fillBlank:'(None)' }}</td>
+              <td>{{ result.count }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="{{ vm.item.group_by.length }}">Total</th>
+              <th>{{ vm.item.count }}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <a ng-link="['Edit', {id: vm.item.id}]" class="btn btn-large btn-primary">
+        <i class="glyphicon glyphicon-pencil"></i> Edit
+      </a>
+    </li>
+    <li>
+      <a ng-link="['Add']" class="btn btn-large btn-default">
+        <i class="glyphicon glyphicon-plus"></i> Create Report
+      </a>
+    </li>
+  </ul>
+</div><!--/row-->
+</div>

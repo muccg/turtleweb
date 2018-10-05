@@ -1,0 +1,160 @@
+<div class="container-fluid">
+  <div class="row" ng-if="vm.items">
+    <div class="col-sm-12 col-md-10 col-lg-9">
+
+      <div ng-repeat="cls in vm.cs.classes"
+           ng-if="vm.isClassShown(cls)">
+        <h3>{{ cls.name }}</h3>
+        <ul class="list-group"
+            ui-sortable="sortableOptions"
+            ng-model="vm.groupedItems[cls.resource_uri]">
+          <li class="list-group-item invisibutton"
+              ng-click="vm.toggleFilter(cls, item)"
+              ng-repeat="item in vm.groupedItems[cls.resource_uri]"
+              ng-class="{active: item.resource_uri && vm.filter[cls.resource_uri] === item.resource_uri && vm.ui.edit !== item, 'list-group-item-interactive': vm.ui.edit !== item }"
+              ng-show="vm.isContainerShown(item) || vm.ui.edit === item">
+            <span ng-if="vm.ui.edit !== item">
+              {{ item.name }}
+              <span ng-if="!item.id" class="text-muted invisitarget">– Unsaved</span>
+              <span ng-if="item.num_samples" class="text-muted container-count">
+                <ng-pluralize count="item.num_samples"
+                              when="{'one': '1 sample',
+                                    'other': '{} samples'}">
+                </ng-pluralize>
+              </span>
+              <div class="pull-right">
+                <button type="button" class="btn btn-danger btn-xs"
+                        ng-disabled="item.num_samples || vm.containerChildCount[item.resource_uri]"
+                        ng-click="vm.deleteItem(item); $event.stopPropagation()">
+                  <i class="glyphicon glyphicon-trash"></i>
+                  Delete
+                </button>
+                <button type="button" class="btn btn-primary btn-xs"
+                        ng-disabled="vm.ui.edit"
+                        ng-click="vm.startEdit(item); $event.stopPropagation()">
+                  <i class="glyphicon glyphicon-pencil"></i>
+                  Edit
+                </button>
+              </div>
+            </span>
+
+            <form ng-if="vm.ui.edit === item"
+                  ng-click="$event.stopPropagation()"
+                  name="containerEdit" class="form-horizontal"
+                  role="form" autocomplete="off">
+              <h4 class="hidden list-group-item-heading">{{ vm.ui.editCopy.name }}</h4>
+
+              <div class="form-group form-group-sm">
+                <label for="cnt-name" class="col-sm-5 control-label">Name</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control"
+                         ng-model="vm.ui.editCopy.name" required
+                         placeholder="Name" id="cnt-name">
+                </div>
+              </div>
+
+              <div class="form-group form-group-sm" ng-if="vm.cs.classUri[vm.ui.editCopy.cls].contained_by">
+                <label for="cnt-cnt" class="col-sm-5 control-label">Container</label>
+                <div class="col-sm-7">
+                  <select ng-model="vm.ui.editCopy.container"
+                          ng-options="cnt.resource_uri as cnt.name group by vm.containerPath[cnt.container] disable when !cnt.id for cnt in vm.groupedItems[vm.cs.classUri[vm.ui.editCopy.cls].contained_by]"
+                          class="form-control" id="cls-cnt" required>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group form-group-sm">
+                <label for="cnt-width" class="col-sm-3 control-label">Size W×H×D</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" id="cnt-width"
+                         ng-model="vm.ui.editCopy.width">
+                </div>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" id="cnt-height"
+                         ng-model="vm.ui.editCopy.height">
+                </div>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" id="cnt-depth"
+                         ng-model="vm.ui.editCopy.depth">
+                </div>
+              </div>
+
+              <div class="text-right">
+                <a href class="btn btn-default btn-xs"
+                        ng-click="vm.cancelEdit(vm.ui.edit, vm.ui.editCopy); $event.stopPropagation()">
+                  Cancel
+                </a>
+                <a href class="btn btn-success btn-xs"
+                        ng-disabled="containerEdit.$pristine || containerEdit.$invalid"
+                        ng-click="vm.finishEdit(vm.ui.edit, vm.ui.editCopy); $event.stopPropagation()">
+                  <i class="glyphicon glyphicon-ok"></i> Update
+                </a>
+              </div>
+            </form>
+          </li>
+
+          <li class="list-group-item not-sortable">
+            <p ng-if="vm.isContainerEmpty(cls)" class="text-muted pull-left">
+              No containers
+            </p>
+
+            <div class="text-right">
+              <button type="button" class="btn btn-primary btn-sm"
+                      ng-disabled="vm.ui.edit"
+                      ng-click="vm.addItem(cls)">
+                <i class="glyphicon glyphicon-plus"></i>
+                Add {{ cls.name }}
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Instructions</h3>
+
+        <p>
+          Find a container to edit by clicking through the hierarchy
+          of containers. After opening a container for editing, you
+          must click either Cancel or Update once finished.
+        </p>
+
+        <p>
+          Containers can be re-ordered by dragging and dropping.
+        </p>
+
+        <p>
+          Please note that containers must be saved before other
+          containers can be added to them.
+        </p>
+
+        <p>
+          When setting a container's size, the width is the number of
+          columns and height is the number of rows. Depth is not used
+          at present.
+        </p>
+
+        <p>
+          Any container
+          where <i>width</i>&nbsp;+&nbsp;<i>height</i>&nbsp;+&nbsp;<i>depth</i>&nbsp;&gt;&nbsp;0
+          can hold samples. A container where
+          <i>width</i>&nbsp;×&nbsp;<i>height</i>&nbsp;×&nbsp;<i>depth</i>&nbsp;&gt;&nbsp;0
+          will hold samples referenced by grid co-ordinates. If that
+          doesn't make sense, then just set boxes to 10×10×1 and
+          everything else to 0×0×0.
+        </p>
+
+        <p>
+          To move a container to a new location, edit it and change
+          its <em>Container</em> setting. The container will be moved,
+          along with all of its contents.
+        </p>
+
+        <p>
+          Don't forget to Save your changes.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

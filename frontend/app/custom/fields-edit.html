@@ -1,0 +1,141 @@
+<ng-form name="fieldsForm">
+<div class="form-group" ng-repeat="field in vm.fields">
+  <label for="{{ field.id }}" class="col-sm-2 control-label"
+         ng-class="{ required: field.required }">
+    {{ field.title }}
+  </label>
+  <div class="col-sm-10" ng-switch="field.type">
+    <!-- normal string -->
+    <input ng-switch-when="string" ng-if="!field.enum || !field.enum.length"
+           ng-model="vm.d[field.name]"
+           ng-required="field.required"
+           id="{{ field.id }}" name="{{ field.id }}"
+           type="text" class="form-control" placeholder="{{ field.title }}">
+    <!-- normal string, limited options -->
+    <select ng-switch-when="string" ng-if="field.enum && field.enum.length"
+            ng-model="vm.d[field.name]"
+            ng-required="field.required"
+            id="{{ field.id }}" name="{{ field.id }}"
+            ng-options="opt for opt in field.enum"
+            class="form-control" placeholder="{{ field.title }}">
+      <option ng-if="!field.required" value=""></option>
+    </select>
+    <!-- long text box -->
+    <textarea ng-switch-when="text"
+              ng-model="vm.d[field.name]"
+              ng-required="field.required"
+              id="{{ field.id }}" name="{{ field.id }}"
+              class="form-control"></textarea>
+    <!-- tri-state bool -->
+    <select ng-switch-when="boolean" ng-if="!field.required"
+            ng-model="vm.d[field.name]"
+            ng-options="o.value as o.title for o in vm.boolOptions"
+            id="{{ field.id }}" name="{{ field.id }}"
+            class="form-control">
+    </select>
+    <!-- bool -->
+    <div class="checkbox" ng-switch-when="boolean" ng-if="field.required">
+      <label>
+        <input type="checkbox" id="{{ field.id }}" name="{{ field.id }}"
+               ng-model="vm.d[field.name]">
+        {{ field.title }}
+      </label>
+    </div>
+    <!-- integer -->
+    <input ng-switch-when="integer"
+           ng-model="vm.d[field.name]"
+           ng-required="field.required"
+           id="{{ field.id }}" name="{{ field.id }}"
+           type="number" step="1" class="form-control">
+    <!-- decimal number -->
+    <input ng-switch-when="number"
+           ng-model="vm.d[field.name]"
+           ng-required="field.required"
+           id="{{ field.id }}" name="{{ field.id }}"
+           kin-coerce-number
+           type="number" class="form-control">
+    <!-- select from another resource -->
+    <kin-select
+       ng-switch-when="resourceId"
+       ng-model="vm.d[field.name]"
+       ng-required="field.required"
+       options="{{ field.resource }} blank unknown id"
+       id="{{ field.id }}">
+    </kin-select>
+    <!-- date -->
+    <kin-date-picker ng-switch-when="date"
+                     ng-model="vm.d[field.name]"
+                     ng-required="field.required"
+                     type="isodate"
+                     id="{{ field.id }}">
+    </kin-date-picker>
+    <!-- datetime -->
+    <div ng-switch-when="datetime" class="form-group">
+      <div class="col-sm-6">
+        <kin-date-picker id="{{ field.id }}_date"
+                         ng-model="vm.d[field.name]"
+                         ng-required="field.required"
+                         type="isodatetime">
+        </kin-date-picker>
+      </div>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <input type="text" placeholder="HH:MM:SS"
+                 id="{{ field.id }}_time" name="{{ field.id }}_time"
+                 kin-time-picker="isodatetime" ng-model="vm.d[field.name]"
+                 class="form-control">
+          <span class="input-group-addon">24h format</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- default: just a text box -->
+    <input ng-switch-default
+           ng-model="vm.d[field.name]"
+           ng-required="field.required"
+           id="{{ field.id }}" name="{{ field.id }}"
+           type="text" class="form-control">
+
+    <!-- optional help text -->
+    <span class="help-block" ng-if="field.description">{{ field.description }}</span>
+
+    <!-- validation message -->
+    <span ng-show="fieldsForm[field.id].$touched && fieldsForm[field.id].$error">
+      <span ng-show="fieldsForm[field.id].$error.required">
+        Field is required.
+      </span>
+      <span ng-show="fieldsForm[field.id].$error.date">
+        That date is invalid.
+      </span>
+      <span ng-if="field.type === 'datetime'">
+        <span ng-show="fieldsForm[field.id + '_date'].$error.date">
+          That date is invalid.
+        </span>
+        <span ng-show="fieldsForm[field.id + '_time'].$error.time">
+          That time is invalid.
+        </span>
+      </span>
+      <span ng-show="fieldsForm[field.id].$error.number">
+        Invalid number.
+      </span>
+      <span ng-show="fieldsForm[field.id].$error.pattern">
+        Invalid format.
+      </span>
+    </span>
+  </div>
+</div>
+
+<div ng-if="vm.showOther">
+<div class="form-group other-fields" ng-repeat="field in vm.otherFields">
+  <label class="col-sm-2 control-label">
+    {{ field }}
+  </label>
+  <div class="col-sm-10">
+    <p class="form-control-static">
+      {{ vm.d[field] }}
+    </p>
+  </div>
+</div>
+</div>
+
+</ng-form>

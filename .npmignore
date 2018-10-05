@@ -1,0 +1,16 @@
+# checked in files that aren't relevant to npm package
+migrate
+requirements
+uwsgi
+*.yaml
+Docker*
+
+# generated files
+data
+dist
+log
+*.egg-info
+.eggs
+bower_components
+gulpdist
+.tmp

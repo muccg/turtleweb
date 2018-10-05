@@ -1,0 +1,42 @@
+.thumbnail-study, .thumbnail-study-admin {
+  padding: 0.25em 0.5em;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: @list-group-link-hover-color;
+    background-color: @list-group-hover-bg;
+  }
+
+  h3 {
+    margin-top: 0px;
+  }
+}
+
+.thumbnail-study {
+  height: 200px;
+  overflow: hidden;
+}
+
+
+.thumbnail-study-admin {
+  h3 {
+    margin-top: 0px;
+  }
+
+  > .caption.study-edit {
+    min-height: 120px;
+    .form-group {
+      margin-bottom: 1px;
+    }
+  }
+
+  .buttons {
+    text-align: right;
+    margin-bottom: 0.25em;
+  }
+
+  &.study-archived {
+    opacity: 0.6;
+  }
+}

@@ -1,0 +1,36 @@
+six==1.9.0
+Django==1.8.13
+pytz>=2016.4
+python3-memcached==1.51
+django-extensions==1.5.9
+django-tastypie==0.13.0
+python-mimeparse==0.1.4  # django-tastypie requires mimeparse
+django-sql-explorer==0.8
+twilio==5.0.dev2  # sms messaging for two-factor auth
+jsonschema==2.4.0
+django-reversion==1.10.0
+requests==2.4.3
+rdflib==4.1.2
+Pillow==2.8.1
+qrcode==5.1
+python-logstash==0.4.5
+pdfrw==0.2
+Sphinx==1.3.2
+
+# JWT token auth
+PyJWT==1.4.0
+pycrypto==2.6.1
+ecdsa==0.13
+
+# Database access
+psycopg2>=2.6.0,<2.7.0
+
+# CCG packages
+ccg-django-utils==0.4.1
+django-useraudit==1.0.1
+
+# Ensures only checked in files appear in dist tarball
+setuptools_git >= 1.0
+
+# uWSGI used for serving in both dev and prod
+uWSGI==2.0.11.1

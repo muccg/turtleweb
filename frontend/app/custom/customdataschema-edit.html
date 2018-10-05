@@ -1,0 +1,47 @@
+<div ng-if="vm.isLoaded">
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['/App/Admin']" title="Admin"></kin-breadcrumb>
+  <kin-breadcrumb title="{{ vm.item.content_type.model|capitalize }} Fields">
+  </kin-breadcrumb>
+  <kin-breadcrumb title="Edit"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<form class="form-horizontal" role="form" name="editForm" novalidate autocomplete="off">
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          All studies
+        </label>
+        <div class="col-sm-10">
+          <kin-schema-editor ng-model="vm.item.schema">
+          </kin-schema-editor>
+        </div>
+      </div>
+
+      <kin-list-related-ddls
+         schema="vm.item.schema"
+         resource-name="vm.item.content_type.model">
+      </kin-list-related-ddls>
+    </div>
+
+    <ul class="col-sm-2 kin-view-actions">
+      <li>
+        <button type="submit" id="save-btn" class="btn btn-success"
+                ng-click="vm.save()" ng-disabled="editForm.$pristine || editForm.$invalid">
+          <i class="glyphicon glyphicon-save"></i> Save
+        </button>
+      </li>
+      <li>
+        <kin-versions-dropdown item="vm.item">
+        </kin-versions-dropdown>
+      </li>
+      <li>
+        <a ng-link="['../../AdminHome']" class="btn btn-large btn-default">
+          Cancel
+        </a>
+      </li>
+    </ul>
+  </div>
+</form>
+</div>

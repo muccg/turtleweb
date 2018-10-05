@@ -1,0 +1,16 @@
+<div class="form-group" ng-if="vm.ddls.length">
+  <label class="col-sm-2 control-label">
+    Related DDLs
+  </label>
+  <div class="col-sm-10">
+    <ul>
+      <li ng-repeat="ddl in vm.ddls">
+        <a ng-if="!ddl.isCustom"
+           ng-link="['/App/Admin/Ddl/Edit', {endpoint: ddl.id }]">{{ ddl.name }}</a>
+        <a ng-if="ddl.isCustom"
+           ng-link="['/App/Admin/Ddl/EditCustom', {id: ddl.id, name: ddl.name}]">{{ ddl.name }}</a>
+        ({{ ddl.propName }})
+      </li>
+    </ul>
+  </div>
+</div>

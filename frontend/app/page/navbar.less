@@ -1,0 +1,51 @@
+// Make menus open on hover.
+// Media selector disables hover menus when navbar is a menu button
+// http://stackoverflow.com/a/9435673/405240
+ul.nav li.dropdown:hover ul.dropdown-menu {
+  @media (min-width: @screen-md-min) {
+    display: block;
+  }
+}
+
+.navbar .dropdown-menu {
+  @media (min-width: @screen-md-min) {
+    margin-top: 0px;
+  }
+}
+
+.navbar-brand img, .navbar-brand svg, {
+  // the 15px comes from @nav-link-padding
+  margin-top: -15px;
+  height: @navbar-height;
+  width: @navbar-height * 1.25;
+}
+
+svg#turtle {
+  #body {
+    fill: @navbar-default-color;
+  }
+
+  #lleg, #rleg, #larm, #rarm, #head {
+    fill: @navbar-default-color;
+  }
+}
+
+.navbar .container-fluid {
+    box-shadow: 0 3px 3px rgba(0,0,0,0.175);
+}
+
+.navbar-collapse.in .kin-quick-search, .navbar-collapse.collapsing .kin-quick-search {
+    display: none;
+}
+
+.navbar-form .kinNavSearchExpandy {
+    input.form-control {
+        width: 100px;
+        transition: 0.3s ease-out;
+    }
+
+    &.focus input {
+        /* if width is 'auto' then animation no work */
+        width: 250px;
+    }
+}

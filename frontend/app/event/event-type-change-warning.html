@@ -1,0 +1,21 @@
+<div class="form-group" ng-if="vm.missingFields && vm.missingFields.length">
+  <div class="col-sm-10 col-sm-offset-2">
+    <div class="alert alert-danger" role="alert">
+      <p>
+        <strong>Warning!</strong>
+        By changing event type, the values of the following
+        fields will become inaccessible.
+      </p>
+      <ul>
+        <li ng-repeat="missing in vm.missingFields">
+          {{ missing.title }}
+          <span ng-if="missing.type && missing.origType && missing.type !== missing.origType">
+            — type changed from
+            <tt>{{ missing.origType }}</tt> to
+            <tt>{{ missing.type }}</tt>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

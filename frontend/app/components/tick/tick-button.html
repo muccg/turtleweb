@@ -1,0 +1,6 @@
+<button type="button" ng-class="cls"
+        ng-model="val" uib-btn-checkbox
+        btn-checkbox-true="tickOn" btn-checkbox-false="tickOff">
+  <i class="glyphicon" ng-class="{ 'glyphicon-ok': val === tickOn, 'glyphicon-remove': val === tickOff, 'glyphicon-minus': val !== tickOn && val !== tickOff }">
+  </i>
+</button>

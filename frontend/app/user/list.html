@@ -1,0 +1,103 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb link="['/App/Admin']" title="Admin"></kin-breadcrumb>
+  <kin-breadcrumb title="Users"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<!--Body content-->
+<div class="row">
+  <div class="col-sm-10">
+    <form class="form-horizontal" role="form" novalidate autocomplete="off" name="queryForm">
+      <div class="form-group query-form">
+        <div class="col-xs-12">
+          <label class="sr-only" for="searchQuery">Search terms</label>
+            <kin-query class="kin-query" ng-model="vm.search.expr" resource="vm.search.what">
+              <div class="input-group">
+                <input type="text" id="searchQuery"
+                       class="form-control input-lg"
+                       placeholder="User query"
+                       spellcheck="false"
+                       ng-model="kinQuery.text"
+                       kin-query-input
+                       kin-query-auto-complete="vm.ac"
+                       kin-autofocus
+                       ng-readonly="show_options">
+                <span class="input-group-btn">
+                  <button ng-click="vm.search.search()" ng-disabled="queryForm.$invalid" class="btn btn-lg btn-primary">
+                    <span class="hidden-xs hidden-sm">Search</span>
+                    <span class="visible-xs visible-sm"><i class="glyphicon glyphicon-search"></i></span>
+                  </button>
+                  <button ng-disabled="vm.search.is_blank()" ng-click="vm.search.clearAndRefresh()"
+                          class="btn btn-lg btn-cancel hidden-xs hidden-sm">Clear</button>
+                </span>
+              </div>
+
+              <kin-query-auto-complete-menu pos="vm.ac.pos" info="vm.ac">
+              </kin-query-auto-complete-menu>
+
+            </kin-query>
+        </div>
+      </div>
+    </form>
+
+    <kin-grid selection="vm.selection">
+      <kin-grid-search search="vm.search">
+      </kin-grid-search>
+
+      <kin-grid-sel-col></kin-grid-sel-col>
+      <kin-grid-col heading="ID" show="true"
+                    field="id"></kin-grid-col>
+      <kin-grid-col heading="E-mail" show="true"
+                    sort-dir="1"
+                    field="email"
+                    cell-sref="['Detail', {id: item.id}]"></kin-grid-col>
+      <kin-grid-col heading="Name" show="true"
+                    expr="item|personFullName"
+                    sort-field="last_name"></kin-grid-col>
+      <kin-grid-col heading="System Role" show="true"
+                    expr="item|userLevel"
+                    field="level"
+                    sortable="false"></kin-grid-col>
+      <kin-grid-col heading="Active" show="false"
+                    expr="item.is_active|yesno"
+                    field="is_active"></kin-grid-col>
+      <kin-grid-col heading="Tokenless Login Allowed" show="false"
+                    expr="item.tokenless_login_allowed|yesno"
+                    field="tokenless_login_allowed"></kin-grid-col>
+      <kin-grid-col heading="Mobile" show="false"
+                    field="mobile_phone_number"></kin-grid-col>
+      <kin-grid-col heading="Last Name" show="false"
+                    field="last_name"></kin-grid-col>
+      <kin-grid-col heading="First Name" show="false"
+                    field="first_name"></kin-grid-col>
+    </kin-grid>
+  </div>
+
+  <ul class="col-sm-2 kin-view-actions">
+    <li>
+      <a ng-link="['Add']" class="btn btn-large btn-default">
+        <i class="glyphicon glyphicon-plus"></i> Create User
+      </a>
+    </li>
+    <li>
+      <div uib-dropdown class="btn-group">
+        <button uib-dropdown-toggle type="button" class="btn btn-default"
+                ng-disabled="vm.selection.length === 0">
+          {{ vm.selection.length }} selected
+          <span class="caret"></span>
+        </button>
+        <ul uib-dropdown-menu class="dropdown-menu" role="menu">
+          <li>
+            <a href="" ng-click="vm.deactivate()">
+              Deactivate users
+            </a>
+          </li>
+          <li>
+            <a href="" ng-click="vm.resetPassword()">
+              Reset Password
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div><!--/row-->

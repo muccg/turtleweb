@@ -1,0 +1,24 @@
+<kin-breadcrumbs>
+  <kin-breadcrumb title="Study"></kin-breadcrumb>
+</kin-breadcrumbs>
+
+<div ng-if="$ctrl.kinStudies.current">
+  <p>
+    This is the home screen for
+    {{ $ctrl.kinStudies.current.name }}<span ng-if="$ctrl.kinStudies.current.desc">— {{ $ctrl.kinStudies.current.desc }}</span>.
+  </p>
+
+  <div class="row">
+    <div class="col-sm-6 col-md-4">
+      <kin-report-front-page study="$ctrl.kinStudies.current">
+      </kin-report-front-page>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-md-4">
+      <kin-saved-search-table study="$ctrl.kinStudies.current">
+      </kin-saved-search-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,233 @@
+.ng-hide-remove{
+  transition: 0s;
+  opacity: 1;
+}
+
+.ng-hide-add {
+  transition: 0s;
+  opacity: 0;
+}
+
+.kin-loading-message.pre-init {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../img/maori-turtle.svg') no-repeat 50% 100px;
+    background-size: 40%;
+
+    padding: 50px;
+    opacity: 0.5;
+    font-size: larger;
+    text-align: center;
+    text-transform: lowercase;
+}
+
+.kin-loading-message.post-init {
+    position: fixed;
+    top: @navbar-height;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: @zindex-modal;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+
+    .loading-backdrop {
+        position: fixed;
+        top: @navbar-height;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: @zindex-modal;
+        background-color: @modal-backdrop-bg;
+        .opacity(@modal-backdrop-opacity);
+
+        // Fade for backdrop
+        &.ng-hide { .opacity(0); }
+
+        &.ng-hide-add, &.ng-hide-remove {
+          transition: all 0s linear;
+        }
+        &.ng-hide-remove.ng-hide-remove-active {
+          transition: all linear 0.5s;
+        }
+        &.ng-hide-add.ng-hide-add-active {
+          transition: all linear 0.2s;
+        }
+    }
+
+    .loading-box {
+        position: relative;
+        background-color: @modal-content-bg;
+        border: 1px solid @modal-content-fallback-border-color; //old browsers fallback (ie8 etc)
+        border: 1px solid @modal-content-border-color;
+        border-radius: @border-radius-large;
+        .box-shadow(0 3px 9px rgba(0,0,0,.5));
+        background-clip: padding-box;
+        // Remove focus outline from opened modal
+        outline: 0;
+
+        z-index: @zindex-modal;
+
+        top: @navbar-height * 1.5;
+        //left: @navbar-height * 1.5;
+        left: 40%;
+        width: 9em;
+
+        text-align: center;
+        vertical-align: middle;
+        cursor: default;
+
+        .loading-msg {
+            padding: 1em 0em;
+        }
+    }
+}
+
+.kin-record-id {
+  white-space: nowrap;
+}
+
+.panel-heading .accordion-btn {
+    margin-top: -7px;
+}
+
+.panel.panel-loading {
+  opacity: 0.5;
+
+  .panel-heading:before {
+    content: "Loading...";
+    float: right;
+    text-align: right;
+  }
+}
+
+.thumbnail.thumbnail-studygroup {
+    padding: 0.25em 0.5em;
+
+    h3 {
+        margin-top: 0px;
+    }
+
+    .caption {
+        height: 120px;
+    }
+
+    img.pull-right {
+        width: 50px;
+    }
+
+    .buttons {
+        text-align: right;
+        margin-bottom: 0.25em;
+    }
+}
+
+.add-patients-modal .studygroup-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-top: 2px;
+}
+
+
+/* fix the accordion headers in patient detail */
+a.accordion-toggle {
+    cursor: pointer;
+}
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+
+td.invisibutton {
+    & > button {
+        visibility: hidden;
+    }
+    &:hover > button {
+        visibility: visible;
+    }
+}
+
+.invisibutton {
+    button, .invisitarget {
+        visibility: hidden;
+    }
+    &:hover button, &:hover .invisitarget {
+        visibility: visible;
+
+        &.invisible {
+          // allow invisible invisibuttons
+          visibility: hidden;
+        }
+    }
+}
+
+.alert.help-text {
+    padding: 5px 15px;
+    margin-top: 0.5em;
+}
+
+.modal-header.bg-danger {
+    border-radius: @border-radius-large @border-radius-large 0 0;
+}
+
+tfoot.consent-outcome > tr > td {
+  border-top: 2px solid @table-border-color;
+  border-bottom: 2px solid @table-border-color;
+
+  &.study {
+    font-weight: bold;
+  }
+}
+
+
+@keyframes armAnimL {
+  0% { transform: rotate(13deg); }
+  100% { transform: rotate(-12deg); }
+}
+
+@keyframes armAnimR {
+  0% { transform: rotate(-13deg); }
+  100% { transform: rotate(12deg); }
+}
+
+@keyframes legAnimL {
+  0%   { transform: rotate(10deg); }
+  100% { transform: rotate(-15deg); }
+}
+
+@keyframes legAnimR {
+  0%   { transform: rotate(-10deg); }
+  100% { transform: rotate(15deg); }
+}
+
+@keyframes headAnim {
+  0% { transform: translate(-15px, 0px); }
+  100% { transform: translate(5px, 0px); }
+}
+
+@keyframes bodyAnim {
+  0% { transform: scale(1,1); }
+  100% { transform: scale(1.05,1.05); }
+}
+
+svg#turtle {
+  &.animating {
+    #head, #body, #larm, #rarm, #lleg, #rleg {
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      animation-timing-function: ease-in-out;
+      transform-origin: 50% 50%;
+      animation-duration: 2s;
+    }
+
+    #head { animation-name: headAnim; }
+    #body { animation-name: bodyAnim; }
+    #larm { animation-name: armAnimL; }
+    #rarm { animation-name: armAnimR; }
+    #lleg { animation-name: legAnimL; }
+    #rleg { animation-name: legAnimR; }
+  }
+}

@@ -1,0 +1,12 @@
+<div class="kin-query-ac-option"
+     ng-repeat="option in vm.options"
+     ng-style="{ 'padding-left': option.indent ? option.indent + 'em' : undefined }">
+  <a href ng-click="vm.selectOption(option)">
+    <span ng-bind-html="option.label|highlight:vm.current">
+    </span>
+    <small ng-if="option.title">{{ option.title }}</small>
+  </a>
+</div>
+<div class="kin-query-ac-option">
+  <a href ng-click="vm.selectOption(null)"><em>blank</em></a>
+</div>

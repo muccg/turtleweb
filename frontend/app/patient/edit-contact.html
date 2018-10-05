@@ -1,0 +1,142 @@
+<div class="row" ng-form="vm.form">
+  <div class="col-md-8">
+    <div class="form-group" ng-if="!vm.allCountries || vm.country.iso2">
+      <label for="streetAddress{{ vm.index }}"
+             class="col-sm-3 control-label"
+             ng-class="{ 'required': !!vm.contact.suburb }">
+        Street Address
+      </label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control"
+               id="streetAddress{{ vm.index }}" name="streetAddress{{ vm.index }}"
+               ng-model="vm.contact.address_line1"
+               ng-required="!!vm.contact.suburb">
+        <p ng-show="vm.form['streetAddress' + vm.index].$dirty && vm.form['streetAddress' + vm.index].$error.required" class="help-block">
+          Field is required.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="vm.allCountries && !vm.country.iso2">
+      <label for="address{{ vm.index }}" class="col-sm-3 control-label">
+        Full Address
+      </label>
+      <div class="col-sm-9">
+        <textarea class="form-control"
+                  id="address{{ vm.index }}" name="address{{ vm.index }}"
+                  ng-model="vm.fullAddress"
+                  ng-change="vm.fullAddressChanged()"
+                  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                  rows="4">
+        </textarea>
+        <p ng-show="vm.form['address' + vm.index].$dirty && vm.form['address' + vm.index].$error.required" class="help-block">
+          Field is required.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6" ng-if="!vm.allCountries || vm.country.iso2">
+    <div class="form-group">
+      <label for="address-suburb{{ vm.index }}" class="col-sm-4 control-label">
+        Suburb
+      </label>
+      <div class="col-sm-8">
+        <ui-select ng-model="vm.contact.suburb"
+                   ng-change="vm.suburbChanged()"
+                   reset-search-input="false" id="address-suburb{{ vm.index }}">
+          <ui-select-match placeholder="Suburb" allow-clear="true">{{ $select.selected.name }}</ui-select-match>
+          <ui-select-choices repeat="suburb in (vm.suburbs) track by $index"
+                             refresh="vm.refreshSuburbs($select.search)"
+                             refresh-delay="0">
+
+            <div ng-bind-html="suburb.name | highlight: $select.search"></div>
+            <small>{{ suburb.state.abbrev }} {{ suburb.postcode }}</small>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6" ng-if="!vm.allCountries || vm.country.iso2">
+    <div class="form-group">
+      <label for="state{{ vm.index }}" class="col-sm-4 control-label">
+        State
+      </label>
+      <div class="col-sm-8">
+        <select id="state{{ vm.index }}" class="form-control"
+                ng-model="vm.state" ng-change="vm.stateChanged()"
+                ng-options="s.name for s in vm.country.states track by s.id">
+          <option value=""></option>
+        </select>
+        <input type="text" ng-model="vm.contact.suburb.state.abbrev"
+               class="hidden form-control" id="state{{ vm.index }}">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6" ng-if="!vm.allCountries || vm.country.iso2">
+    <div class="form-group">
+      <label for="postcode{{ vm.index }}" class="col-sm-4 control-label">
+        Postcode
+      </label>
+      <div class="col-sm-8">
+        <p class="form-control-static">{{vm.contact.suburb.postcode}}</p>
+        <input type="text" ng-model="vm.contact.suburb.postcode"
+               class="hidden form-control" id="postcode{{ vm.index }}">
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="address-country" class="col-sm-4 control-label">
+        Country
+      </label>
+      <div class="col-sm-8">
+        <ui-select ng-model="vm.country"
+                   ng-change="vm.countryChanged()"
+                   reset-search-input="false" id="address-country">
+          <ui-select-match placeholder="Country" allow-clear="true">{{ $select.selected.name }}</ui-select-match>
+          <ui-select-choices repeat="country in (vm.countries) track by $index"
+                             refresh="vm.refreshCountries($select.search)"
+                             refresh-delay="0">
+
+            <div ng-bind-html="country.name | highlight: $select.search"></div>
+            <small ng-if="!country.iso2">Use address box for other countries.</small>
+          </ui-select-choices>
+        </ui-select>
+<!--         
+        <p class="form-control-static">
+          {{ vm.contact && vm.contact.suburb ? "Australia" : "" }}
+        </p>
+        <input type="text" ng-model="vm.contact.suburb.state.country"
+               class="hidden form-control" id="address-country">
+-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="email">E-mail</label>
+  <div class="col-sm-4">
+    <input type="email" ng-model="vm.contact.email" class="form-control" name="email" id="email">
+    <p ng-show="vm.form.email.$dirty && vm.form.email.$error.email" class="help-block">
+      Invalid format for e-mail address.
+    </p>
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label">Phone</label>
+  <div class="col-sm-4">
+    <input type="text" ng-model="vm.contact.phone_home" class="form-control" />
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label">Mobile</label>
+  <div class="col-sm-4">
+    <input type="text" ng-model="vm.contact.mobile" class="form-control" />
+  </div>
+</div>

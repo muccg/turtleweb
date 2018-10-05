@@ -1,0 +1,48 @@
+<span ng-repeat="level in vm.levels">
+
+  <div uib-dropdown class="btn-group" is-open="level.menuOpen">
+  <button class="btn dropdown-toggle"
+          ng-class="{'btn-link': level.selected, 'btn-default': !level.selected}"
+          uib-dropdown-toggle>
+    <span ng-if="!level.selected">{{ level.cls.name }}</span>
+    <span ng-if="level.selected">{{ level.selected.name }}</span>
+    <span class="caret"></span>
+  </button>
+  <ul uib-dropdown-menu class="dropdown-menu kin-container-path" role="menu">
+    <li ng-if="level.selected" class="dropdown-header">{{ level.cls.name }}</li>
+    <li ng-repeat="container in level.containers">
+      <a href=""
+         ng-click="vm.openLevel($parent.$index, container)"
+         ng-class="{ active: level.selected === container }">
+        {{ container.name }}
+
+        <span class="container-count">
+          <span ng-if="!level.terminal">{{ container.children.length }}:</span>
+          {{ container.num_samples }}
+        </span>
+        <!--
+          <span ng-if="showMatches" class="badge">
+            {{ container.num_samples_match }}
+            {{ container.num_samples_match !== undefined ? '/' : '' }}
+            {{ container.num_samples }}
+          </span>
+          -->
+      </a>
+    </li>
+    <li ng-if="level.containers.length === 0" class="empty">
+      <a href="">No more containers</a>
+    </li>
+  </ul>
+  </div>
+
+  <span ng-if="!$last">&gt;</span>
+</span>
+
+<!-- add a fake button to fix the height of this element -->
+<span class="invisible">
+  <div class="btn-group">
+    <button class="btn dropdown-toggle">
+      X <span class="caret"></span>
+    </button>
+  </div>
+</div>

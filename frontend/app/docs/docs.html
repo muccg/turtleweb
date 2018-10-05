@@ -1,0 +1,10 @@
+<button ng-click="onClose()" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<div class="docs-container">
+  <div class="loading">Loading...</div>
+</div>
+<div class="docs-footer" ng-if="loaded"
+     ng-mouseenter="x=true;" ng-mouseleave="x=false;">
+  <hr>
+  <img ng-src="{{ $root.config.urls.base }}img/maori-turtle.svg"
+       kin-loading-anim="x">
+</div>

@@ -1,0 +1,35 @@
+////////////////////////////////////////////////////////////////////////////
+// the buttons at the right-hand side of views
+
+ul.kin-view-actions {
+  .list-unstyled();
+
+  > li {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    .btn-group {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: @screen-sm-min) {
+    > li {
+      display: block;
+      padding-left: 0px;
+      padding-right: 0px;
+      margin-bottom: 0.5em;
+
+      .btn {
+        .btn-block();
+      }
+    }
+  }
+
+  @media (min-width: @screen-sm-min) {
+    /* await positioning by javascript */
+    position: fixed;
+    visibility: hidden;
+  }
+}
